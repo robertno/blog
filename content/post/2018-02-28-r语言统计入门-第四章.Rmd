@@ -1,0 +1,317 @@
+---
+title: R语言统计入门-第四章
+author: Dr.二哈
+date: '2018-02-28'
+slug: r语言统计入门-第四章
+categories:
+  - R
+  - 统计
+tags:
+  - R
+  - 统计
+---
+
+# 第四章 描述性统计和图形
+
+## 4.1 单组的汇总统计量
+
+```{r}
+#计算均值、标准差、方差和中位数
+#比如x为50个来自于正态分布的数值的向量
+x <- rnorm(50)
+mean(x)
+sd(x)
+var(x)
+median(x)
+#经验后分位数
+quantile(x)
+#看看如何取得十分位数
+#可以增加一个包含十分位数的参数
+pvec <- seq(0, 1, 0.1)
+pvec
+quantile(x, pvec)
+```
+
+如果有缺失值，那么问题会复杂一些，下面讲个例子。
+
+数据集juul，包含在ISwR包中。是Anders Juul的报告中的数据。该报告是关于健康人群，主要是学龄儿童的血清IGF-l的。现在只使用igfl。
+
+```{r}
+#当试着计算igfl的均值时，出现一个问题
+library(ISwR)
+attach(juul)
+mean(igf1)
+#R不能跳过缺失值
+#然而可以用na.rm参数来移除未知值
+mean(igf1,na.rm=T)
+#但有个例外，length函数不识别na.rm
+#所以不能用它来确定非缺失观测的个数
+#可以用下面的语句来实现
+#这个结构说明，逻辑值若用于算数计算，那么TRUE转换为1，FALSE转换为0
+sum(!is.na(igf1))
+#summary函数可以汇总数字变量
+#其中，1stQu.和3rdQu.分别指经验四分位数（0.25，0.75）
+summary(igf1)
+#也可以对整个数据集进行汇总
+summary(juul)
+#其中menarche、sex、tanner被编码为数值变量
+#虽然它们显然是分类变量
+#可以进行如下改进
+detach(juul)
+juul$sex <- factor(juul$sex, labels=c("M","F"))
+juul$menarche <- factor(juul$menarche, labels=c("No","Yes"))
+juul$tanner <- factor(juul$tanner, labels=c("Ⅰ","Ⅱ","Ⅲ","Ⅳ","Ⅴ"))
+attach(juul)
+summary(juul)
+#变量sex、menarche和tanner被转换为辅以适当水平名称的因子变量
+#在原始数据中，它们以数字代码显示
+#这些转化后的变量重新放回数据集juul中，从而替代原来的sex等
+#也可以用transformf函数（或within）
+juul <- transform(juul,
+                sex=factor(sex,labels=c("M","F")),
+                menarche=factor(menarche,labels=c("No","Yes")),
+                tanner=factor(tanner,labels=c("Ⅰ","Ⅱ","Ⅲ","Ⅳ","Ⅴ")))
+```
+
+## 4.2 分布的图形显示
+
+### 4.2.1 直方图
+
+```{r}
+#绘制x的直方图
+hist(x)
+```
+
+在hist函数中调用breaks=n，可以在直方图中得到大约n个条，这是因为算法会尽力创建“合适”的分割点。亦可以通过指定breaks为一个向量而不仅是数字完成区间分割的完全控制。
+
+```{r}
+mid.age <- c(2.5,7.5,13,16.5,17.5,19,22.5,44.5,70.5)
+acc.count <- c(28,46,58,20,31,64,149,316,103)
+age.acc <- c(0,5,10,16,17,18,20,25,60,80)
+brk <- c(0,5,10,16,17,18,20,25,60,80)
+hist(age.acc, breaks=brk)
+#可以在hist函数中，用freq=T指定列高为数据数量，freq=F可以得到密度显示
+```
+
+### 4.2.2 经验累计分布
+
+经验累计分布函数定义为小于等于x的数据占总数据的比例，可以作图如下：
+
+```{r}
+n <- length(x)
+#type="s"给出一个阶梯函数，其中(x,y)是步长额左端点，ylim是两个元素的向量，用于指定y坐标的边界点
+plot(sort(x),(1:n)/n,type="s",ylim=c(0,1))
+```
+
+### 4.2.3 Q-Q图
+
+计算经验累积分布函数的目的之一，是观察数据是否能被假设成来自正态分布。为更好地评估，可以画出第k个最小观测值和来自标准正态分布的n个值中第k个最小观测值的图形。关键之处是，用这种方法，如果数据是来自任何均值和标准差的正态分布，应该得到一条直线。
+
+```{r}
+#可以用qqnorm函数来做这个
+qqnorm(x)
+```
+
+### 4.2.4 箱式图
+
+```{r}
+#两个按行并列图的布局使用mfrow作图参数指定
+#mfcol参数用来绘制按排列的图形
+#值得注意的是，最后把布局参数重新设定回c(1,1)是必要的
+#除非希望继续画此种并列图
+par(mfrow=c(1,2))
+boxplot(IgM)
+boxplot(log(IgM))
+par(mfrow=c(1,1))
+```
+
+## 4.3 分组数据的汇总统计量
+
+当处理分组数据的时候，经常会希望得到一些按组计算的不同的总结统计量，比如均值和标准差的一张表格。为此目的，可以使用tapply函数。
+
+```{r}
+attach(red.cell.folate)
+#tapply函数提取folate变量，根据ventilation分组
+#然后对每一组计算均值
+tapply(folate,ventilation,mean)
+#同样的方法，可以计算标准差和数目
+tapply(folate,ventilation,sd)
+tapply(folate,ventilation,length)
+#可以像下面这样更好的显示
+xbar <- tapply(folate,ventilation,mean)
+s <- tapply(folate,ventilation,sd)
+n <- tapply(folate,ventilation,length)
+#对于juul数据集来说，希望求按tanner对igfl分组后的均值
+#但是又遇到了缺失值的问题
+tapply(igf1,tanner,mean)
+#可以用na.rm排除缺失值
+tapply(igf1,tanner,mean,na.rm=T)
+#函数aggregate和by是同一个主题的变形。
+#前者非常类似于tapply，只是它对整个数据集操作并把结果作为一个数据框显示
+#同时显示多个变量是很有用的
+aggregate(juul[c("age","igf1")],
+         list(sex=juul$sex),mean,na.rm=T)
+#索引变量不是数据框中必须被汇总的部分，没有像在subset中进行的“智能评价”尝试
+#所以必须拼出juul$sex
+#也可以使用数据框类似于列表的事实
+#技巧是使用单引号索引一个数据框，产生一个座位结果的数据框
+aggregate(juul[c("age","igf1")],juul["sex"],mean,na.rm=T)
+#by函数也是类似的，但有所不同
+#不同之处在于取整个（子）数据框作为它的变量，所以可以用性别总结juul数据
+by(juul, juul["sex"],summary)
+```
+
+## 4.4 分组数据作图
+
+这一节主要是在同一页为几组数据进行作图。
+
+### 4.4.1 直方图
+
+这个例子使用1.2.14节的关于两组妇女24 h能量消耗的energy数据集，选择了0.5 MJ的倍数作为分割点。
+
+```{r}
+#先获得数据集
+attach(energy)
+#分割向量
+expend.lean <- expend[stature=="lean"]
+expend.obese <- expend[stature=="obese"]
+#开始作图
+#设置par(mfrow=c(2,1))，从而在一个图中得到两个直方图
+par(mfrow=c(2,1))
+hist(expend.lean,breaks=10,xlim=c(5,13),ylim=c(0,4),col="white")
+hist(expend.obese,breaks=10,xlim=c(5,13),ylim=c(0,4),col="grey")
+par(mfrow=c(1,1))
+```
+
+### 4.4.2 并联箱式图
+
+```{r}
+#创建图形
+#符号y~x表示用x表达的y
+boxplot(expend ~ stature)
+#也可以用expend.lean和expend.obese作图
+boxplot(expend.lean,expend.obese)
+```
+
+### 4.4.3 带状图
+
+刚刚介绍的箱式图并没有很好的显示“Laurel & Hardy”效应。原因在于一组数据的四分位点内距比另一组大很多，使箱式图变得很胖。使用这么小的分组数据四分位数的确定变得很不准确，因此对原始数据作图可能是更合适的。
+
+```{r}
+#mex设置减少行间距，mar减少图形区域周边线的数量
+#将这些设置的原始值储存在opar中，用par(opar)重新调出
+opar <- par(mfrow=c(2,1),mex=0.8,mar=c(3,3,2,1)+.1)
+stripchart(expend ~ stature)
+stripchart(expend ~ stature,method="stack")
+stripchart(expend ~ stature,method="jitter")
+stripchart(expend ~ stature,method="jitter",jitter=.03)
+par(opar)
+```
+
+## 4.5 表格
+
+### 4.5.1 生产表格
+
+本文主要处理双向表格（two-way）。它可以作为一个矩阵对象输入。
+
+```{r}
+#matrix函数中，函数用nrow设置，一般默认是按列输入，byrow=T表示按行输入
+#也可以用ncol给出列数
+caff.marital <- matrix(c(652,1537,598,242,36,46,38,21,218,327,106,67),
+                       nrow=3, byrow=T)
+caff.marital
+#若ncol和nrow中的一个被给出，那么R将计算相应的那个，从而与输入的值的数目相匹配
+#若都给出，但是与值得数目不匹配，那么，值将被循环使用
+colnames(caff.marital) <- c("0","1-150","151-300",">300")
+rownames(caff.marital) <- c("Married","Prev.married","Single")
+caff.marital
+#此外，也可以如下命名行和列的名称
+names(dimnames(caff.marital)) <- c("martial","consumption")
+caff.marital
+#一般来说，可以在需要两维表格的地方可以用矩阵
+#在确实需要表格的时候可以用as.table
+as.data.frame(as.table(caff.marital))
+#在实际中，更常见的情形是对一个数据集中的每一个人，都有一个带变量的数据框
+#这时可以用table，xtabs或ftable做一个表列
+attach(juul)
+table(sex)
+table(sex,menarche)
+table(menarche,tanner)
+#xtabs类似于table，只不过它使用模型公式借口
+#最常用的是一个单边公式，只要列出分类变量，用+分割
+xtabs(~tanner + sex, data=juul)
+#从table或xtabs得到的多向量表形式并不是很好
+xtabs(~dgn + diab + coma, data=stroke)
+#当增加维度时，会得到更多的二维子表格，这就是ftable的用武之地
+#这个函数创建一个扁平的表格
+ftable(coma + diab ~ dgn, data=stroke)
+#可以用t函数转置表格，对于多维表格，可以用aperm来转置
+t(caff.marital)
+```
+
+### 4.5.2 边际表格和相对频数
+
+经常会需要计算边际表格，即沿着表格的一个或另一个维度求和。
+
+```{r}
+#首先生成表格
+#tanner.sex是为一个交叉表任意选取的名称
+tanner.sex <- table(tanner,sex)
+tanner.sex
+#然后计算边际表格
+#margin.table中的参数1和2分别表示按行或按列进行求和
+margin.table(tanner.sex,1)
+margin.table(tanner.sex,2)
+#相对频数的表格可以用prop.table构建，参数1表示按行
+prop.table(tanner.sex,1)
+```
+
+## 4.6 表格的图形显示
+
+### 4.6.1 条形图
+
+```{r}
+total.caff <- margin.table(caff.marital,2)
+total.caff
+barplot(total.caff, col="white")
+#如果要创建的对象是一个矩阵，那么barplot将默认创建一个堆积条形图
+#其中列根据表中不同行的贡献而被分割，beside=T表示把行的贡献放在旁边
+par(mfrow=c(2,2))
+barplot(caff.marital, col="white")
+barplot(t(caff.marital), col="white")
+barplot(t(caff.marital), col="white",beside=T)
+barplot(prop.table(t(caff.marital),2),col="white",beside=T)
+par(mfrow=c(1,1))
+#可以美化一下
+barplot(prop.table(t(caff.marital),2),beside=T,
+       legend.text=colnames(caff.marital),
+       col=c("white","grey80","grey50","black"))
+```
+
+### 4.6.2 点图
+
+Cleveland点图，可以用来同时从两侧研究一个表格。
+
+```{r}
+dotchart(t(caff.marital), lcolor="black")
+```
+
+### 4.6.3 饼图
+
+```{r}
+opar <- par(mfrow=c(2,2),mex=0.8,mar=c(1,1,2,1))
+slices <- c("white","grey80","grey50","black")
+pie(caff.marital["Married",],main="Married",col=slices)
+pie(caff.marital["Prev.married",],
+   main="Previously married",col=slices)
+pie(caff.marital["Single",],main="Single",col=slices)
+par(opar)
+```
+
+## 4.7 思考题
+
+1. 探索不同类型的线和点图的可能性。变化图形的符号、线型、线宽和颜色。
+2. 如果用标定的线和点绘制一个图形，比如plot(rnorm(10),type="o")，线将在画图符号内课件，怎样避免这一点。
+3. 怎样把两个qqnorm图放在同一绘图区域，若试着用type="1"生成一幅图，将出现什么错误，怎样避免。
+4. 对react数据集画直方图。由于这些数据高度分散化，所以直方图会是有偏的。为什么。也许会希望用MASS包中的truehist作为替代。
+5. 从均匀分布中生成有5个随机数的一个样本向量z，作为x的函数绘制quantile(z,x)（比如可以用curve）。

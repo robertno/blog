@@ -1,0 +1,275 @@
+---
+title: R语言统计分析与应用-第三章-2
+author: Dr.二哈
+date: '2019-05-08'
+slug: r语言统计分析与应用-第三章-2
+categories:
+  - R
+  - 统计
+tags:
+  - R
+  - 统计
+header:
+  caption: ''
+  image: ''
+  preview: yes
+---
+
+## 3.5 变量的重命名
+
+继续接上期。上期讲到啥了~~
+
+算了，根据标题来。这一节主要讲如何修改变量的名称。一般来说，可以通过交互式或者编程的方法来实现。
+
+假设希望将变量名manager变为managerID。
+```{R}
+#fix(leader)
+#在弹出的界面单击manager就可以修改了
+```
+
+上面是交互式修改，下面介绍如何用命令行修改。
+```{R}
+manager <- c(1,2,3,4,5)
+date <- c("10/20/08","10/21/08","10/10/08","10/19/08","6/1/09")
+country <- c("US","UK","US","UK","US")
+gender <- c("M","F","M","F","M")
+age <- c(32,43,26,38,99)
+q1 <- c(5,3,3,3,2)
+q2 <- c(4,5,5,3,2)
+q3 <- c(5,2,5,4,1)
+q4 <- c(5,5,5,NA,1)
+q5 <- c(5,5,2,NA,1)
+leader <- data.frame(manager,date,country,gender,age,
+                     q1,q2,q3,q4,q5,
+                     stringsAsFactors = FALSE)
+#首先调用reshape包
+library(reshape)
+#修改manager和date变量名
+#这里书上出现了个错误。managerID应该用双引号括起来
+leader <- rename(leader, c(manager="managerID",
+                           date="testDate"))
+leader
+#也可以通过names()函数来重命名变量
+#比如讲q1-q5变为item1-item5
+names(leader)[6:10] <- c("item1","item2","item3",
+                         "item4","item5")
+leader
+```
+
+嗯，就这么简单。
+
+## 3.6 缺失值
+
+说起缺失值，很烦的好不好。在实际的数据处理中，经常会遇到缺失值的出现。有些是因为某些样本并没有这个变量（指标），也有些是因为测量过程中出现问题导致的。
+
+缺失值的存在对后续的数据处理是个很大的问题。在R中，缺失值用NA表示。可以用函数is.na()检测缺失值是否存在。它将返回逻辑值。出现NA就用TRUE，反之则是FALSE。看下面的例子。
+```{R}
+x <- c(1,2,NA,3,4)
+is.na(x)
+```
+
+现在将这个函数应用在leader数据框上：
+```{R}
+is.na(leader[6:10])
+```
+
+那么问题来了，现在已经检测到缺失值了，要怎么处理呢？
+
+第一种方法是删除这些缺失值，用其余的数据进行之后的运算
+```{R}
+#先构建几个向量
+a <- c(1,NA,2,3,4)
+b <- c(10,20,NA,30,40)
+z <- a+b
+z
+d <- a[1]+a[2]+a[3]+a[4]+a[5]
+d
+e <- sum(a)
+e
+#可以看出e算不出来，在sum函数中加入na.rm=TRUE删掉缺失值
+e <- sum(a,na.rm = TRUE)
+```
+
+也可以用函数na.omit()来移除所有含有缺失值的观测，也就是变量，它将删除所有含有缺失值的行。
+```{R}
+leader
+newdata <- na.omit(leader)
+newdata
+```
+可以看见少了两行。要注意的是，这个函数尽量不要用，因为它作用太强了。
+
+那么问题又来了，不能用这个函数，还能用什么呢。
+
+在其他地方看到，可以用填补法把缺失值填上去（不影响原有数据的分布）。不过现在忘了在哪里看到了，等有空了再补上。
+
+## 3.8 类型转换
+
+嗯，我就是跳过了3.7节，也就是日期值的内容。有兴趣的话自己去看看吧。
+
+类型转换包括数值型、字符型等的互转，数据框、矩阵等的互转。见下表。
+
+|      判断    |      转换       |
+| :----------: |  :------------: |
+| is.numeric() |  as.numeric()   |
+|   is.character()  |  as..character()   |
+|    is.vector()    |  as.vector()       |
+|    is.matrix()    |  as.matrix()       |
+|  is.data.frame()  |  as.data.frame()   |
+|  is.factor()      |  as.factor()       |
+|is.logical()       |  as.logical()      |
+
+一般来说，先判断类型，再根据需求转换。例子我就不举了，以后会用到。
+算了，讲一个吧。
+```{R}
+xyz <- c(2,4,5,6,7)
+is.numeric(xyz)
+is.vector(xyz)
+is.character(xyz)
+xyz <- as.character(xyz)
+is.numeric(xyz)
+is.vector(xyz)
+is.character(xyz)
+```
+
+## 3.9 数据排序
+
+排序嘛，很好理解。举个栗子。
+
+```{R}
+#用order()函数
+newdata1 <- leader[order(leader$age)]
+newdata1
+```
+
+或者
+```{R}
+attach(leader)
+newdata2 <- leader[order(gender,age)]
+newdata2
+```
+
+## 3.10 数据集的合并
+
+说实话，我觉得应该先讲数据集的拆分，不过无所谓了。
+
+数据集的合并可以看成在原来的数据集上添加行或者列。多数情况下，两个**数据框**是通过一个或多个共有变量进行联结的，叫做内联结（inner join）。
+merge()函数是用来**横向**合并数据集的，即**列合并**。
+
+>total <- merge(dataframe1,datafame2,by="ID")
+
+
+下面看下具体的例子。
+```{R}
+library(multilevel)
+data(cohesion)
+cohesion
+#现在新建一个数据框group.size
+group.size <- data.frame(
+  UNIT=c("1044B","1044B","1044C","1044C"),
+  PLATOON=c("1ST","2ND","1ST","2ND"),
+  PSIZE=c(3,3,2,3)
+  )
+group.size
+new.cohesion <- merge(cohesion,group.size,
+                      by=c("UNIT","PLATOON"))
+new.cohesion
+```
+
+那么，**纵向**合并也就是**行**合并怎么弄呢。用rbind()函数。
+
+>total <- rbind(dataframe1,datafame2)
+
+注意一点，两个数据框必须拥有相同的变量，顺序倒是无所谓。如果A数据框含有B数据框没有的变量，那么就采取下面两种方法：
+1. 将它删除；
+
+2. 在B中追加这个变量并将其值设置为NA。
+
+## 3.11 数据集取子集
+
+这节的内容就是在解决第三章开头的第5个问题。
+
+在实际操作中，经常会出现导入的数据集包含了太多样本以及变量，而仅仅只想针对某些样本或者变量来展开研究。下面一一介绍取子集的方法。
+
+### 3.11.1 选入样本
+
+见例子：
+```{R}
+data(cohesion)
+cohesion
+#选择第一到第三行并命名为newdata3数据集
+#注意方括号的用法"[行, 列]"
+newdata3 <- cohesion[1:3,]
+#按条件筛选
+#注意绝对等于“==”以及连接符“&”
+newdata4 <- cohesion[which(cohesion$UNIT=="1044B"
+                           &
+                             cohesion$COH03>=4),]
+```
+
+当然，这个方法不唯一，subset()函数也可以。
+
+### 3.11.2 选入变量
+
+同样见例子。
+```{R}
+data(cohesion)
+cohesion
+#选择cohesion数据集中第一个到第三个变量，也就是列
+newdata5 <- cohesion[1:3]
+newdata5
+#等价于
+v <- c("UNIT","PLATOON","COH01")
+newdata6 <- cohesion[v]
+newdata6
+```
+
+### 3.11.3 剔除变量
+
+捡栗子，不对，见例子：
+```{R}
+myvariable <- names(cohesion) %in%
+  c("COH01","COH03","COH05")
+newdata7 <- cohesion[!myvariable]
+newdata7
+```
+
+下面讲解一下：
+>names(cohesion)产生一个包含所有变量名的字符向量
+
+>names(cohesion) %in% c("COH01","COH03","COH05")返回一个逻辑向量，names(cohesion)中每个匹配这三个变量的元素的值为TRUE，反之为FALSE。即c(FALSE,FALSE,TRUE,FALSE,TRUE,FALSE,TRUE)
+
+>运算符非（即“！”）将逻辑值翻转即c(TRUE,TRUE,FALSE,TRUE,FALSE,TRUE,FALSE)
+
+>cohesion[c(TRUE,TRUE,FALSE,TRUE,FALSE,TRUE,FALSE)]选了TRUE的列。
+
+于是COH01，COH03，COH05被删除了。
+当然也可以根据这三个变量的位置来操作。
+```{R}
+newdata8 <- cohesion[c(-3,-5,-7)]
+newdata8
+```
+
+### 3.11.4 subset()函数
+
+前面提到了这个函数，举个例子：
+```{R}
+newdata9 <- subset(cohesion, COH02>=4 | COH02<=1,
+                   select=c(COH01,COH02,COH03,COH04,COH05))
+newdata9
+newdata10 <- subset(cohesion, UNIT=="1044B" & COH02>=4,
+                    select=c(COH01,COH02,COH03,COH04,COH05))
+newdata10
+```
+
+嗯，这章就结束了。
+
+
+
+
+
+
+
+
+
+
+

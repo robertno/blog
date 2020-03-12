@@ -1,0 +1,135 @@
+---
+title: R语言统计入门-第二章
+author: Dr.二哈
+date: '2018-02-17'
+slug: r语言统计入门-第二章
+categories:
+  - R
+  - 统计
+tags:
+  - R
+  - 统计
+---
+
+# 第2章 R语言环境
+## 2.1 会话管理
+### 2.1.1 工作空间窗口
+```{R}
+#用ls()命令了解都哪些变量定义在工作区
+ls()
+#这样输出有些乱
+#可以通过rm()命令来删除某些对象
+rm(height,weight)
+```
+### 2.1.6 内置数据
+```{r}
+#加载数据thuesen
+data(thuesen)
+#需要注意的是thuesen这个数据框隶属于ISwR数据
+#要加载thuesen，需要先加载ISwR
+library(ISwR)
+data(thuesen)
+```
+### 2.1.7 attach和detach
+```{r}
+#如果要重复写一些很长的命令，在数据集中获取变量的符号很很麻烦
+#比如
+plot(thuesen$blood.glucose,thuesen$short.velocity)
+#但可以简化
+#可以让R在给定数据集的变量中寻找目标
+attach(thuesen)
+#然后thuesen中的数据就可以得到，而不需要使用$符号
+blood.glucose
+#上述命令使thuesen被置于系统的搜索路径中
+#可以用search()看到搜索路径
+#可以看到thuesen被置于搜索路径的第二位
+#.GlobalEnv是工作空间
+#package:base是定义了所有标准函数的系统库
+search()
+#可以用detach命令从搜索路径中删除数据集
+#如果不给出参数，那么位于第二位置的数据集将被删除
+detach()
+search()
+```
+### 2.1.8 subset，transform和within
+```{r}
+#可以附加一个数据框，从而避免对其中每一个变量的繁琐的索引
+#然而，这对于选择数据子集以及用变化变量创建新的数据框却少有帮助
+#有一些函数使得这一操作变得简单，如：
+#在此处用到subset和transform函数，这里只利用这两个函数的简单功能
+#subset函数，从某一个数据框中选择出符合某条件的数据或是相关的列
+#transform函数为原数据框添加新的列
+thue2 <- subset(thuesen, blood.glucose<7)
+thue2
+#transform函数中的=符号并不是赋值，而是表示名称
+thue3 <- transform(thuesen,log.gluc=log(blood.glucose))
+thue3
+#transform函数的替代方法有一种是within函数，用法如下：
+thue4 <- within(thuesen,{
+  log.gluc <- log(blood.glucose)
+  m <- mean(log.gluc)
+  centered.log.gluc <- log.gluc - m
+  rm(m)
+})
+thue4
+```
+## 2.2 作图系统
+### 2.2.1 图形布局
+```{r}
+x <- runif(50, 0, 2)
+y <- runif(50, 0, 2)
+plot(x, y, main = "Main title", sub = "subtitle",
+     xlab = "x-label", ylab = "y-label")
+#可以在绘图区域放置点和线
+#可以在plot函数中设定
+#或者用points和lines添加
+#也可以添加如下命令
+text(0.6, 0.6, "text at (0.6, 0.6)")
+abline(h=.6, v=.6)
+#调用abline仅是表明文本如何以点（0.6,0.6）为中心的
+#通常，给定a和b后，abline绘制直线y=a+bx
+#边界坐标由mtext函数使用
+#for循环将数字-1到4放置在每条边界线的0.7位置
+for(side in 1:4) mtext(-1:4, side = side, at=.7, line=-1:4)
+#接下来的调用在每个边界放置一个标签，给出边的数字，font=2表示使用粗体
+mtext(paste("side", 1:4), side = 1:4, line = -1, font = 2)
+```
+
+### 2.2.2 利用部分构造图形
+```{r}
+#下面的命令绘制完全空白的图形
+#type="n"使得点不被绘制，axes=F删掉坐标轴以及图周围的方框
+#x，y的标题标签被设置成空字符串
+plot(x, y, type = "n", xlab = "", ylab = "", axes = F)
+#添加图形元素
+#第二个axis调用如何制定了小十字符（和标签）的替换
+points(x,y)
+axis(1)
+axis(2, at=seq(0.2, 1.8, 0.2))
+box()
+title(main = "Main title", sub = "subtitle",
+      xlab = "x-label", ylab = "y-label")
+```
+
+### 2.2.3 par的使用
+1. par函数可以对图的细节进行非常精细的控制
+2. par设置润徐控制线宽和类型、字符大小和字体、颜色、坐标轴的类型、图形图标区域的大小、图形的裁剪等
+3. 利用mfrow和mfcol参数可以把一个图分成几个子图
+
+### 2.2.4 组合图形
+```{r}
+#如果希望把一个元素一起放在同一张图的时候，就会产生一些特殊的要求
+#比如，为直方图添加一个正态密度函数
+#hist中的freq=F参数保证了直方图是根据比例而不是绝对数值画出来的
+#curve函数画出一个表达式（根据x），add=T润徐它叠加到已有的图上
+#但这样的还不够好
+x <- rnorm(100)
+hist(x, freq = F)
+curve(dnorm(x), add = T)
+#解决方案
+#首先确定两个图形元素的y值的大小，然后使图形足够大到涵盖这两个值
+h <- hist(x, plot = F)
+ylim <- range(0, h$density, dnorm(0))
+hist(x, freq = F, ylim = ylim)
+curve(dnorm(x), add = T)
+```

@@ -1,0 +1,220 @@
+---
+title: R语言统计入门-第二章
+author: Dr.二哈
+date: '2018-02-17'
+slug: r语言统计入门-第二章
+categories:
+  - R
+  - 统计
+tags:
+  - R
+  - 统计
+---
+
+
+
+<div id="2-r" class="section level1">
+<h1>第2章 R语言环境</h1>
+<div class="section level2">
+<h2>2.1 会话管理</h2>
+<div class="section level3">
+<h3>2.1.1 工作空间窗口</h3>
+<pre class="r"><code>#用ls()命令了解都哪些变量定义在工作区
+ls()</code></pre>
+<pre><code>## character(0)</code></pre>
+<pre class="r"><code>#这样输出有些乱
+#可以通过rm()命令来删除某些对象
+rm(height,weight)</code></pre>
+<pre><code>## Warning in rm(height, weight): 找不到对象&#39;height&#39;</code></pre>
+<pre><code>## Warning in rm(height, weight): 找不到对象&#39;weight&#39;</code></pre>
+</div>
+<div class="section level3">
+<h3>2.1.6 内置数据</h3>
+<pre class="r"><code>#加载数据thuesen
+data(thuesen)</code></pre>
+<pre><code>## Warning in data(thuesen): data set &#39;thuesen&#39; not found</code></pre>
+<pre class="r"><code>#需要注意的是thuesen这个数据框隶属于ISwR数据
+#要加载thuesen，需要先加载ISwR
+library(ISwR)
+data(thuesen)</code></pre>
+</div>
+<div id="attachdetach" class="section level3">
+<h3>2.1.7 attach和detach</h3>
+<pre class="r"><code>#如果要重复写一些很长的命令，在数据集中获取变量的符号很很麻烦
+#比如
+plot(thuesen$blood.glucose,thuesen$short.velocity)</code></pre>
+<p><img src="/post/2018-02-17-r语言统计入门-第二章_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+<pre class="r"><code>#但可以简化
+#可以让R在给定数据集的变量中寻找目标
+attach(thuesen)
+#然后thuesen中的数据就可以得到，而不需要使用$符号
+blood.glucose</code></pre>
+<pre><code>##  [1] 15.3 10.8  8.1 19.5  7.2  5.3  9.3 11.1  7.5 12.2  6.7  5.2 19.0 15.1
+## [15]  6.7  8.6  4.2 10.3 12.5 16.1 13.3  4.9  8.8  9.5</code></pre>
+<pre class="r"><code>#上述命令使thuesen被置于系统的搜索路径中
+#可以用search()看到搜索路径
+#可以看到thuesen被置于搜索路径的第二位
+#.GlobalEnv是工作空间
+#package:base是定义了所有标准函数的系统库
+search()</code></pre>
+<pre><code>##  [1] &quot;.GlobalEnv&quot;        &quot;thuesen&quot;           &quot;package:ISwR&quot;     
+##  [4] &quot;package:methods&quot;   &quot;package:stats&quot;     &quot;package:graphics&quot; 
+##  [7] &quot;package:grDevices&quot; &quot;package:utils&quot;     &quot;package:datasets&quot; 
+## [10] &quot;Autoloads&quot;         &quot;package:base&quot;</code></pre>
+<pre class="r"><code>#可以用detach命令从搜索路径中删除数据集
+#如果不给出参数，那么位于第二位置的数据集将被删除
+detach()
+search()</code></pre>
+<pre><code>##  [1] &quot;.GlobalEnv&quot;        &quot;package:ISwR&quot;      &quot;package:methods&quot;  
+##  [4] &quot;package:stats&quot;     &quot;package:graphics&quot;  &quot;package:grDevices&quot;
+##  [7] &quot;package:utils&quot;     &quot;package:datasets&quot;  &quot;Autoloads&quot;        
+## [10] &quot;package:base&quot;</code></pre>
+</div>
+<div id="subsettransformwithin" class="section level3">
+<h3>2.1.8 subset，transform和within</h3>
+<pre class="r"><code>#可以附加一个数据框，从而避免对其中每一个变量的繁琐的索引
+#然而，这对于选择数据子集以及用变化变量创建新的数据框却少有帮助
+#有一些函数使得这一操作变得简单，如：
+#在此处用到subset和transform函数，这里只利用这两个函数的简单功能
+#subset函数，从某一个数据框中选择出符合某条件的数据或是相关的列
+#transform函数为原数据框添加新的列
+thue2 &lt;- subset(thuesen, blood.glucose&lt;7)
+thue2</code></pre>
+<pre><code>##    blood.glucose short.velocity
+## 6            5.3           1.49
+## 11           6.7           1.25
+## 12           5.2           1.19
+## 15           6.7           1.52
+## 17           4.2           1.12
+## 22           4.9           1.03</code></pre>
+<pre class="r"><code>#transform函数中的=符号并不是赋值，而是表示名称
+thue3 &lt;- transform(thuesen,log.gluc=log(blood.glucose))
+thue3</code></pre>
+<pre><code>##    blood.glucose short.velocity log.gluc
+## 1           15.3           1.76 2.727853
+## 2           10.8           1.34 2.379546
+## 3            8.1           1.27 2.091864
+## 4           19.5           1.47 2.970414
+## 5            7.2           1.27 1.974081
+## 6            5.3           1.49 1.667707
+## 7            9.3           1.31 2.230014
+## 8           11.1           1.09 2.406945
+## 9            7.5           1.18 2.014903
+## 10          12.2           1.22 2.501436
+## 11           6.7           1.25 1.902108
+## 12           5.2           1.19 1.648659
+## 13          19.0           1.95 2.944439
+## 14          15.1           1.28 2.714695
+## 15           6.7           1.52 1.902108
+## 16           8.6             NA 2.151762
+## 17           4.2           1.12 1.435085
+## 18          10.3           1.37 2.332144
+## 19          12.5           1.19 2.525729
+## 20          16.1           1.05 2.778819
+## 21          13.3           1.32 2.587764
+## 22           4.9           1.03 1.589235
+## 23           8.8           1.12 2.174752
+## 24           9.5           1.70 2.251292</code></pre>
+<pre class="r"><code>#transform函数的替代方法有一种是within函数，用法如下：
+thue4 &lt;- within(thuesen,{
+  log.gluc &lt;- log(blood.glucose)
+  m &lt;- mean(log.gluc)
+  centered.log.gluc &lt;- log.gluc - m
+  rm(m)
+})
+thue4</code></pre>
+<pre><code>##    blood.glucose short.velocity centered.log.gluc log.gluc
+## 1           15.3           1.76       0.481879807 2.727853
+## 2           10.8           1.34       0.133573113 2.379546
+## 3            8.1           1.27      -0.154108960 2.091864
+## 4           19.5           1.47       0.724441444 2.970414
+## 5            7.2           1.27      -0.271891996 1.974081
+## 6            5.3           1.49      -0.578266201 1.667707
+## 7            9.3           1.31      -0.015958621 2.230014
+## 8           11.1           1.09       0.160972087 2.406945
+## 9            7.5           1.18      -0.231070001 2.014903
+## 10          12.2           1.22       0.255462930 2.501436
+## 11           6.7           1.25      -0.343865495 1.902108
+## 12           5.2           1.19      -0.597314396 1.648659
+## 13          19.0           1.95       0.698465958 2.944439
+## 14          15.1           1.28       0.468721722 2.714695
+## 15           6.7           1.52      -0.343865495 1.902108
+## 16           8.6             NA      -0.094210818 2.151762
+## 17           4.2           1.12      -0.810888496 1.435085
+## 18          10.3           1.37       0.086170874 2.332144
+## 19          12.5           1.19       0.279755623 2.525729
+## 20          16.1           1.05       0.532846250 2.778819
+## 21          13.3           1.32       0.341791014 2.587764
+## 22           4.9           1.03      -0.656737817 1.589235
+## 23           8.8           1.12      -0.071221300 2.174752
+## 24           9.5           1.70       0.005318777 2.251292</code></pre>
+</div>
+</div>
+<div class="section level2">
+<h2>2.2 作图系统</h2>
+<div class="section level3">
+<h3>2.2.1 图形布局</h3>
+<pre class="r"><code>x &lt;- runif(50, 0, 2)
+y &lt;- runif(50, 0, 2)
+plot(x, y, main = &quot;Main title&quot;, sub = &quot;subtitle&quot;,
+     xlab = &quot;x-label&quot;, ylab = &quot;y-label&quot;)
+#可以在绘图区域放置点和线
+#可以在plot函数中设定
+#或者用points和lines添加
+#也可以添加如下命令
+text(0.6, 0.6, &quot;text at (0.6, 0.6)&quot;)
+abline(h=.6, v=.6)
+#调用abline仅是表明文本如何以点（0.6,0.6）为中心的
+#通常，给定a和b后，abline绘制直线y=a+bx
+#边界坐标由mtext函数使用
+#for循环将数字-1到4放置在每条边界线的0.7位置
+for(side in 1:4) mtext(-1:4, side = side, at=.7, line=-1:4)
+#接下来的调用在每个边界放置一个标签，给出边的数字，font=2表示使用粗体
+mtext(paste(&quot;side&quot;, 1:4), side = 1:4, line = -1, font = 2)</code></pre>
+<p><img src="/post/2018-02-17-r语言统计入门-第二章_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+</div>
+<div class="section level3">
+<h3>2.2.2 利用部分构造图形</h3>
+<pre class="r"><code>#下面的命令绘制完全空白的图形
+#type=&quot;n&quot;使得点不被绘制，axes=F删掉坐标轴以及图周围的方框
+#x，y的标题标签被设置成空字符串
+plot(x, y, type = &quot;n&quot;, xlab = &quot;&quot;, ylab = &quot;&quot;, axes = F)
+#添加图形元素
+#第二个axis调用如何制定了小十字符（和标签）的替换
+points(x,y)
+axis(1)
+axis(2, at=seq(0.2, 1.8, 0.2))
+box()
+title(main = &quot;Main title&quot;, sub = &quot;subtitle&quot;,
+      xlab = &quot;x-label&quot;, ylab = &quot;y-label&quot;)</code></pre>
+<p><img src="/post/2018-02-17-r语言统计入门-第二章_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+</div>
+<div id="par" class="section level3">
+<h3>2.2.3 par的使用</h3>
+<ol style="list-style-type: decimal">
+<li>par函数可以对图的细节进行非常精细的控制</li>
+<li>par设置润徐控制线宽和类型、字符大小和字体、颜色、坐标轴的类型、图形图标区域的大小、图形的裁剪等</li>
+<li>利用mfrow和mfcol参数可以把一个图分成几个子图</li>
+</ol>
+</div>
+<div class="section level3">
+<h3>2.2.4 组合图形</h3>
+<pre class="r"><code>#如果希望把一个元素一起放在同一张图的时候，就会产生一些特殊的要求
+#比如，为直方图添加一个正态密度函数
+#hist中的freq=F参数保证了直方图是根据比例而不是绝对数值画出来的
+#curve函数画出一个表达式（根据x），add=T润徐它叠加到已有的图上
+#但这样的还不够好
+x &lt;- rnorm(100)
+hist(x, freq = F)
+curve(dnorm(x), add = T)</code></pre>
+<p><img src="/post/2018-02-17-r语言统计入门-第二章_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+<pre class="r"><code>#解决方案
+#首先确定两个图形元素的y值的大小，然后使图形足够大到涵盖这两个值
+h &lt;- hist(x, plot = F)
+ylim &lt;- range(0, h$density, dnorm(0))
+hist(x, freq = F, ylim = ylim)
+curve(dnorm(x), add = T)</code></pre>
+<p><img src="/post/2018-02-17-r语言统计入门-第二章_files/figure-html/unnamed-chunk-7-2.png" width="672" /></p>
+</div>
+</div>
+</div>

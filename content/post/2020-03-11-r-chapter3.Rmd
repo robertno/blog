@@ -1,0 +1,326 @@
+---
+title: R语言初学者指南-第三章
+author: Dr.二哈
+date: '2020-03-11'
+slug: r语言初学者指南-第三章
+categories:
+  - R
+  - 统计
+tags:
+  - R
+  - 统计
+header:
+  caption: ''
+  image: ''
+  preview: yes
+---
+时隔半年，我终于又开始写这个博客了。
+话不多说，言归正传。
+
+# 第三章 访问变量和处理数据子集
+
+在学习上一章导入数据，这一章节来学习对变量的访问和数据子集的处理。
+
+## 3.1 访问数据框变量
+
+当确认导入数据无误后，就可以按照自己的需求开始对数据进行删除部分数据，选取部分数据也就是数据子集了。
+以上一章的鱿鱼数据为例。
+
+```{r}
+#导入数据，并生成一个数据框
+Squid <- read.table(file = "F:\\database\\RBook\\squid.txt", header = TRUE)
+#查看数据框中的变量名
+names(Squid)
+```
+
+### 3.1.1 str函数
+
+这个函数主要是告诉我们这个**Squid**数据框中5个变量的属性。
+
+```{r}
+str(Squid)
+```
+
+如这个结果所示，变量样本、年份、月份、位置和性别都是整数型即**int**，GSI是数值型即**num**。
+为什么建议在读入数据形成数据框之后，用str函数看一下变量属性呢，因为如果在读入数据时使用了错误的分割符号：
+
+```{r}
+#设定分割符号是","
+Squid2 <- read.table(file = "F:\\database\\RBook\\squid.txt", dec = ",", header = TRUE)
+#查看数据框中的变量属性
+str(Squid2)
+```
+
+这个时候GSI就是个因子即**factor**，当后续处理时，R就会报错。
+后续我们将对GSI这个变量进行统计分析，值得注意的是，GSI存在于Squid这个数据框中，而没有存在于R的内存中，也就是说，在直接访问GSI的时候，R会报错。
+
+```{r}
+#我注释掉了，因为不这样的话，会卡在报错那里
+#GSI
+```
+
+### 3.1.2 函数中的数据参数
+
+这一节说的是啥呢，书上翻译的感觉啰嗦，其实就是在有些函数中指定数据集。毕竟你想做个线性回归什么的，你得告诉R要用到哪个数据集。
+
+```{r}
+N1 <- lm(GSI~factor(Location)+factor(Year),
+         data = Squid)
+N1
+```
+
+但是有些函数的参数没有这个**data=……**，比如mean()函数。这个时候可以用attach()函数绑定数据集。这个可以在之后讨论。
+
+### 3.1.3 $符号
+
+上文说到有的函数没有data参数，还有一个办法是用**$**符号。比如：
+
+```{r}
+Squid$GSI
+```
+
+还有一个方法，就是按列选择，观察数据框可以得知，GSI这个变量在Squid数据集的第6列，那么：
+
+```{r}
+Squid[,6]
+```
+
+当然，我不推荐这种方法，还得查第几列，麻烦。
+
+### 3.1.4 attach函数
+
+你看，之前提到了这个函数吧。这个函数可以把数据集添加到R的搜索路径中，这样，就可以直接访问数据集中的变量。
+
+```{r}
+attach(Squid)
+#直接访问变量GSI
+GSI
+#然后可以画图了
+boxplot(GSI)
+#或者运算
+mean(GSI)
+#当想要解绑的时候
+detach(Squid)
+```
+
+注意哈，一次绑定一个数据，当想绑定其他数据集的时候，建议最好先解绑前一个数据集，避免有同名的变量干扰。
+
+## 3.2 访问数据子集
+
+Squid这个数据集里面有个sex变量，别想多了，是性别。此时，我只想对雄性的数据进行处理，可以这么做：
+首先需要知道性别是如何编码的：
+
+```{r}
+unique(Squid$Sex)
+```
+
+这里是这么表示的，雄性是1，雌性是2。
+接下来访问所有的雄性数据，并存储在SquidM的数据框中：
+
+```{r}
+Se1 <- Squid$Sex == 1
+SquidM <- Squid[Se1,]
+SquidM
+```
+
+下面讲下这段代码的逻辑：
+
+1. 第一行生成一个与变量Sex具有相同长度的逻辑向量Se1，如果Sex值为1，则该变量的值是TRUE，反之则为FALSE。这样的变量也被称为**布尔向量**，可以用来选择**行**。
+2. 接下来选择Squid中Se1等于TRUE的行，并存储在SquidM中。
+   至此，雄性数据选择完毕。
+   当然，这个代码也可以简化为：
+
+```{r}
+SquidM <- Squid[Squid$Sex == 1,]
+SquidM
+#雌性的数据
+SquidF <- Squid[Squid$Sex == 2,]
+SquidF
+```
+
+下面讲一下布尔运算符的用法：或“|”,与“&”，非“!”。
+先看一下Location变量有什么编码值：
+
+```{r}
+unique(Squid$Location)
+```
+
+然后，我只想要Location为1，2，3的数据，注意这个是**并集**。
+
+```{r}
+Squid123 <- Squid[Squid$Location == 1 | 
+                  Squid$Location == 2 |
+                  Squid$Location == 3,]
+Squid123 <- Squid[Squid$Location != 4, ]
+Squid123 <- Squid[Squid$Location < 4, ]
+Squid123 <- Squid[Squid$Location <= 3, ]
+Squid123 <- Squid[Squid$Location >= 1 &
+                  Squid$Location <= 3,]
+```
+
+以上语句都是一个意思。
+额，写完才发现，我选用的是Cascadia code字体，这样的话……绝对等于也就是两个等于号是**==**，不等于应该是**！=**，而这里显示的是**!=**，同样的，小于等于和大于等于的形式都发生变化了。
+然后，接下来，我想进一步从雄性数据集中提取出Location为1的数据集：
+
+```{r}
+SquidM.1 <- Squid[Squid$Sex == 1 &
+                  Squid$Location == 1,]
+```
+
+### 3.2.1 数据排序
+
+有的时候想对数据集根据某一个变量进行排序，从大到小啊或者从小到大，在excel中很好操作，在R中要这样：
+
+```{r}
+#按月份排序
+Squid[order(Squid$Month),]
+```
+
+因为处理的是Squid中行，所以放在了逗号的前面。也可以对一个变量进行排序：
+
+```{r}
+Squid$GSI[order(Squid$Month)]
+```
+
+## 3.3 使用相同的标识符组合两个数据集
+
+书里这段说的很啰嗦，其实就是在实际使用中，我们可能会导入很多个excel文件，而这些文件里面的样本是一样的。简单来说，举个例子，我用了10只小鼠，样本命名为1，2，3，……，10，第一个excel文件里记载了每只老鼠血清的甘三酯（TG）含量，第二个excel文件里，记载了每只老鼠肝脏的TG含量，这两个文件分别导入到R中，生成两个数据集，而这两个数据集，样本名是一致的。
+以书中的例子而言，是这样的，Squid1.txt文件里记载了样本和对应的GSI，Squid2.txt文件里记载了样本和其他的对应变量，比如年份、月份、位置、性别。
+下面来读入这两个数据：
+
+```{r}
+Sq1 <- read.table(file = "F:\\database\\RBook\\Squid1.txt", header = TRUE)
+Sq2 <- read.table(file = "F:\\database\\RBook\\Squid2.txt", header = TRUE)
+```
+
+然后根据这两个数据集具有一致的样本进行合并，采用merge函数：
+
+```{r}
+SquidMerged <- merge(Sq1, Sq2, by = "Sample")
+SquidMerged
+```
+
+这个**by = "Sample"**就是说，Sq1和Sq2以Sample作为相同的标识符来合并。
+另外merge这个函数还有一个参数是**all = TRUE/FALSE**，默认情况下，这个值是FALSE，什么意思呢，就是说Sq1和Sq2的行如果有缺失值的话，就会被忽略掉，这个样本就不存在于SquidMerged数据集中，反之，则用NA填充。下面举个**all = TRUE**的例子：
+
+```{r}
+SquidMerged2 <- merge(Sq1, Sq2, by = "Sample",
+                      all = TRUE)
+SquidMerged2
+```
+
+对比这两个组合数据集，就可以发现样本4的差别。
+
+## 3.4 输出数据
+
+上文提到我为了研究需要，将雄性鱿鱼的数据给提取出来了，并存储于SquidM的数据集中，下面，我想把这个数据集给导出来，方便我发给小伙伴们。这个时候就会用到write.table函数：
+
+```{r}
+SquidM <- Squid[Squid$Sex == 1,]
+write.table(SquidM, file = "F:\\database\\RBook\\MaleSquid.txt",
+            sep = " ", quote = FALSE,
+            append = FALSE, na = "NA")
+```
+
+这样在我的文件夹中就会出现**MaleSquid.txt**文件。接下来，逐个讲解这个函数中各参数的含义：
+
+1. 首先要指明要导出的数据集，本例中是SquidM；
+2. 然后需要告诉R，我要以什么名称，在什么位置来导出这个数据集，本例中是file = "F:\\database\\RBook\\MaleSquid.txt"；
+3. sep = " "是告诉R我要将数据用空格隔开，注意引号里面是空格；
+4. quote = FALSE是要取消字符串的引号标志，也就是标题的引号；
+5. append = FALSE嘛……说实话，书中说"为FALSE的话，就会打开一个新的文件，如果为TRUE，它会将变量SquidM添加到一个已经存在的文件的尾部“，我压根就没看懂，等哪天找到英文原版看一下是不是翻译的问题；
+6. na = "NA"的意思就简单了，SquidM的缺失值我就用**NA**来代替。
+   看一下输出来的文件长什么样：
+   ![](https://rmarkdown.s3-cn-east-1.qiniucs.com/20200310212039.jpg)
+   可以发现，按照变量名将下面的数据逐个对应后，第一列没有名字，这个就是R的问题，如果要导入到excel中，需要将第一行的所有变量名向右移一格。说到这里，我又想吐槽了，书中是这么说的：“需要把第一行转移到右侧一列”，你瞅瞅，能理解不。
+
+## 3.5 重新编码分类变量
+
+首先说下什么是分类变量，结合例子，在前文，我们用str(Squid)命令查看了各变量的类型：
+
+```{r}
+str(Squid)
+```
+
+变量Location编码为1，2，3，4，变量Sex编码为1，2。这样的变量就是分类变量，或者叫做名义变量。
+虽然说这种编码方式可以将一些字符串什么的转换为数字，但是，除了数据集所有者自己，谁也不知道Location的1，2，3，4分别是什么，随着时间的变迁，所有者自己都会忘掉。
+所以就有了将这类分类变量重编码的需要。
+
+```{r}
+Squid$fLocation <- factor(Squid$Location)
+Squid$fSex <- factor(Squid$Sex)
+```
+
+这两句的意思是，分别在Squid数据框中生成新变量**fLocation**和**fSex**，这里用到了R中的因子概念。
+那我们看一下这两个新变量长什么样子，比如说fSex：
+
+```{r}
+Squid$fSex
+```
+
+注意最后一行：**Levels: 1 2**，这告诉我们，fSex有两个水平，下面将这两个水平重新编码为**“雄性”**和**“雌性”**：
+
+```{r}
+Squid$fSex <- factor(Squid$Sex, levels = c(1,2),
+                     labels = c("M", "F"))
+Squid$fSex
+```
+
+这里levels = c(1,2)和labels = c("M", "F")就一一对应起来，1对应M也就是雄性，2对应F也就是雌性。
+现在试试用新变量fSex来做个图或者来个线性回归：
+
+```{r}
+boxplot(GSI ~ fSex, data = Squid)
+M1 <- lm(GSI ~ fSex, data = Squid)
+M1
+```
+
+下面，我们看一下FLocation：
+
+```{r}
+Squid$fLocation
+boxplot(GSI ~ fLocation, data = Squid)
+```
+
+注意到，这个名义变量有四个水平，这种情况下，水平值由小到大进行排序，这意味着，在盒形图里，位置为1的数据与位置为2的数据相邻，位置为2的与位置为3的相邻等等。
+但是如果我把这个默认的由小到大的排序改了呢：
+
+```{r}
+Squid$fLocation <- factor(Squid$Location, levels = c(2,3,1,4))
+Squid$fLocation
+```
+
+此时，最后一行显示的是：**Levels: 2 3 1 4**，我用这个重编码过的fLocation画个图，大家看下差别：
+
+```{r}
+boxplot(GSI ~ fLocation, data = Squid)
+```
+
+另外，在本章开始的时候选择雄性数据，我是这么做的：
+
+```{r}
+SquidM <- Squid[Squid$Sex == 1,]
+```
+
+那我想用fSex选择雄性呢，是一样的吗，答案是否定的：
+
+```{r}
+SquidM <- Squid[Squid$fSex == "1",]
+```
+
+对于fSex而言，编码数字1必须用双引号括起来，因为fSex是个因子（factor）。
+
+## 3.6 本章学了哪些R函数
+
+自己整合去。
+
+## 3.7 习题
+
+1. 使用流行病学数据练习使用read.table函数并访问其中的变量：
+   文件为*BirdFlu.xls*，这是一个WHO报道的每年人类感染禽流感A（H5N1)的病例。
+2. 使用深海研究数据练习使用read.table函数并访问其中的变量：
+   这个来源于第二张的习题6，做完之后，从*ISIT.xls*文件载入数据。
+3. 使用深海研究数据练习使用write.table函数：
+   提取4月份并且深度超过2000米的测量数据，并输出。
+4. 使用深海研究数据练习使用factor函数并访问数据框中的子集：
+   站点1-5是2001年4月抽样，站点6-11是2001年8月抽样，站点12-15是2002年3月抽样，站点16-19是2002年10月抽样，在R里生成两个新变量确定月份和年份。

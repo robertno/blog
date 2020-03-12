@@ -1,0 +1,238 @@
+---
+title: R语言统计分析与应用-第三章-1
+author: Dr.二哈
+date: '2019-04-20'
+slug: r语言统计分析与应用-第三章-1
+categories:
+  - R
+  - 统计
+tags:
+  - R
+  - 统计
+header:
+  caption: ''
+  image: ''
+  preview: yes
+---
+
+
+
+<div id="section" class="section level1">
+<h1>第三章 基本数据管理</h1>
+<p>前面讲了一些常用的函数以及数据的输入，在数据处理过程中，在数据输入之后还要对数据进行筛选啊拆分啊什么的，这一章主要讲的就是这个。</p>
+<p>下面讲一个例子：
+某项研究想确定男性和女性在领导各自企业方式上的不同，主要的问题如下：</p>
+<ol style="list-style-type: decimal">
+<li><p>处于管理岗位的男性和女性在听从上级的程度上是否不同；</p></li>
+<li><p>这种情况是否依国家不同而不同，或者由性别导致的不同是否普遍存在。</p></li>
+</ol>
+<p>针对这两个问题，让多个国家的经理人的上司对其服从程度打分：
+这位经理人在做出决策之前会询问我的意见。</p>
+<table>
+<thead>
+<tr class="header">
+<th align="center">态度</th>
+<th align="center">分数</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center">非常不同意</td>
+<td align="center">1</td>
+</tr>
+<tr class="even">
+<td align="center">不同意</td>
+<td align="center">2</td>
+</tr>
+<tr class="odd">
+<td align="center">中立</td>
+<td align="center">3</td>
+</tr>
+<tr class="even">
+<td align="center">同意</td>
+<td align="center">4</td>
+</tr>
+<tr class="odd">
+<td align="center">非常同意</td>
+<td align="center">5</td>
+</tr>
+</tbody>
+</table>
+<p>在这里，每位上司根据这个对某一名经理人进行评分，为简化，一共5个经理人，5个上司。因此，上司的评分就有q1到q5，共5个向量。</p>
+<pre class="r"><code>manager &lt;- c(1,2,3,4,5)
+date &lt;- c(&quot;10/20/08&quot;,&quot;10/21/08&quot;,&quot;10/10/08&quot;,&quot;10/19/08&quot;,&quot;6/1/09&quot;)
+country &lt;- c(&quot;US&quot;,&quot;UK&quot;,&quot;US&quot;,&quot;UK&quot;,&quot;US&quot;)
+gender &lt;- c(&quot;M&quot;,&quot;F&quot;,&quot;M&quot;,&quot;F&quot;,&quot;M&quot;)
+age &lt;- c(32,43,26,38,99)
+q1 &lt;- c(5,3,3,3,2)
+q2 &lt;- c(4,5,5,3,2)
+q3 &lt;- c(5,2,5,4,1)
+q4 &lt;- c(5,5,5,NA,1)
+q5 &lt;- c(5,5,2,NA,1)
+leader &lt;- data.frame(manager,date,country,gender,age,
+                     q1,q2,q3,q4,q5,
+                     stringsAsFactors = FALSE)
+leader</code></pre>
+<pre><code>##   manager     date country gender age q1 q2 q3 q4 q5
+## 1       1 10/20/08      US      M  32  5  4  5  5  5
+## 2       2 10/21/08      UK      F  43  3  5  2  5  5
+## 3       3 10/10/08      US      M  26  3  5  5  5  2
+## 4       4 10/19/08      UK      F  38  3  3  4 NA NA
+## 5       5   6/1/09      US      M  99  2  2  1  1  1</code></pre>
+<p>为从这些数据里分析出东西来，就要对这些数据进行管理。比如；</p>
+<ol style="list-style-type: decimal">
+<li><p>5个评分（q1到q5）需要组合起来，即为每位经理人生成一个平均服从程度得分；</p></li>
+<li><p>从上面可以看出，有些得分出现了NA缺失值，同时也需要为99岁这样的数据重编码为缺失值，因为99岁这明显不对啊。因此需要一种处理不完整数据的方法；</p></li>
+<li><p>在某些数据集中往往包含了数百个变量，而我们可能只对一些感兴趣，因此希望创建一个只包含那些变量的新数据集；</p></li>
+<li><p>在本例中，领导行为可能随经理人的年龄而改变，即二者存在某种函数关系。要检验这种观点，需要将当前的年龄数值重编码为类别型的年龄组（比如，年轻，中年，年长）；</p></li>
+<li><p>领导行为可能随时间推移而发生变化，我们可能想重点研究最近全球金融危机期间的服从行为。那么，需要将研究范围限定在某一个特定的时间段（比如1/1/09到12/31/09）。</p></li>
+</ol>
+<p>这些问题怎么解决呢，下面将一一介绍。</p>
+<div id="section-1" class="section level2">
+<h2>3.1 创建新变量</h2>
+<p>创建新变量很简单，重点在于如何将新变量整合到原来的数据集中：</p>
+<pre class="r"><code>y1 &lt;- c(1,2,3,4,5)
+y2 &lt;- c(12,13,15,16,17)
+newdata &lt;- data.frame(y1,y2)
+head(newdata)</code></pre>
+<pre><code>##   y1 y2
+## 1  1 12
+## 2  2 13
+## 3  3 15
+## 4  4 16
+## 5  5 17</code></pre>
+<pre class="r"><code>#创建新变量
+sumy &lt;- newdata$y1+newdata$y2
+meany &lt;- (newdata$y1+newdata$y2)/2
+sumy</code></pre>
+<pre><code>## [1] 13 15 18 20 22</code></pre>
+<pre class="r"><code>meany</code></pre>
+<pre><code>## [1]  6.5  7.5  9.0 10.0 11.0</code></pre>
+<pre class="r"><code>#可以看出只是创建了新变量，但是不在newdata中
+#整合到newdata数据框中
+#方法一
+newdata1 &lt;- data.frame(newdata, sumy, meany)
+head(newdata1)</code></pre>
+<pre><code>##   y1 y2 sumy meany
+## 1  1 12   13   6.5
+## 2  2 13   15   7.5
+## 3  3 15   18   9.0
+## 4  4 16   20  10.0
+## 5  5 17   22  11.0</code></pre>
+<pre class="r"><code>#方法二
+newdata2 &lt;- transform(newdata,
+                     sumy=y1+y2,
+                     meany=(y1+y2)/2)
+head(newdata2)</code></pre>
+<pre><code>##   y1 y2 sumy meany
+## 1  1 12   13   6.5
+## 2  2 13   15   7.5
+## 3  3 15   18   9.0
+## 4  4 16   20  10.0
+## 5  5 17   22  11.0</code></pre>
+<pre class="r"><code>#方法三
+newdata3 &lt;- newdata
+attach(newdata3)</code></pre>
+<pre><code>## The following objects are masked _by_ .GlobalEnv:
+## 
+##     y1, y2</code></pre>
+<pre class="r"><code>newdata3$sumy &lt;- y1+y2
+newdata3$meany &lt;- (y1+y2)/2
+detach(newdata3)
+head(newdata3)</code></pre>
+<pre><code>##   y1 y2 sumy meany
+## 1  1 12   13   6.5
+## 2  2 13   15   7.5
+## 3  3 15   18   9.0
+## 4  4 16   20  10.0
+## 5  5 17   22  11.0</code></pre>
+</div>
+<div id="section-2" class="section level2">
+<h2>3.2 向量运算</h2>
+<div id="section-3" class="section level3">
+<h3>3.2.1 添加或删除向量</h3>
+<p>在R中，向量一旦建立起来，里面的元素就已经确定了。因此，如果想添加或删除元素，就需要重新给向量赋值。</p>
+<pre class="r"><code>qwe &lt;- c(12,13,14,23,78)
+#在中间添加一个元素，数值56
+qwe &lt;- c(qwe[1:3],56,qwe[4:5])
+qwe</code></pre>
+<pre><code>## [1] 12 13 14 56 23 78</code></pre>
+</div>
+<div id="section-4" class="section level3">
+<h3>3.2.2 向量运算</h3>
+<p>这部分就是线性代数的内容。嗯……不讲了。看例子吧</p>
+<pre class="r"><code>x &lt;- c(2,3,4)
+y &lt;- c(2,5,7)
+x+y</code></pre>
+<pre><code>## [1]  4  8 11</code></pre>
+<pre class="r"><code>x*y</code></pre>
+<pre><code>## [1]  4 15 28</code></pre>
+</div>
+<div id="section-5" class="section level3">
+<h3>3.2.3 用: 运算符创建向量</h3>
+<p>：运算符用于生成指定范围内数值构成的向量。
+看例子：</p>
+<pre class="r"><code>5:8</code></pre>
+<pre><code>## [1] 5 6 7 8</code></pre>
+<pre class="r"><code>5:1</code></pre>
+<pre><code>## [1] 5 4 3 2 1</code></pre>
+<pre class="r"><code>#要注意运算符的优先级
+i &lt;- 2
+#冒号的优先级高于减号，所以先计算i:i，变成个一元向量，然后再减1
+i:i-1</code></pre>
+<pre><code>## [1] 1</code></pre>
+<pre class="r"><code>#括号的优先级高于冒号，所以先计算i-1，于是就相当于计算2:1
+i:(i-1)</code></pre>
+<pre><code>## [1] 2 1</code></pre>
+<p>注意了，这个地方书上说的不对，解释的也是乱七八糟。它的结果是：
+i:i-1的结果是“0 1”，i:(i-1)的结果是“1”。</p>
+</div>
+<div id="seqrep" class="section level3">
+<h3>3.2.4 使用seq()以及rep()函数创建向量</h3>
+<p>比上面那个冒号“：”运算符更常用的是seq()函数。它用来生成等差数列。</p>
+<pre class="r"><code>seq(from=10,to=30,by=3)</code></pre>
+<pre><code>## [1] 10 13 16 19 22 25 28</code></pre>
+<pre class="r"><code>?seq()</code></pre>
+<pre><code>## starting httpd help server ... done</code></pre>
+<pre class="r"><code>seq(10,30,3)</code></pre>
+<pre><code>## [1] 10 13 16 19 22 25 28</code></pre>
+<p>rep()函数可以把同一常数放在向量中，语法是：</p>
+<p>rep(x, times, each)，前两个参数很好理解，最后的each参数是指定x交替重复的次数。</p>
+<pre class="r"><code>x &lt;- rep(7,5)
+x</code></pre>
+<pre><code>## [1] 7 7 7 7 7</code></pre>
+<pre class="r"><code>y &lt;- rep(c(1,2,3),3)
+y</code></pre>
+<pre><code>## [1] 1 2 3 1 2 3 1 2 3</code></pre>
+<pre class="r"><code>rep(1:3,2)</code></pre>
+<pre><code>## [1] 1 2 3 1 2 3</code></pre>
+<pre class="r"><code>rep(c(2,6,12),each=3)</code></pre>
+<pre><code>## [1]  2  2  2  6  6  6 12 12 12</code></pre>
+</div>
+</div>
+<div id="section-6" class="section level2">
+<h2>3.3 处理数据对象的常用函数</h2>
+<p>这一部分就不再写了，用的时候自然就知道了。</p>
+</div>
+<div id="section-7" class="section level2">
+<h2>3.4 变量的重编码</h2>
+<p>现在解决前言中的问题2：
+&gt; 2. 从上面可以看出，有些得分出现了NA缺失值，同时也需要为99岁这样的数据重编码为缺失值，因为99岁这明显不对啊。因此需要一种处理不完整数据的方法。</p>
+<p>现在将连续型变量age重编码为类别型变量：agecat(Young,Middle Aged,Elder)。</p>
+<pre class="r"><code>#首先把99岁的年龄值编码成缺失值。
+leader$age[leader$age == 99] &lt;- NA
+#然后创建agecat向量
+leader$agecat[leader$age &gt;= 75] &lt;- &quot;Elder&quot;
+leader$agecat[leader$age &lt; 75 &amp; leader$age &gt;=55] &lt;- &quot;Middle Aged&quot;
+leader$agecat[leader$age &lt; 55] &lt;- &quot;Young&quot;
+leader</code></pre>
+<pre><code>##   manager     date country gender age q1 q2 q3 q4 q5 agecat
+## 1       1 10/20/08      US      M  32  5  4  5  5  5  Young
+## 2       2 10/21/08      UK      F  43  3  5  2  5  5  Young
+## 3       3 10/10/08      US      M  26  3  5  5  5  2  Young
+## 4       4 10/19/08      UK      F  38  3  3  4 NA NA  Young
+## 5       5   6/1/09      US      M  NA  2  2  1  1  1   &lt;NA&gt;</code></pre>
+<p>当然这个方法不唯一。</p>
+<p>嗯……今天就到这里。</p>
+</div>
+</div>

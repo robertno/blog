@@ -1,0 +1,166 @@
+---
+title: R语言统计入门-第三章
+author: Dr.二哈
+date: 2018-02-27 19:21:41
+categories:
+  - R
+  - 统计
+tags:
+  - R
+  - 统计
+---
+
+
+
+<div id="-" class="section level1">
+<h1>第三章 概率与分布</h1>
+<div class="section level2">
+<h2>3.1 随机抽样</h2>
+<pre class="r"><code>#在R中，如果想进行随机抽样，比如从1-40中随机抽取5个数字
+#sample函数中，第一个参数1:40表示被抽样的值向量
+#第二个参数5是抽样大小
+sample(1:40,5)</code></pre>
+<pre><code>## [1] 37 16 30 21 18</code></pre>
+<pre class="r"><code>#值得注意的是，sample函数默认是无放回抽样
+#如果想进行有放回抽样，需要加上参数replace=TRUE
+#有放回抽样适用于投硬币或掷骰子模型
+#比如模拟10次投硬币
+sample(c(&quot;H&quot;,&quot;T&quot;),10,replace=T)</code></pre>
+<pre><code>##  [1] &quot;H&quot; &quot;H&quot; &quot;T&quot; &quot;T&quot; &quot;H&quot; &quot;H&quot; &quot;T&quot; &quot;T&quot; &quot;H&quot; &quot;H&quot;</code></pre>
+<pre class="r"><code>#可以用prob参数来模拟那种结果具有不相等概率的数据
+#比如成功的几率是90%
+sample(c(&quot;succ&quot;,&quot;fail&quot;),10,replace=T,prob=c(0.9,0.1))</code></pre>
+<pre><code>##  [1] &quot;succ&quot; &quot;succ&quot; &quot;succ&quot; &quot;succ&quot; &quot;succ&quot; &quot;fail&quot; &quot;succ&quot; &quot;succ&quot; &quot;succ&quot; &quot;succ&quot;</code></pre>
+</div>
+<div class="section level2">
+<h2>3.2 概率计算与排列组合</h2>
+<pre class="r"><code>#使用prod函数，进行连乘
+#比如36×37×38×39×40
+prod(40:36)</code></pre>
+<pre><code>## [1] 78960960</code></pre>
+<pre class="r"><code>#如果这是一种类似于乐透彩票的游戏，需要正确猜对5个数字
+#第一个数字有5种可能，第二个有4种可能，以此类推
+#那么赢奖的概率为
+prod(5:1)/prod(40:36)</code></pre>
+<pre><code>## [1] 1.519738e-06</code></pre>
+<pre class="r"><code>#计算从40个数字中选取5个的所有可能
+#可以用choose函数
+choose(40,5)</code></pre>
+<pre><code>## [1] 658008</code></pre>
+<pre class="r"><code>#那么概率即为
+1/choose(40,5)</code></pre>
+<pre><code>## [1] 1.519738e-06</code></pre>
+</div>
+<div class="section level2">
+<h2>3.3 离散分布</h2>
+<p> 当观察一个独立重复二项实验时，通常对每次实验的成功或失败并不感兴趣，更感兴趣的是成功或失败的总数。显然，这个总数是随机的，因为它依赖于每一次随机结果，因此被称为随机变量。</p>
+<p> 它是一个可以取值0,1,2,3，……，n的离散值的随机变量。</p>
+<p> 随机变量<span class="math display">\[X\]</span>具有概率分布，可以用点概率<span class="math display">\[f(x)=P(X=x)\]</span>或累计分布函数<span class="math display">\[F(x)=P(X=x)\]</span>描述。在上述二项分布情形下，分布可以用点概率来得到： <span class="math display">\[
+f(x)=(\begin{matrix}
+n\\
+x\\
+\end{matrix})p^x(1-p)^{n-x}
+\]</span></p>
+<p> 其中 <span class="math display">\[
+(\begin{matrix}
+n\\
+x\\
+\end{matrix})
+\]</span>  被称为二项系数。参数<em>P</em>是一次独立实验中成功地概率。</p>
+</div>
+<div class="section level2">
+<h2>3.4 连续分布</h2>
+<p> 有些数据来自于对实质连续尺度的测量，比如温度什么的。这种测量通常包含随机变化的因素，这使得测量很难被完全重复。然而，这种随机波动会遵循某种模式：它会集中在某个中心值附近，大的偏差比小的要少得多。</p>
+<p> 为了连续数据建模，需要定义能包含任意实数值的随机变量。因为有无穷的数字无限接近，任何特定值的概率是0，所以这里没有像离散型随机变量那样的点概率的说法，取而代之的是<strong>密度</strong>的概念。</p>
+<p> 它是指<em>x</em>的一个小邻域的无穷小概率除以区域的大小。累计分布函数的定义如前，并且有下面的关系： <span class="math display">\[
+F(x)=\int_{-\infty}^\infty{f(x)dx}
+\]</span>  在统计理论中有许多常见的分布，可以在R中使用。先看下面几个例子。</p>
+<p> 均匀分布是在一个特定的区间（默认是[0,1]）上有常数密度。</p>
+<p> 正态分布（也成为高斯分布）具有密度： <span class="math display">\[
+f(x)=\frac{1}{\sqrt{{2\pi\sigma}}}exp(-\frac{(x-\mu)^2}{2\sigma^2})
+\]</span>  依赖于均值<span class="math display">\[\mu\]</span>和标准差<span class="math display">\[\sigma\]</span>。正态分布具有标志性的钟形曲线。</p>
+</div>
+<div id="r" class="section level2">
+<h2>3.5 R中的内置分布</h2>
+<p> 与建模和统计检验有关的常用标准分布都已经嵌入到R中，因此可以完全取代传统的统计表格。下面只看一下正态分布和二项分布。</p>
+<p> 对一个统计分布可以计算4项基本内容：</p>
+<ol style="list-style-type: decimal">
+<li><p>密度或点概率；</p></li>
+<li><p>累计概率分布函数</p></li>
+<li><p>分位数</p></li>
+<li><p>伪随机数</p></li>
+</ol>
+<p> 对R中所有的分布，关于上面列出的4项都对应一个相应的函数，比如对于正态分布，它们分别为dnorm，pnorm，qnorm和rnorm（分别对应密度，概率、分位数和随机数）。</p>
+<div class="section level3">
+<h3>3.5.1 密度</h3>
+<p> 连续分布的密度是“得到一个接近<em>x</em>的值”的相对可能性的度量。在一个特定区间得到一个值得概率是在相应曲线下的面积。</p>
+<p> 离散分布，密度用于点概率——恰好得到<em>x</em>值得概率。</p>
+<pre class="r"><code>#对于密度函数，可以如下进行
+#函数seq用于产生等距数值，这里是从-4到4，步长为0.1
+#type=“l“参数可以使函数在点与点之间划线而不是只画出点。
+x &lt;- seq(-4,4,0.1)
+plot(x,dnorm(x),type=&quot;l&quot;)</code></pre>
+<p><img src="/post/2018-02-27-r语言统计入门-第三章_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+<pre class="r"><code>#创建图形的另外一种方法是用curve
+curve(dnorm(x), from=-4, to=4)</code></pre>
+<p><img src="/post/2018-02-27-r语言统计入门-第三章_files/figure-html/unnamed-chunk-3-2.png" width="672" /></p>
+<pre class="r"><code>#对于离散分布，变量只能取明确值，更倾向于画针形图
+#下面是n=50，p=0.33的二项分布图，type=“h”指定画出针形图
+x &lt;- 0:50
+plot(x, dbinom(x,size=50, prob=.33),type=&quot;h&quot;)</code></pre>
+<p><img src="/post/2018-02-27-r语言统计入门-第三章_files/figure-html/unnamed-chunk-3-3.png" width="672" /></p>
+</div>
+<div class="section level3">
+<h3>3.5.2 累计分布函数</h3>
+<p> 累计分布函数描述的是对一个给定分布小于或等于x的分布的概率。相应R函数按惯例以“p”开头。</p>
+<p> 比如，一种生化指标可以用均值132，标准差13的正态分布描述，而某个患者的该指标为160，则：</p>
+<pre class="r"><code>1-pnorm(160,mean=132,sd=13)</code></pre>
+<pre><code>## [1] 0.01562612</code></pre>
+<p> 另一个典型应用与统计检验有关。考虑简单的符号检验：</p>
+<p> 20个病人每人进行2中治疗（以随机顺序治疗），问治疗A还是治疗B更好。结果表明16人认为A好。问题是这是否能作为A确实更好的充分证据，还是说这个结果也可能只是偶然发生的，即使两种治疗效果同样好。如果两种治疗没有差别，可以认为喜欢A的人数服从n=20，<em>p</em>=0.5的二项分布。那么所观测到的结果有多少种可能呢，如同在正态分布下，需要一个尾部概率。</p>
+<pre class="r"><code>pbinom(16,size=20,prob=.5)</code></pre>
+<pre><code>## [1] 0.9987116</code></pre>
+<p> 然后用1减去它得到上尾概率，但这是不对的。我们需要的是观测到的或更极端的概率，pbinom给出了16或更少数量的概率。此处用“15或更少”来代替：</p>
+<pre class="r"><code>1-pbinom(15,size=20,prob=.5)</code></pre>
+<pre><code>## [1] 0.005908966</code></pre>
+<p> 如果因为没有关于哪种治疗方法更好的假设，而希望进行双侧检验，那么必须加上得到在另一侧同样极端结果的概率。这意味着4个或更少的人喜欢A的概率。下面给出总的概率：</p>
+<pre class="r"><code>1-pbinom(15,20,.5)+pbinom(4,20,.5)</code></pre>
+<pre><code>## [1] 0.01181793</code></pre>
+</div>
+<div class="section level3">
+<h3>3.5.3 分位数</h3>
+<p> 分位数函数是累计分布函数的反函数。具有这样的性质：得到小于等于它的概率为<em>p</em>。根据定义，中位数即50%分位数。</p>
+<p> 理论分位数通常用于置信区间的计算，以及与设计试验有关的势函数的计算。下面给出一个置信区间计算的简单例子。</p>
+<p> 如果有来自具有共同均值μ和标准差σ的正态分布的n个观测，均值<span class="math display">\[ \overline{X}\]</span>服从均值为<span class="math display">\[\mu\]</span>、标准差为<span class="math display">\[\sigma/\sqrt{n}\]</span>的正态分布，<span class="math display">\[\mu\]</span>的95%置信区间为： <span class="math display">\[
+\overline{x}+\sigma/\sqrt{n}\times N_{0.025}\leq\mu\leq\overline{x}+\sigma/\sqrt{n}\times N_{0.025}
+\]</span>  其中<span class="math display">\[N_{0.025}\]</span>是正态分布的2.5%分位数。如果<span class="math display">\[\sigma=12\]</span>，观测了<span class="math display">\[n=5\]</span>个人，得到均值<span class="math display">\[\overline{x}=83\]</span>，那么可以计算相关分位数如下：（sem表示standard error of the mean）</p>
+<pre class="r"><code>xbar &lt;- 83
+sigma &lt;- 12
+n &lt;- 5
+sem &lt;- sigma/sqrt(n)
+sem</code></pre>
+<pre><code>## [1] 5.366563</code></pre>
+<pre class="r"><code>xbar + sem + qnorm(0.025)</code></pre>
+<pre><code>## [1] 86.4066</code></pre>
+<pre class="r"><code>xbar + sem + qnorm(0.975)</code></pre>
+<pre><code>## [1] 90.32653</code></pre>
+<p> 因此得到了一个<span class="math display">\[\mu\]</span>的置信度为95%的置信区间，从72.48到93.52。</p>
+<p> 由于正态分布是对称的，所以有<span class="math display">\[N_{0.025}=-N_{0.975}\]</span>，通常把置信区间公式写成<span class="math display">\[\overline{x}\pm\sigma/\sqrt{n}\times N_{0.975}\]</span>。这个分位数通常被记为<span class="math display">\[\Phi^{-1}(0.975)\]</span>。此处<span class="math display">\[\Phi\]</span>是标准正态分布（pnorm）函数的标准符号。</p>
+</div>
+<div class="section level3">
+<h3>3.5.4 随机数字</h3>
+<p> 使用随机数产生函数非常简单。第一个参数指定用于计算的随机数的数量，后续参数类似于其他与相同分布有关的函数中相应位置的参数，例如：</p>
+<pre class="r"><code>rnorm(10)</code></pre>
+<pre><code>##  [1]  0.04684732 -0.02948123 -0.75005173 -0.56389955  0.19080283
+##  [6] -0.61748503  2.71935500  0.20708539  0.40252155  0.17880460</code></pre>
+<pre class="r"><code>rnorm(10)</code></pre>
+<pre><code>##  [1] -0.08673014 -1.43452132  0.79059235 -0.44031861  0.99937695
+##  [6]  0.43162762  0.44075596 -1.40122629  2.15570131  0.36923848</code></pre>
+<pre class="r"><code>rnorm(10,mean=7,sd=5)</code></pre>
+<pre><code>##  [1]  1.9246116  8.4571563  5.2999963  1.2818234  9.7980067 -1.9064289
+##  [7] 13.5556810  3.3486614  6.5230462  0.3127788</code></pre>
+<pre class="r"><code>rbinom(10,size=20,prob=.5)</code></pre>
+<pre><code>##  [1]  7 10  6  7  9 11  7 12  9 12</code></pre>
+</div>
+</div>
+</div>

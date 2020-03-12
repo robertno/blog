@@ -1,0 +1,495 @@
+---
+title: R语言统计入门-第四章
+author: Dr.二哈
+date: '2018-02-28'
+slug: r语言统计入门-第四章
+categories:
+  - R
+  - 统计
+tags:
+  - R
+  - 统计
+---
+
+
+
+<div id="-" class="section level1">
+<h1>第四章 描述性统计和图形</h1>
+<div class="section level2">
+<h2>4.1 单组的汇总统计量</h2>
+<pre class="r"><code>#计算均值、标准差、方差和中位数
+#比如x为50个来自于正态分布的数值的向量
+x &lt;- rnorm(50)
+mean(x)</code></pre>
+<pre><code>## [1] -0.1020794</code></pre>
+<pre class="r"><code>sd(x)</code></pre>
+<pre><code>## [1] 0.7992287</code></pre>
+<pre class="r"><code>var(x)</code></pre>
+<pre><code>## [1] 0.6387666</code></pre>
+<pre class="r"><code>median(x)</code></pre>
+<pre><code>## [1] -0.09860993</code></pre>
+<pre class="r"><code>#经验后分位数
+quantile(x)</code></pre>
+<pre><code>##          0%         25%         50%         75%        100% 
+## -2.27594629 -0.51963199 -0.09860993  0.52209912  1.33801565</code></pre>
+<pre class="r"><code>#看看如何取得十分位数
+#可以增加一个包含十分位数的参数
+pvec &lt;- seq(0, 1, 0.1)
+pvec</code></pre>
+<pre><code>##  [1] 0.0 0.1 0.2 0.3 0.4 0.5 0.6 0.7 0.8 0.9 1.0</code></pre>
+<pre class="r"><code>quantile(x, pvec)</code></pre>
+<pre><code>##          0%         10%         20%         30%         40%         50% 
+## -2.27594629 -1.03235747 -0.57501258 -0.45242250 -0.33083825 -0.09860993 
+##         60%         70%         80%         90%        100% 
+##  0.03587906  0.35254339  0.55122580  0.93672980  1.33801565</code></pre>
+<p>如果有缺失值，那么问题会复杂一些，下面讲个例子。</p>
+<p>数据集juul，包含在ISwR包中。是Anders Juul的报告中的数据。该报告是关于健康人群，主要是学龄儿童的血清IGF-l的。现在只使用igfl。</p>
+<pre class="r"><code>#当试着计算igfl的均值时，出现一个问题
+library(ISwR)
+attach(juul)
+mean(igf1)</code></pre>
+<pre><code>## [1] NA</code></pre>
+<pre class="r"><code>#R不能跳过缺失值
+#然而可以用na.rm参数来移除未知值
+mean(igf1,na.rm=T)</code></pre>
+<pre><code>## [1] 340.168</code></pre>
+<pre class="r"><code>#但有个例外，length函数不识别na.rm
+#所以不能用它来确定非缺失观测的个数
+#可以用下面的语句来实现
+#这个结构说明，逻辑值若用于算数计算，那么TRUE转换为1，FALSE转换为0
+sum(!is.na(igf1))</code></pre>
+<pre><code>## [1] 1018</code></pre>
+<pre class="r"><code>#summary函数可以汇总数字变量
+#其中，1stQu.和3rdQu.分别指经验四分位数（0.25，0.75）
+summary(igf1)</code></pre>
+<pre><code>##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max.    NA&#39;s 
+##    25.0   202.2   313.5   340.2   462.8   915.0     321</code></pre>
+<pre class="r"><code>#也可以对整个数据集进行汇总
+summary(juul)</code></pre>
+<pre><code>##       age            menarche          sex             igf1      
+##  Min.   : 0.170   Min.   :1.000   Min.   :1.000   Min.   : 25.0  
+##  1st Qu.: 9.053   1st Qu.:1.000   1st Qu.:1.000   1st Qu.:202.2  
+##  Median :12.560   Median :1.000   Median :2.000   Median :313.5  
+##  Mean   :15.095   Mean   :1.476   Mean   :1.534   Mean   :340.2  
+##  3rd Qu.:16.855   3rd Qu.:2.000   3rd Qu.:2.000   3rd Qu.:462.8  
+##  Max.   :83.000   Max.   :2.000   Max.   :2.000   Max.   :915.0  
+##  NA&#39;s   :5        NA&#39;s   :635     NA&#39;s   :5       NA&#39;s   :321    
+##      tanner        testvol      
+##  Min.   :1.00   Min.   : 1.000  
+##  1st Qu.:1.00   1st Qu.: 1.000  
+##  Median :2.00   Median : 3.000  
+##  Mean   :2.64   Mean   : 7.896  
+##  3rd Qu.:5.00   3rd Qu.:15.000  
+##  Max.   :5.00   Max.   :30.000  
+##  NA&#39;s   :240    NA&#39;s   :859</code></pre>
+<pre class="r"><code>#其中menarche、sex、tanner被编码为数值变量
+#虽然它们显然是分类变量
+#可以进行如下改进
+detach(juul)
+juul$sex &lt;- factor(juul$sex, labels=c(&quot;M&quot;,&quot;F&quot;))
+juul$menarche &lt;- factor(juul$menarche, labels=c(&quot;No&quot;,&quot;Yes&quot;))
+juul$tanner &lt;- factor(juul$tanner, labels=c(&quot;Ⅰ&quot;,&quot;Ⅱ&quot;,&quot;Ⅲ&quot;,&quot;Ⅳ&quot;,&quot;Ⅴ&quot;))
+attach(juul)
+summary(juul)</code></pre>
+<pre><code>##       age         menarche     sex           igf1        tanner   
+##  Min.   : 0.170   No  :369   M   :621   Min.   : 25.0   Ⅰ   :515  
+##  1st Qu.: 9.053   Yes :335   F   :713   1st Qu.:202.2   Ⅱ   :103  
+##  Median :12.560   NA&#39;s:635   NA&#39;s:  5   Median :313.5   Ⅲ   : 72  
+##  Mean   :15.095                         Mean   :340.2   Ⅳ   : 81  
+##  3rd Qu.:16.855                         3rd Qu.:462.8   Ⅴ   :328  
+##  Max.   :83.000                         Max.   :915.0   NA&#39;s:240  
+##  NA&#39;s   :5                              NA&#39;s   :321               
+##     testvol      
+##  Min.   : 1.000  
+##  1st Qu.: 1.000  
+##  Median : 3.000  
+##  Mean   : 7.896  
+##  3rd Qu.:15.000  
+##  Max.   :30.000  
+##  NA&#39;s   :859</code></pre>
+<pre class="r"><code>#变量sex、menarche和tanner被转换为辅以适当水平名称的因子变量
+#在原始数据中，它们以数字代码显示
+#这些转化后的变量重新放回数据集juul中，从而替代原来的sex等
+#也可以用transformf函数（或within）
+juul &lt;- transform(juul,
+                sex=factor(sex,labels=c(&quot;M&quot;,&quot;F&quot;)),
+                menarche=factor(menarche,labels=c(&quot;No&quot;,&quot;Yes&quot;)),
+                tanner=factor(tanner,labels=c(&quot;Ⅰ&quot;,&quot;Ⅱ&quot;,&quot;Ⅲ&quot;,&quot;Ⅳ&quot;,&quot;Ⅴ&quot;)))</code></pre>
+</div>
+<div class="section level2">
+<h2>4.2 分布的图形显示</h2>
+<div class="section level3">
+<h3>4.2.1 直方图</h3>
+<pre class="r"><code>#绘制x的直方图
+hist(x)</code></pre>
+<p><img src="/post/2018-02-28-r语言统计入门-第四章_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+<p>在hist函数中调用breaks=n，可以在直方图中得到大约n个条，这是因为算法会尽力创建“合适”的分割点。亦可以通过指定breaks为一个向量而不仅是数字完成区间分割的完全控制。</p>
+<pre class="r"><code>mid.age &lt;- c(2.5,7.5,13,16.5,17.5,19,22.5,44.5,70.5)
+acc.count &lt;- c(28,46,58,20,31,64,149,316,103)
+age.acc &lt;- c(0,5,10,16,17,18,20,25,60,80)
+brk &lt;- c(0,5,10,16,17,18,20,25,60,80)
+hist(age.acc, breaks=brk)</code></pre>
+<p><img src="/post/2018-02-28-r语言统计入门-第四章_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+<pre class="r"><code>#可以在hist函数中，用freq=T指定列高为数据数量，freq=F可以得到密度显示</code></pre>
+</div>
+<div class="section level3">
+<h3>4.2.2 经验累计分布</h3>
+<p>经验累计分布函数定义为小于等于x的数据占总数据的比例，可以作图如下：</p>
+<pre class="r"><code>n &lt;- length(x)
+#type=&quot;s&quot;给出一个阶梯函数，其中(x,y)是步长额左端点，ylim是两个元素的向量，用于指定y坐标的边界点
+plot(sort(x),(1:n)/n,type=&quot;s&quot;,ylim=c(0,1))</code></pre>
+<p><img src="/post/2018-02-28-r语言统计入门-第四章_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+</div>
+<div id="q-q" class="section level3">
+<h3>4.2.3 Q-Q图</h3>
+<p>计算经验累积分布函数的目的之一，是观察数据是否能被假设成来自正态分布。为更好地评估，可以画出第k个最小观测值和来自标准正态分布的n个值中第k个最小观测值的图形。关键之处是，用这种方法，如果数据是来自任何均值和标准差的正态分布，应该得到一条直线。</p>
+<pre class="r"><code>#可以用qqnorm函数来做这个
+qqnorm(x)</code></pre>
+<p><img src="/post/2018-02-28-r语言统计入门-第四章_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+</div>
+<div class="section level3">
+<h3>4.2.4 箱式图</h3>
+<pre class="r"><code>#两个按行并列图的布局使用mfrow作图参数指定
+#mfcol参数用来绘制按排列的图形
+#值得注意的是，最后把布局参数重新设定回c(1,1)是必要的
+#除非希望继续画此种并列图
+par(mfrow=c(1,2))
+boxplot(IgM)
+boxplot(log(IgM))</code></pre>
+<p><img src="/post/2018-02-28-r语言统计入门-第四章_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+<pre class="r"><code>par(mfrow=c(1,1))</code></pre>
+</div>
+</div>
+<div class="section level2">
+<h2>4.3 分组数据的汇总统计量</h2>
+<p>当处理分组数据的时候，经常会希望得到一些按组计算的不同的总结统计量，比如均值和标准差的一张表格。为此目的，可以使用tapply函数。</p>
+<pre class="r"><code>attach(red.cell.folate)
+#tapply函数提取folate变量，根据ventilation分组
+#然后对每一组计算均值
+tapply(folate,ventilation,mean)</code></pre>
+<pre><code>## N2O+O2,24h  N2O+O2,op     O2,24h 
+##   316.6250   256.4444   278.0000</code></pre>
+<pre class="r"><code>#同样的方法，可以计算标准差和数目
+tapply(folate,ventilation,sd)</code></pre>
+<pre><code>## N2O+O2,24h  N2O+O2,op     O2,24h 
+##   58.71709   37.12180   33.75648</code></pre>
+<pre class="r"><code>tapply(folate,ventilation,length)</code></pre>
+<pre><code>## N2O+O2,24h  N2O+O2,op     O2,24h 
+##          8          9          5</code></pre>
+<pre class="r"><code>#可以像下面这样更好的显示
+xbar &lt;- tapply(folate,ventilation,mean)
+s &lt;- tapply(folate,ventilation,sd)
+n &lt;- tapply(folate,ventilation,length)
+#对于juul数据集来说，希望求按tanner对igfl分组后的均值
+#但是又遇到了缺失值的问题
+tapply(igf1,tanner,mean)</code></pre>
+<pre><code>##  Ⅰ  Ⅱ  Ⅲ  Ⅳ  Ⅴ 
+## NA NA NA NA NA</code></pre>
+<pre class="r"><code>#可以用na.rm排除缺失值
+tapply(igf1,tanner,mean,na.rm=T)</code></pre>
+<pre><code>##        Ⅰ        Ⅱ        Ⅲ        Ⅳ        Ⅴ 
+## 207.4727 352.6714 483.2222 513.0172 465.3344</code></pre>
+<pre class="r"><code>#函数aggregate和by是同一个主题的变形。
+#前者非常类似于tapply，只是它对整个数据集操作并把结果作为一个数据框显示
+#同时显示多个变量是很有用的
+aggregate(juul[c(&quot;age&quot;,&quot;igf1&quot;)],
+         list(sex=juul$sex),mean,na.rm=T)</code></pre>
+<pre><code>##   sex      age     igf1
+## 1   M 15.38436 310.8866
+## 2   F 14.84363 368.1006</code></pre>
+<pre class="r"><code>#索引变量不是数据框中必须被汇总的部分，没有像在subset中进行的“智能评价”尝试
+#所以必须拼出juul$sex
+#也可以使用数据框类似于列表的事实
+#技巧是使用单引号索引一个数据框，产生一个座位结果的数据框
+aggregate(juul[c(&quot;age&quot;,&quot;igf1&quot;)],juul[&quot;sex&quot;],mean,na.rm=T)</code></pre>
+<pre><code>##   sex      age     igf1
+## 1   M 15.38436 310.8866
+## 2   F 14.84363 368.1006</code></pre>
+<pre class="r"><code>#by函数也是类似的，但有所不同
+#不同之处在于取整个（子）数据框作为它的变量，所以可以用性别总结juul数据
+by(juul, juul[&quot;sex&quot;],summary)</code></pre>
+<pre><code>## sex: M
+##       age        menarche   sex          igf1        tanner   
+##  Min.   : 0.17   No  :  0   M:621   Min.   : 29.0   Ⅰ   :291  
+##  1st Qu.: 8.85   Yes :  0   F:  0   1st Qu.:176.0   Ⅱ   : 55  
+##  Median :12.38   NA&#39;s:621           Median :280.0   Ⅲ   : 34  
+##  Mean   :15.38                      Mean   :310.9   Ⅳ   : 41  
+##  3rd Qu.:16.77                      3rd Qu.:430.2   Ⅴ   :124  
+##  Max.   :83.00                      Max.   :915.0   NA&#39;s: 76  
+##                                     NA&#39;s   :145               
+##     testvol      
+##  Min.   : 1.000  
+##  1st Qu.: 1.000  
+##  Median : 3.000  
+##  Mean   : 7.896  
+##  3rd Qu.:15.000  
+##  Max.   :30.000  
+##  NA&#39;s   :141     
+## -------------------------------------------------------- 
+## sex: F
+##       age        menarche   sex          igf1        tanner   
+##  Min.   : 0.25   No  :369   M:  0   Min.   : 25.0   Ⅰ   :224  
+##  1st Qu.: 9.30   Yes :335   F:713   1st Qu.:233.0   Ⅱ   : 48  
+##  Median :12.80   NA&#39;s:  9           Median :352.0   Ⅲ   : 38  
+##  Mean   :14.84                      Mean   :368.1   Ⅳ   : 40  
+##  3rd Qu.:16.93                      3rd Qu.:483.0   Ⅴ   :204  
+##  Max.   :75.12                      Max.   :914.0   NA&#39;s:159  
+##                                     NA&#39;s   :176               
+##     testvol   
+##  Min.   : NA  
+##  1st Qu.: NA  
+##  Median : NA  
+##  Mean   :NaN  
+##  3rd Qu.: NA  
+##  Max.   : NA  
+##  NA&#39;s   :713</code></pre>
+</div>
+<div class="section level2">
+<h2>4.4 分组数据作图</h2>
+<p>这一节主要是在同一页为几组数据进行作图。</p>
+<div id="-1" class="section level3">
+<h3>4.4.1 直方图</h3>
+<p>这个例子使用1.2.14节的关于两组妇女24 h能量消耗的energy数据集，选择了0.5 MJ的倍数作为分割点。</p>
+<pre class="r"><code>#先获得数据集
+attach(energy)
+#分割向量
+expend.lean &lt;- expend[stature==&quot;lean&quot;]
+expend.obese &lt;- expend[stature==&quot;obese&quot;]
+#开始作图
+#设置par(mfrow=c(2,1))，从而在一个图中得到两个直方图
+par(mfrow=c(2,1))
+hist(expend.lean,breaks=10,xlim=c(5,13),ylim=c(0,4),col=&quot;white&quot;)
+hist(expend.obese,breaks=10,xlim=c(5,13),ylim=c(0,4),col=&quot;grey&quot;)</code></pre>
+<p><img src="/post/2018-02-28-r语言统计入门-第四章_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
+<pre class="r"><code>par(mfrow=c(1,1))</code></pre>
+</div>
+<div class="section level3">
+<h3>4.4.2 并联箱式图</h3>
+<pre class="r"><code>#创建图形
+#符号y~x表示用x表达的y
+boxplot(expend ~ stature)</code></pre>
+<p><img src="/post/2018-02-28-r语言统计入门-第四章_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
+<pre class="r"><code>#也可以用expend.lean和expend.obese作图
+boxplot(expend.lean,expend.obese)</code></pre>
+<p><img src="/post/2018-02-28-r语言统计入门-第四章_files/figure-html/unnamed-chunk-10-2.png" width="672" /></p>
+</div>
+<div class="section level3">
+<h3>4.4.3 带状图</h3>
+<p>刚刚介绍的箱式图并没有很好的显示“Laurel &amp; Hardy”效应。原因在于一组数据的四分位点内距比另一组大很多，使箱式图变得很胖。使用这么小的分组数据四分位数的确定变得很不准确，因此对原始数据作图可能是更合适的。</p>
+<pre class="r"><code>#mex设置减少行间距，mar减少图形区域周边线的数量
+#将这些设置的原始值储存在opar中，用par(opar)重新调出
+opar &lt;- par(mfrow=c(2,1),mex=0.8,mar=c(3,3,2,1)+.1)
+stripchart(expend ~ stature)
+stripchart(expend ~ stature,method=&quot;stack&quot;)</code></pre>
+<p><img src="/post/2018-02-28-r语言统计入门-第四章_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
+<pre class="r"><code>stripchart(expend ~ stature,method=&quot;jitter&quot;)
+stripchart(expend ~ stature,method=&quot;jitter&quot;,jitter=.03)</code></pre>
+<p><img src="/post/2018-02-28-r语言统计入门-第四章_files/figure-html/unnamed-chunk-11-2.png" width="672" /></p>
+<pre class="r"><code>par(opar)</code></pre>
+</div>
+</div>
+<div class="section level2">
+<h2>4.5 表格</h2>
+<div class="section level3">
+<h3>4.5.1 生产表格</h3>
+<p>本文主要处理双向表格（two-way）。它可以作为一个矩阵对象输入。</p>
+<pre class="r"><code>#matrix函数中，函数用nrow设置，一般默认是按列输入，byrow=T表示按行输入
+#也可以用ncol给出列数
+caff.marital &lt;- matrix(c(652,1537,598,242,36,46,38,21,218,327,106,67),
+                       nrow=3, byrow=T)
+caff.marital</code></pre>
+<pre><code>##      [,1] [,2] [,3] [,4]
+## [1,]  652 1537  598  242
+## [2,]   36   46   38   21
+## [3,]  218  327  106   67</code></pre>
+<pre class="r"><code>#若ncol和nrow中的一个被给出，那么R将计算相应的那个，从而与输入的值的数目相匹配
+#若都给出，但是与值得数目不匹配，那么，值将被循环使用
+colnames(caff.marital) &lt;- c(&quot;0&quot;,&quot;1-150&quot;,&quot;151-300&quot;,&quot;&gt;300&quot;)
+rownames(caff.marital) &lt;- c(&quot;Married&quot;,&quot;Prev.married&quot;,&quot;Single&quot;)
+caff.marital</code></pre>
+<pre><code>##                0 1-150 151-300 &gt;300
+## Married      652  1537     598  242
+## Prev.married  36    46      38   21
+## Single       218   327     106   67</code></pre>
+<pre class="r"><code>#此外，也可以如下命名行和列的名称
+names(dimnames(caff.marital)) &lt;- c(&quot;martial&quot;,&quot;consumption&quot;)
+caff.marital</code></pre>
+<pre><code>##               consumption
+## martial          0 1-150 151-300 &gt;300
+##   Married      652  1537     598  242
+##   Prev.married  36    46      38   21
+##   Single       218   327     106   67</code></pre>
+<pre class="r"><code>#一般来说，可以在需要两维表格的地方可以用矩阵
+#在确实需要表格的时候可以用as.table
+as.data.frame(as.table(caff.marital))</code></pre>
+<pre><code>##         martial consumption Freq
+## 1       Married           0  652
+## 2  Prev.married           0   36
+## 3        Single           0  218
+## 4       Married       1-150 1537
+## 5  Prev.married       1-150   46
+## 6        Single       1-150  327
+## 7       Married     151-300  598
+## 8  Prev.married     151-300   38
+## 9        Single     151-300  106
+## 10      Married        &gt;300  242
+## 11 Prev.married        &gt;300   21
+## 12       Single        &gt;300   67</code></pre>
+<pre class="r"><code>#在实际中，更常见的情形是对一个数据集中的每一个人，都有一个带变量的数据框
+#这时可以用table，xtabs或ftable做一个表列
+attach(juul)</code></pre>
+<pre><code>## The following objects are masked from juul (pos = 5):
+## 
+##     age, igf1, menarche, sex, tanner, testvol</code></pre>
+<pre class="r"><code>table(sex)</code></pre>
+<pre><code>## sex
+##   M   F 
+## 621 713</code></pre>
+<pre class="r"><code>table(sex,menarche)</code></pre>
+<pre><code>##    menarche
+## sex  No Yes
+##   M   0   0
+##   F 369 335</code></pre>
+<pre class="r"><code>table(menarche,tanner)</code></pre>
+<pre><code>##         tanner
+## menarche   Ⅰ   Ⅱ   Ⅲ   Ⅳ   Ⅴ
+##      No  221  43  32  14   2
+##      Yes   1   1   5  26 202</code></pre>
+<pre class="r"><code>#xtabs类似于table，只不过它使用模型公式借口
+#最常用的是一个单边公式，只要列出分类变量，用+分割
+xtabs(~tanner + sex, data=juul)</code></pre>
+<pre><code>##       sex
+## tanner   M   F
+##      Ⅰ 291 224
+##      Ⅱ  55  48
+##      Ⅲ  34  38
+##      Ⅳ  41  40
+##      Ⅴ 124 204</code></pre>
+<pre class="r"><code>#从table或xtabs得到的多向量表形式并不是很好
+xtabs(~dgn + diab + coma, data=stroke)</code></pre>
+<pre><code>## , , coma = No
+## 
+##      diab
+## dgn    No Yes
+##   ICH  53   6
+##   ID  143  21
+##   INF 411  64
+##   SAH  38   0
+## 
+## , , coma = Yes
+## 
+##      diab
+## dgn    No Yes
+##   ICH  19   1
+##   ID   23   3
+##   INF  23   2
+##   SAH   9   0</code></pre>
+<pre class="r"><code>#当增加维度时，会得到更多的二维子表格，这就是ftable的用武之地
+#这个函数创建一个扁平的表格
+ftable(coma + diab ~ dgn, data=stroke)</code></pre>
+<pre><code>##     coma  No     Yes    
+##     diab  No Yes  No Yes
+## dgn                     
+## ICH       53   6  19   1
+## ID       143  21  23   3
+## INF      411  64  23   2
+## SAH       38   0   9   0</code></pre>
+<pre class="r"><code>#可以用t函数转置表格，对于多维表格，可以用aperm来转置
+t(caff.marital)</code></pre>
+<pre><code>##            martial
+## consumption Married Prev.married Single
+##     0           652           36    218
+##     1-150      1537           46    327
+##     151-300     598           38    106
+##     &gt;300        242           21     67</code></pre>
+</div>
+<div class="section level3">
+<h3>4.5.2 边际表格和相对频数</h3>
+<p>经常会需要计算边际表格，即沿着表格的一个或另一个维度求和。</p>
+<pre class="r"><code>#首先生成表格
+#tanner.sex是为一个交叉表任意选取的名称
+tanner.sex &lt;- table(tanner,sex)
+tanner.sex</code></pre>
+<pre><code>##       sex
+## tanner   M   F
+##      Ⅰ 291 224
+##      Ⅱ  55  48
+##      Ⅲ  34  38
+##      Ⅳ  41  40
+##      Ⅴ 124 204</code></pre>
+<pre class="r"><code>#然后计算边际表格
+#margin.table中的参数1和2分别表示按行或按列进行求和
+margin.table(tanner.sex,1)</code></pre>
+<pre><code>## tanner
+##   Ⅰ   Ⅱ   Ⅲ   Ⅳ   Ⅴ 
+## 515 103  72  81 328</code></pre>
+<pre class="r"><code>margin.table(tanner.sex,2)</code></pre>
+<pre><code>## sex
+##   M   F 
+## 545 554</code></pre>
+<pre class="r"><code>#相对频数的表格可以用prop.table构建，参数1表示按行
+prop.table(tanner.sex,1)</code></pre>
+<pre><code>##       sex
+## tanner         M         F
+##      Ⅰ 0.5650485 0.4349515
+##      Ⅱ 0.5339806 0.4660194
+##      Ⅲ 0.4722222 0.5277778
+##      Ⅳ 0.5061728 0.4938272
+##      Ⅴ 0.3780488 0.6219512</code></pre>
+</div>
+</div>
+<div class="section level2">
+<h2>4.6 表格的图形显示</h2>
+<div class="section level3">
+<h3>4.6.1 条形图</h3>
+<pre class="r"><code>total.caff &lt;- margin.table(caff.marital,2)
+total.caff</code></pre>
+<pre><code>## consumption
+##       0   1-150 151-300    &gt;300 
+##     906    1910     742     330</code></pre>
+<pre class="r"><code>barplot(total.caff, col=&quot;white&quot;)</code></pre>
+<p><img src="/post/2018-02-28-r语言统计入门-第四章_files/figure-html/unnamed-chunk-14-1.png" width="672" /></p>
+<pre class="r"><code>#如果要创建的对象是一个矩阵，那么barplot将默认创建一个堆积条形图
+#其中列根据表中不同行的贡献而被分割，beside=T表示把行的贡献放在旁边
+par(mfrow=c(2,2))
+barplot(caff.marital, col=&quot;white&quot;)
+barplot(t(caff.marital), col=&quot;white&quot;)
+barplot(t(caff.marital), col=&quot;white&quot;,beside=T)
+barplot(prop.table(t(caff.marital),2),col=&quot;white&quot;,beside=T)</code></pre>
+<p><img src="/post/2018-02-28-r语言统计入门-第四章_files/figure-html/unnamed-chunk-14-2.png" width="672" /></p>
+<pre class="r"><code>par(mfrow=c(1,1))
+#可以美化一下
+barplot(prop.table(t(caff.marital),2),beside=T,
+       legend.text=colnames(caff.marital),
+       col=c(&quot;white&quot;,&quot;grey80&quot;,&quot;grey50&quot;,&quot;black&quot;))</code></pre>
+<p><img src="/post/2018-02-28-r语言统计入门-第四章_files/figure-html/unnamed-chunk-14-3.png" width="672" /></p>
+</div>
+<div class="section level3">
+<h3>4.6.2 点图</h3>
+<p>Cleveland点图，可以用来同时从两侧研究一个表格。</p>
+<pre class="r"><code>dotchart(t(caff.marital), lcolor=&quot;black&quot;)</code></pre>
+<p><img src="/post/2018-02-28-r语言统计入门-第四章_files/figure-html/unnamed-chunk-15-1.png" width="672" /></p>
+</div>
+<div class="section level3">
+<h3>4.6.3 饼图</h3>
+<pre class="r"><code>opar &lt;- par(mfrow=c(2,2),mex=0.8,mar=c(1,1,2,1))
+slices &lt;- c(&quot;white&quot;,&quot;grey80&quot;,&quot;grey50&quot;,&quot;black&quot;)
+pie(caff.marital[&quot;Married&quot;,],main=&quot;Married&quot;,col=slices)
+pie(caff.marital[&quot;Prev.married&quot;,],
+   main=&quot;Previously married&quot;,col=slices)
+pie(caff.marital[&quot;Single&quot;,],main=&quot;Single&quot;,col=slices)
+par(opar)</code></pre>
+<p><img src="/post/2018-02-28-r语言统计入门-第四章_files/figure-html/unnamed-chunk-16-1.png" width="672" /></p>
+</div>
+</div>
+<div class="section level2">
+<h2>4.7 思考题</h2>
+<ol style="list-style-type: decimal">
+<li>探索不同类型的线和点图的可能性。变化图形的符号、线型、线宽和颜色。</li>
+<li>如果用标定的线和点绘制一个图形，比如plot(rnorm(10),type=“o”)，线将在画图符号内课件，怎样避免这一点。</li>
+<li>怎样把两个qqnorm图放在同一绘图区域，若试着用type=“1”生成一幅图，将出现什么错误，怎样避免。</li>
+<li>对react数据集画直方图。由于这些数据高度分散化，所以直方图会是有偏的。为什么。也许会希望用MASS包中的truehist作为替代。</li>
+<li>从均匀分布中生成有5个随机数的一个样本向量z，作为x的函数绘制quantile(z,x)（比如可以用curve）。</li>
+</ol>
+</div>
+</div>

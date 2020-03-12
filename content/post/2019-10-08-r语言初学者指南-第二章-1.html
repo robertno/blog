@@ -1,0 +1,575 @@
+---
+title: R语言初学者指南-第二章
+author: Dr.二哈
+date: '2019-10-08'
+slug: r语言初学者指南-第二章
+categories:
+  - R
+tags:
+  - R
+header:
+  caption: ''
+  image: ''
+  preview: yes
+---
+
+
+
+<div id="section" class="section level1">
+<h1><strong>写在前面</strong></h1>
+<p>嗯~怎么说呢，之前的那本书，我又鸽了，原因有这几个：</p>
+<ol style="list-style-type: decimal">
+<li>书太厚了</li>
+<li>讲的东西太全面，而且感觉实用性不大，我在实际使用中很多问题这本书解决不了</li>
+<li>说句不该说的，那本书有很大部分与《R语言实战》重合</li>
+</ol>
+<p>所以，我又重开了一本书，这本书解决了我最近的一个大问题。这本书我想以记笔记的形式记录下来，以配套的课后习题为主。</p>
+<p>废话少说，进入正题</p>
+</div>
+<div id="r" class="section level1">
+<h1><strong>第二章：R中数据输入</strong></h1>
+<div id="r-1" class="section level2">
+<h2><strong>2.1 R中的第一步</strong></h2>
+<div id="section-1" class="section level3">
+<h3><strong>2.1.1 少量的数据录入</strong></h3>
+<p>这一部分主要针对在R中输入少量数据的问题，数据见下表，有四个形态参数，每个形态参数有8个观测值：</p>
+<table>
+<thead>
+<tr class="header">
+<th align="center">翼弦</th>
+<th align="center">踝骨</th>
+<th align="center">头</th>
+<th align="center">体重</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center">59</td>
+<td align="center">22.3</td>
+<td align="center">31.2</td>
+<td align="center">9.5</td>
+</tr>
+<tr class="even">
+<td align="center">55</td>
+<td align="center">19.7</td>
+<td align="center">30.4</td>
+<td align="center">13.8</td>
+</tr>
+<tr class="odd">
+<td align="center">53.5</td>
+<td align="center">20.8</td>
+<td align="center">30.6</td>
+<td align="center">14.8</td>
+</tr>
+<tr class="even">
+<td align="center">55</td>
+<td align="center">20.3</td>
+<td align="center">30.3</td>
+<td align="center">15.2</td>
+</tr>
+<tr class="odd">
+<td align="center">52.5</td>
+<td align="center">20.8</td>
+<td align="center">30.3</td>
+<td align="center">15.5</td>
+</tr>
+<tr class="even">
+<td align="center">57.5</td>
+<td align="center">21.58</td>
+<td align="center">30.8</td>
+<td align="center">15.6</td>
+</tr>
+<tr class="odd">
+<td align="center">53</td>
+<td align="center">20.6</td>
+<td align="center">32.5</td>
+<td align="center">15.6</td>
+</tr>
+<tr class="even">
+<td align="center">55</td>
+<td align="center">21.5</td>
+<td align="center">NA</td>
+<td align="center">15.7</td>
+</tr>
+</tbody>
+</table>
+<p>具体变量的解释就不多说了，知道是变量就可以了。
+对于这种数据量较少的表格，可以一个个输入，不过这种方法很累。比如录入翼弦的前5个数据：</p>
+<pre class="r"><code>a &lt;- 59
+b &lt;- 55
+c &lt;- 53.5
+d &lt;- 55
+e &lt;- 52.5</code></pre>
+<p>此时要想看R中的结果，可以输入<strong>“a”</strong>，之后敲回车（话说这本书写的是真细）。这里就不演示了，之后对于简单的命令，笔记中都不会进行演示。</p>
+<p>这种方法不仅累，而且以字母最为变量名容易乱，可以改名，但是没什么卵用，比如这样：</p>
+<pre class="r"><code>Wing1 &lt;- 59
+Wing2 &lt;- 55
+Wing3 &lt;- 53.5
+Wing4 &lt;- 55
+Wing5 &lt;- 52.5 </code></pre>
+<p>这本书接下来先以这些变量讲解了一下运算，比如：</p>
+<pre class="r"><code>sqrt(Wing1)</code></pre>
+<pre><code>## [1] 7.681146</code></pre>
+<pre class="r"><code>2*Wing1</code></pre>
+<pre><code>## [1] 118</code></pre>
+<pre class="r"><code>Wing1+Wing2</code></pre>
+<pre><code>## [1] 114</code></pre>
+<p>此时，R只是运算了一下，并没将这些结果储存，最好以新变量来储存这些结果：</p>
+<pre class="r"><code>SQ.wing1 &lt;- sqrt(Wing1)
+#加了个圆括号就可以直接出结果
+(SQ.wing1 &lt;- sqrt(Wing1))</code></pre>
+<pre><code>## [1] 7.681146</code></pre>
+</div>
+<div id="c" class="section level3">
+<h3><strong>2.1.2 用c函数连接数据</strong></h3>
+<p>对于这个表格，4个参数8个变量，共需要32个变量名，而这是不实际的。可以用c()函数简化一下：</p>
+<pre class="r"><code>#用c()函数生成了一个长度是8的向量
+Wingcrd &lt;- c(59, 55, 53.5, 55, 52.5, 57.5, 53, 55)</code></pre>
+<p>这个时候只要输入Wingcrd就可以查看结果：</p>
+<pre class="r"><code>Wingcrd</code></pre>
+<pre><code>## [1] 59.0 55.0 53.5 55.0 52.5 57.5 53.0 55.0</code></pre>
+<p>要是想看这个向量的第一个值，可以这样，注意是方括号：</p>
+<pre class="r"><code>Wingcrd[1]</code></pre>
+<pre><code>## [1] 59</code></pre>
+<p>如果想看前5个值</p>
+<pre class="r"><code>Wingcrd[1:5]</code></pre>
+<pre><code>## [1] 59.0 55.0 53.5 55.0 52.5</code></pre>
+<p>如果想看除了第二个值之外的</p>
+<pre class="r"><code>Wingcrd[-2]</code></pre>
+<pre><code>## [1] 59.0 53.5 55.0 52.5 57.5 53.0 55.0</code></pre>
+<p>负号这个用法以后会经常用到。
+至于R中内置的函数，比如sum等，可以这么用，</p>
+<pre class="r"><code>S.win &lt;- sum(Wingcrd)
+S.win</code></pre>
+<pre><code>## [1] 440.5</code></pre>
+<p>接下来，把剩余三个参数也输入进R中，一般来说，R中的变量名最好以大写字母开头，而且要方便记忆。</p>
+<pre class="r"><code>Tarsus &lt;- c(22.3, 19.7, 20.8, 20.3, 20.8, 21.5, 20.6, 21.5)
+Head &lt;- c(31.2, 30.4, 30.6, 30.3, 30.3, 30.8, 32.5, NA)
+Wt &lt;- c(9.5, 13.8, 14.8, 15.2, 15.5, 15.6, 15.6, 15.7)</code></pre>
+<p>这个时候发现Head向量中有一个缺失值NA（这不废话吗，上面表格中就看见了），此时算Head的和就会出现问题：</p>
+<pre class="r"><code>sum(Head)</code></pre>
+<pre><code>## [1] NA</code></pre>
+<p>调用其他函数比如mean什么的也会这样，这个时候可以用“?sum”命令来看看怎么剔除这个缺失值，发现可以这样做：</p>
+<pre class="r"><code>sum(Head, na.rm = TRUE)</code></pre>
+<pre><code>## [1] 216.1</code></pre>
+<p>加个<strong>na.rm = TRUE</strong>就可以了。当然也可以用<strong>na.rm = T</strong>代替，不过有时候会出错，所以最好还是用“TRUE”。</p>
+</div>
+<div id="ccbindrbind" class="section level3">
+<h3><strong>2.1.3 使用c，cbind和rbind函数结合变量</strong></h3>
+<p>首先用c()函数连接Wingcrd，Tarsus，Head和Wt变量。</p>
+<pre class="r"><code>BirdData &lt;- c(Wingcrd, Tarsus, Head, Wt)</code></pre>
+<p>这个时候输入这个新变量名可以看到这是一个长度为32的向量：</p>
+<pre class="r"><code>BirdData</code></pre>
+<pre><code>##  [1] 59.0 55.0 53.5 55.0 52.5 57.5 53.0 55.0 22.3 19.7 20.8 20.3 20.8 21.5
+## [15] 20.6 21.5 31.2 30.4 30.6 30.3 30.3 30.8 32.5   NA  9.5 13.8 14.8 15.2
+## [29] 15.5 15.6 15.6 15.7</code></pre>
+<p>但是这个变量并没有区分哪些值输入哪一个变量，为实现这一目的，可以生成另一个长度为32的向量，命名为ID：</p>
+<pre class="r"><code>Id &lt;- c(1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 3, 4, 4, 4, 4, 4, 4, 4, 4)
+Id</code></pre>
+<pre><code>##  [1] 1 1 1 1 1 1 1 1 2 2 2 2 2 2 2 2 3 3 3 3 3 3 3 3 4 4 4 4 4 4 4 4</code></pre>
+<p>这样也很费时间，可以这样：</p>
+<pre class="r"><code>Id &lt;- rep(c(1, 2, 3, 4), each = 8)
+Id</code></pre>
+<pre><code>##  [1] 1 1 1 1 1 1 1 1 2 2 2 2 2 2 2 2 3 3 3 3 3 3 3 3 4 4 4 4 4 4 4 4</code></pre>
+<p>还可以这样：</p>
+<pre class="r"><code>Id &lt;- rep(1:4, each = 8)
+Id</code></pre>
+<pre><code>##  [1] 1 1 1 1 1 1 1 1 2 2 2 2 2 2 2 2 3 3 3 3 3 3 3 3 4 4 4 4 4 4 4 4</code></pre>
+<p>还可以这样：</p>
+<pre class="r"><code>a &lt;- seq(from = 1, to = 4, by = 1)
+a</code></pre>
+<pre><code>## [1] 1 2 3 4</code></pre>
+<pre class="r"><code>rep(a, each = 8)</code></pre>
+<pre><code>##  [1] 1 1 1 1 1 1 1 1 2 2 2 2 2 2 2 2 3 3 3 3 3 3 3 3 4 4 4 4 4 4 4 4</code></pre>
+<p>至此，这里只是实现了数字的连接，假如想生成一个长度为32的向量“Id“，这个向量包含单词”Wingcrd“8次，”Tarsus“8次等，可以先生成一个名为VarNames的新变量：</p>
+<pre class="r"><code>VarNames &lt;- c(&quot;Wingcrd&quot;, &quot;Tarsus&quot;, &quot;Head&quot;, &quot;Wt&quot;)
+VarNames</code></pre>
+<pre><code>## [1] &quot;Wingcrd&quot; &quot;Tarsus&quot;  &quot;Head&quot;    &quot;Wt&quot;</code></pre>
+<p>但是这只是名称，而不是含有数值的变量。接下来再用rep函数来生成需要的向量：</p>
+<pre class="r"><code>Id2 &lt;- rep(VarNames, each = 8)
+Id2</code></pre>
+<pre><code>##  [1] &quot;Wingcrd&quot; &quot;Wingcrd&quot; &quot;Wingcrd&quot; &quot;Wingcrd&quot; &quot;Wingcrd&quot; &quot;Wingcrd&quot; &quot;Wingcrd&quot;
+##  [8] &quot;Wingcrd&quot; &quot;Tarsus&quot;  &quot;Tarsus&quot;  &quot;Tarsus&quot;  &quot;Tarsus&quot;  &quot;Tarsus&quot;  &quot;Tarsus&quot; 
+## [15] &quot;Tarsus&quot;  &quot;Tarsus&quot;  &quot;Head&quot;    &quot;Head&quot;    &quot;Head&quot;    &quot;Head&quot;    &quot;Head&quot;   
+## [22] &quot;Head&quot;    &quot;Head&quot;    &quot;Head&quot;    &quot;Wt&quot;      &quot;Wt&quot;      &quot;Wt&quot;      &quot;Wt&quot;     
+## [29] &quot;Wt&quot;      &quot;Wt&quot;      &quot;Wt&quot;      &quot;Wt&quot;</code></pre>
+<p>注意不能丢掉each，否则会得到：</p>
+<pre class="r"><code>Id3 &lt;- rep(VarNames,8)
+Id3</code></pre>
+<pre><code>##  [1] &quot;Wingcrd&quot; &quot;Tarsus&quot;  &quot;Head&quot;    &quot;Wt&quot;      &quot;Wingcrd&quot; &quot;Tarsus&quot;  &quot;Head&quot;   
+##  [8] &quot;Wt&quot;      &quot;Wingcrd&quot; &quot;Tarsus&quot;  &quot;Head&quot;    &quot;Wt&quot;      &quot;Wingcrd&quot; &quot;Tarsus&quot; 
+## [15] &quot;Head&quot;    &quot;Wt&quot;      &quot;Wingcrd&quot; &quot;Tarsus&quot;  &quot;Head&quot;    &quot;Wt&quot;      &quot;Wingcrd&quot;
+## [22] &quot;Tarsus&quot;  &quot;Head&quot;    &quot;Wt&quot;      &quot;Wingcrd&quot; &quot;Tarsus&quot;  &quot;Head&quot;    &quot;Wt&quot;     
+## [29] &quot;Wingcrd&quot; &quot;Tarsus&quot;  &quot;Head&quot;    &quot;Wt&quot;</code></pre>
+<p>结果差异很明显了。
+前面用c()来结合数据，实际上没个乱用，我也不知道这本书为啥会写它，实际应用中主要用cbind函数来进行数据连接。</p>
+<pre class="r"><code>Z &lt;- cbind(Wingcrd, Tarsus, Head, Wt)
+Z</code></pre>
+<pre><code>##      Wingcrd Tarsus Head   Wt
+## [1,]    59.0   22.3 31.2  9.5
+## [2,]    55.0   19.7 30.4 13.8
+## [3,]    53.5   20.8 30.6 14.8
+## [4,]    55.0   20.3 30.3 15.2
+## [5,]    52.5   20.8 30.3 15.5
+## [6,]    57.5   21.5 30.8 15.6
+## [7,]    53.0   20.6 32.5 15.6
+## [8,]    55.0   21.5   NA 15.7</code></pre>
+<p>假设需要访问Z的第一列，</p>
+<pre class="r"><code>Z[,1]</code></pre>
+<pre><code>## [1] 59.0 55.0 53.5 55.0 52.5 57.5 53.0 55.0</code></pre>
+<p>要访问第二行，</p>
+<pre class="r"><code>Z[2,]</code></pre>
+<pre><code>## Wingcrd  Tarsus    Head      Wt 
+##    55.0    19.7    30.4    13.8</code></pre>
+<p>方括号中，逗号前面代表行，后面代表列。
+当然也可以将这些查询结果储存为新变量，</p>
+<pre class="r"><code>X &lt;- Z[2,]
+Y &lt;- Z[,-3]
+W &lt;- Z[,c(-1,-3)]</code></pre>
+<p>如果想知道Z的维度，</p>
+<pre class="r"><code>dim(Z)</code></pre>
+<pre><code>## [1] 8 4</code></pre>
+<p>也可以将这个结果存储起来，</p>
+<pre class="r"><code>n &lt;- dim(Z)
+n</code></pre>
+<pre><code>## [1] 8 4</code></pre>
+<p>或者，仅需要储存Z的行数，</p>
+<pre class="r"><code>nrow &lt;- dim(Z)[1]
+nrow</code></pre>
+<pre><code>## [1] 8</code></pre>
+<p>当然，cbind也可以用rbind来代替，不过就是行表示形态变量而列表示鸟个体，</p>
+<pre class="r"><code>Z2 &lt;- rbind(Wingcrd, Tarsus, Head, Wt)
+Z2</code></pre>
+<pre><code>##         [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8]
+## Wingcrd 59.0 55.0 53.5 55.0 52.5 57.5 53.0 55.0
+## Tarsus  22.3 19.7 20.8 20.3 20.8 21.5 20.6 21.5
+## Head    31.2 30.4 30.6 30.3 30.3 30.8 32.5   NA
+## Wt       9.5 13.8 14.8 15.2 15.5 15.6 15.6 15.7</code></pre>
+</div>
+<div id="vector" class="section level3">
+<h3><strong>2.1.4 使用vector函数结合数据</strong></h3>
+<p>vector()函数与c()函数类似，可以用来代替c函数。
+假如想生成一个长度为8，包含了所有8只鸟的Wingcrd数据的一个向量，可以这么做：</p>
+<pre class="r"><code>W &lt;- vector(length = 8)
+W[1] &lt;- 59
+W[2] &lt;- 55
+W[3] &lt;- 53.5
+W[4] &lt;- 55
+W[5] &lt;- 52.5
+W[6] &lt;- 57.5
+W[7] &lt;- 53
+W[8] &lt;- 55
+W</code></pre>
+<pre><code>## [1] 59.0 55.0 53.5 55.0 52.5 57.5 53.0 55.0</code></pre>
+<p>可以看到这是先生成一个长度为8的向量，然后再向其中每个元素赋值的方法。所以在输入第一条命令后直接键入<strong>W</strong>，会得到一个FALSE的向量，因为R并不知道这个<strong>W</strong>是啥。</p>
+<p>先定义向量长度，这就是vector函数的优点，比如在做循环运算的时候，当然，平常还是用c()比较方便。</p>
+<p>和c()函数一样，可以用W[i]，W[i:j]，W[-i]，W[i,j,k]等访问其中元素，i，j，k是具体的数字哈。</p>
+</div>
+<div id="section-2" class="section level3">
+<h3><strong>2.1.5 使用矩阵结合数据</strong></h3>
+<p>书上说初学者可以跳过这一节，我是吗？</p>
+<p>可能吧~</p>
+<p>不过在具体数据分析时，经常会用到矩阵或者数据框的形式，所以，我才不是初学者呢。
+回归正题，为了不用向量来显示4个变量Wingcrd，Tarsus，Head和Wt（每个向量长度为8，这在创建矩阵时非常重要，每个向量长度要一致），可以生成一个8×4的矩阵：</p>
+<pre class="r"><code>Dmat &lt;- matrix(nrow = 8, ncol = 4)
+Dmat</code></pre>
+<pre><code>##      [,1] [,2] [,3] [,4]
+## [1,]   NA   NA   NA   NA
+## [2,]   NA   NA   NA   NA
+## [3,]   NA   NA   NA   NA
+## [4,]   NA   NA   NA   NA
+## [5,]   NA   NA   NA   NA
+## [6,]   NA   NA   NA   NA
+## [7,]   NA   NA   NA   NA
+## [8,]   NA   NA   NA   NA</code></pre>
+<p>当然此时并没有给矩阵Dmat中的元素赋值，所以元素都是Na。</p>
+<p>为了给每个元素赋值，可以这么做：</p>
+<pre class="r"><code>Dmat[, 1] &lt;- c(59, 55, 53.5, 55, 52.5, 57.5, 53, 55)
+Dmat[, 2] &lt;- c(22.3, 19.7, 20.8, 20.3, 20.8, 21.5,
+                 20.6, 21.5)
+Dmat[, 3] &lt;- c(31.2, 30.4, 30.6, 30.3, 30.3, 30.8,
+                 32.5, NA)
+Dmat[, 4] &lt;- c(9.5, 13.8, 14.8, 15.2, 15.5, 15.6,
+                 15.6, 15.7)
+Dmat</code></pre>
+<pre><code>##      [,1] [,2] [,3] [,4]
+## [1,] 59.0 22.3 31.2  9.5
+## [2,] 55.0 19.7 30.4 13.8
+## [3,] 53.5 20.8 30.6 14.8
+## [4,] 55.0 20.3 30.3 15.2
+## [5,] 52.5 20.8 30.3 15.5
+## [6,] 57.5 21.5 30.8 15.6
+## [7,] 53.0 20.6 32.5 15.6
+## [8,] 55.0 21.5   NA 15.7</code></pre>
+<p>这是在按Dmat矩阵的每列分别赋值。当然也可以按行来赋值（方括号中的行列[行，列]）。</p>
+<p>此时可以发现，这个矩阵没有列标签，默认的是[,1]，[,2]，[,3]，[,4]。可以用colnames()函数来给这个矩阵加上列标签，也就是列名：</p>
+<pre class="r"><code>colnames(Dmat) &lt;- c(&quot;Wingcrd&quot;, &quot;Tarsus&quot;, &quot;Head&quot;, &quot;Wt&quot;)
+Dmat</code></pre>
+<pre><code>##      Wingcrd Tarsus Head   Wt
+## [1,]    59.0   22.3 31.2  9.5
+## [2,]    55.0   19.7 30.4 13.8
+## [3,]    53.5   20.8 30.6 14.8
+## [4,]    55.0   20.3 30.3 15.2
+## [5,]    52.5   20.8 30.3 15.5
+## [6,]    57.5   21.5 30.8 15.6
+## [7,]    53.0   20.6 32.5 15.6
+## [8,]    55.0   21.5   NA 15.7</code></pre>
+<p>以此类推，给每个行命名也是可以的，用rownames()函数就可以了。</p>
+<p>但是，可以发现，这么给矩阵元素赋值还是比较麻烦，毕竟我们已经有了具体的Wingcrd，Tarsus，Head和Wt这四个向量，那么，可以这么做：</p>
+<pre class="r"><code>Dmat2 &lt;- as.matrix(cbind(Wingcrd,Tarsus,Head, Wt))
+Dmat2</code></pre>
+<pre><code>##      Wingcrd Tarsus Head   Wt
+## [1,]    59.0   22.3 31.2  9.5
+## [2,]    55.0   19.7 30.4 13.8
+## [3,]    53.5   20.8 30.6 14.8
+## [4,]    55.0   20.3 30.3 15.2
+## [5,]    52.5   20.8 30.3 15.5
+## [6,]    57.5   21.5 30.8 15.6
+## [7,]    53.0   20.6 32.5 15.6
+## [8,]    55.0   21.5   NA 15.7</code></pre>
+<p>这里就用到了as.matrix()和cbind()函数。</p>
+</div>
+<div id="data.frame" class="section level3">
+<h3><strong>2.1.6 使用data.frame函数结合数据</strong></h3>
+<p>前面提到了数据框，这一小节就是利用数据框来结合数据。同样，要求也是向量长度必须相同。</p>
+<pre class="r"><code>Dfrm &lt;- data.frame(WC = Wingcrd, TS = Tarsus,
+                HD = Head, W = Wt)
+Dfrm</code></pre>
+<pre><code>##     WC   TS   HD    W
+## 1 59.0 22.3 31.2  9.5
+## 2 55.0 19.7 30.4 13.8
+## 3 53.5 20.8 30.6 14.8
+## 4 55.0 20.3 30.3 15.2
+## 5 52.5 20.8 30.3 15.5
+## 6 57.5 21.5 30.8 15.6
+## 7 53.0 20.6 32.5 15.6
+## 8 55.0 21.5   NA 15.7</code></pre>
+<p>data.frame()这个函数创建了一个名为Dfrm的数据框。数据框的优点在于可以在不影响原始数据的基础上改变数据，比如可以在这个数据框中结合体重值和体重值的平方根：</p>
+<pre class="r"><code>Dfrm1 &lt;- data.frame(WC = Wingcrd, TS = Tarsus,
+                HD = Head, W = Wt, Wsq=sqrt(Wt))
+Dfrm1</code></pre>
+<pre><code>##     WC   TS   HD    W      Wsq
+## 1 59.0 22.3 31.2  9.5 3.082207
+## 2 55.0 19.7 30.4 13.8 3.714835
+## 3 53.5 20.8 30.6 14.8 3.847077
+## 4 55.0 20.3 30.3 15.2 3.898718
+## 5 52.5 20.8 30.3 15.5 3.937004
+## 6 57.5 21.5 30.8 15.6 3.949684
+## 7 53.0 20.6 32.5 15.6 3.949684
+## 8 55.0 21.5   NA 15.7 3.962323</code></pre>
+<p>这就相当于增加了一列。</p>
+</div>
+<div id="list" class="section level3">
+<h3><strong>2.1.7 使用list函数结合数据</strong></h3>
+<p>嗯，书上又说了初学者可以跳过这一节。</p>
+<p>就不跳。</p>
+<p>书上是这么说list的。假设现在需要一个黑盒子，里面可以放入<strong>尽可能多</strong>的<strong>各种各样</strong>的变量，一些可能是相关的，一些可能具有相似的维数，一些可能是向量，一些可能是矩阵，一些可能是字符串，这就是list能完成的事。</p>
+<p>其实，就一句话，list里面包含所有的数据类型。下面举个例子：</p>
+<pre class="r"><code>x1 &lt;- c(1,2,3)#数值向量
+x2 &lt;- c(&quot;a&quot;,&quot;b&quot;,&quot;c&quot;,&quot;d&quot;)#字符向量
+x3 &lt;- 3#数值
+x4 &lt;- matrix(nrow = 2,ncol = 2)#矩阵
+x4[,1] &lt;- c(1,2)
+x4[,2] &lt;- c(3,4)
+Y &lt;- list(x1=x1,x2=x2,x3=x3,x4=x4)</code></pre>
+<p>此时键入Y，可以得到：</p>
+<pre class="r"><code>Y</code></pre>
+<pre><code>## $x1
+## [1] 1 2 3
+## 
+## $x2
+## [1] &quot;a&quot; &quot;b&quot; &quot;c&quot; &quot;d&quot;
+## 
+## $x3
+## [1] 3
+## 
+## $x4
+##      [,1] [,2]
+## [1,]    1    3
+## [2,]    2    4</code></pre>
+<p>也可以通过Y$x1什么的单独访问某个信息。</p>
+<p>为什么要介绍list呢，因为在之后的学习中，有一些函数的结果，比如线性回归什么的，这些结果都是存储在list中的。比如应用线性回归模型实现将翅膀长度表示为体重的函数：</p>
+<pre class="r"><code>M &lt;- lm(WC ~ Wt, data = Dfrm)</code></pre>
+<p>如果键入：</p>
+<pre class="r"><code>names(M)</code></pre>
+<pre><code>##  [1] &quot;coefficients&quot;  &quot;residuals&quot;     &quot;effects&quot;       &quot;rank&quot;         
+##  [5] &quot;fitted.values&quot; &quot;assign&quot;        &quot;qr&quot;            &quot;df.residual&quot;  
+##  [9] &quot;xlevels&quot;       &quot;call&quot;          &quot;terms&quot;         &quot;model&quot;</code></pre>
+<p>会得到一堆奇特的输出结果。这时就可以用M$cofficients什么的分别访问。这个M就是个列表。</p>
+<p>回到原来的例子。对于前面表2.1中鸟的形态参数，由于其中每一行都代表同一只鸟的数据，所以将其存入一个列表中没啥用。然而，当任务就是生成一个列表，这个列表需要将所有数据放在一个长向量中，还需要另一个向量来识别这些变量（例如ID的作用），同时需要一个8×4的矩阵来表示这些数据，并且还需要一个包含了4中形态参数名称的向量时，可以这么处理：</p>
+<pre class="r"><code>AllData &lt;- list(BirdData = BirdData, Id = Id, Z = Z,
+                VarNames = VarNames)</code></pre>
+<p>可以看下结果：</p>
+<pre class="r"><code>AllData</code></pre>
+<pre><code>## $BirdData
+##  [1] 59.0 55.0 53.5 55.0 52.5 57.5 53.0 55.0 22.3 19.7 20.8 20.3 20.8 21.5
+## [15] 20.6 21.5 31.2 30.4 30.6 30.3 30.3 30.8 32.5   NA  9.5 13.8 14.8 15.2
+## [29] 15.5 15.6 15.6 15.7
+## 
+## $Id
+##  [1] 1 1 1 1 1 1 1 1 2 2 2 2 2 2 2 2 3 3 3 3 3 3 3 3 4 4 4 4 4 4 4 4
+## 
+## $Z
+##      Wingcrd Tarsus Head   Wt
+## [1,]    59.0   22.3 31.2  9.5
+## [2,]    55.0   19.7 30.4 13.8
+## [3,]    53.5   20.8 30.6 14.8
+## [4,]    55.0   20.3 30.3 15.2
+## [5,]    52.5   20.8 30.3 15.5
+## [6,]    57.5   21.5 30.8 15.6
+## [7,]    53.0   20.6 32.5 15.6
+## [8,]    55.0   21.5   NA 15.7
+## 
+## $VarNames
+## [1] &quot;Wingcrd&quot; &quot;Tarsus&quot;  &quot;Head&quot;    &quot;Wt&quot;</code></pre>
+<p>这种数据的存放方法在处理一些数据，比如用某些R包处理代谢组学数据时，极为有用。</p>
+</div>
+</div>
+<div id="section-3" class="section level2">
+<h2><strong>2.2数据的载入</strong></h2>
+<p>前面都是说的数据的输入，少量数据还好，但是大量的数据，这个就不合适了，最好是直接将excel文件什么的直接导入R中。</p>
+<div id="excel" class="section level3">
+<h3><strong>2.2.1 Excel中的数据载入</strong></h3>
+<div id="excel-1" class="section level4">
+<h4><strong>2.2.1.1 Excel中的数据准备</strong></h4>
+<p>这节很重要，因为原始文件中数据的排列方式不仅对向R导入，还对之后的分析至关重要。</p>
+<p>为方便，一般将数据排列成样本-变量的形式，也就是说，<strong>行代表各种变量</strong>，<strong>列代表各种样本</strong>，当然，反过来也行。一般最好以Excel中的第一列来识别样本，第一行作为变量名。举个例子，下图是一组乌贼的性腺指数（GSI）的数据库。
+<img src="https://s2.ax1x.com/2019/11/15/MdTwlD.jpg" alt="MdTwlD.jpg" /></p>
+</div>
+<div id="ascii" class="section level4">
+<h4><strong>2.2.1.2 数据提取到制表符分割的ascii文件</strong></h4>
+<p>将这个Excel文件另存为文本文件（制表符分割）即txt文件，注意，另存为那里还有别的txt文件格式，别选错了。</p>
+</div>
+<div id="read.table" class="section level4">
+<h4><strong>2.2.1.3 read.table函数</strong></h4>
+<p>当制表符分割的ascii文件没有空内容或者包含空格的名称时（想想看，为什么不能有包含空格的名称），就可以将数据载入R中。</p>
+<pre class="r"><code>#Squid &lt;- read.table(file = &quot;C:/RBook/squidGSI.txt&quot;,header = TRUE)</code></pre>
+<p>为了不报错，我将这个命令注释掉了。因为我在C盘下，没有这个文件夹和文件。header = TRUE这参数表示第一行包含了标签。</p>
+</div>
+</div>
+<div id="section-4" class="section level3">
+<h3><strong>2.2.2 从其他统计程序包中访问数据</strong></h3>
+<p>其实R不仅能从文本文件也就是txt文件中读出数据，.xls等Excel文件也可以。后面再讲。
+同时，也可以从Minitab，SAS，SPSS什么的导入数据。可以键入：</p>
+<pre class="r"><code>#library(foreign)</code></pre>
+<p>然后再查找这个包的帮助文档来解决导入其他数据文件。</p>
+</div>
+<div id="section-5" class="section level3">
+<h3><strong>2.2.3 访问数据库</strong></h3>
+<p>嗯~~这部分就不讲了，目前在学数据库，没搞明白呢。因为这个从R中访问数据库，需要一些驱动程序，有些麻烦。</p>
+</div>
+</div>
+<div id="r-2" class="section level2">
+<h2><strong>2.3 本章涉及的R函数</strong></h2>
+<p>自己去整合吧。</p>
+</div>
+<div id="section-6" class="section level2">
+<h2><strong>习题</strong></h2>
+<ol style="list-style-type: decimal">
+<li>有人通过观察生长在西班牙一些地方的野猪和马鹿得到这个数据，包含了两种生物的肺结核（tuberculosis，Tb）信息，寄生虫<em>Elaphostrongylus cervi</em>的信息，这种寄生虫只会感染马鹿。
+在另一些人的研究中，Tb被当做是一个连续变量的函数，动物的长度由lengthCT（CT是<em>cabeza-tronco</em>的缩写，表示头体）表示Tb和<em>Ecervi</em>是由0和1组成的向量，分别代表未发现或发现了Tb和<em>Ecervi</em>的幼虫。下表的前7行给出了马鹿的数据。</li>
+</ol>
+<table>
+<thead>
+<tr class="header">
+<th align="center">农场</th>
+<th align="center">月份</th>
+<th align="center">年份</th>
+<th align="center">性别</th>
+<th align="center">LengthClass</th>
+<th align="center">LengthCT</th>
+<th align="center">Ecervi</th>
+<th align="center">Tb</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center">MO</td>
+<td align="center">11</td>
+<td align="center">00</td>
+<td align="center">1</td>
+<td align="center">1</td>
+<td align="center">75</td>
+<td align="center">0</td>
+<td align="center">0</td>
+</tr>
+<tr class="even">
+<td align="center">MO</td>
+<td align="center">07</td>
+<td align="center">00</td>
+<td align="center">2</td>
+<td align="center">1</td>
+<td align="center">85</td>
+<td align="center">0</td>
+<td align="center">0</td>
+</tr>
+<tr class="odd">
+<td align="center">MO</td>
+<td align="center">07</td>
+<td align="center">01</td>
+<td align="center">2</td>
+<td align="center">1</td>
+<td align="center">91.6</td>
+<td align="center">0</td>
+<td align="center">1</td>
+</tr>
+<tr class="even">
+<td align="center">MO</td>
+<td align="center">NA</td>
+<td align="center">NA</td>
+<td align="center">2</td>
+<td align="center">1</td>
+<td align="center">95</td>
+<td align="center">NA</td>
+<td align="center">NA</td>
+</tr>
+<tr class="odd">
+<td align="center">LN</td>
+<td align="center">09</td>
+<td align="center">03</td>
+<td align="center">1</td>
+<td align="center">1</td>
+<td align="center">NA</td>
+<td align="center">0</td>
+<td align="center">0</td>
+</tr>
+<tr class="even">
+<td align="center">SE</td>
+<td align="center">09</td>
+<td align="center">03</td>
+<td align="center">2</td>
+<td align="center">1</td>
+<td align="center">105.5</td>
+<td align="center">0</td>
+<td align="center">0</td>
+</tr>
+<tr class="odd">
+<td align="center">QM</td>
+<td align="center">11</td>
+<td align="center">02</td>
+<td align="center">2</td>
+<td align="center">1</td>
+<td align="center">106</td>
+<td align="center">0</td>
+<td align="center">0</td>
+</tr>
+</tbody>
+</table>
+<p>使用c()函数创建一个包含了7只动物长度值的变量，再生成一个包含了Tb的变量，包含NA，并求7只动物的平均长度。</p>
+<ol start="2" style="list-style-type: decimal">
+<li><p>继续习题1中的数据。首先生成一个包含了农场和月份的变量，注意农场是字符串。然后用cbind结合月份、长度和Tb的数据，并将结果储存在变量Boar中，同时确保可以提取Boar的行、列及每个元素。并用dim，nrow和ncol函数确定Boar中动物的数量和变量的数量。</p></li>
+<li><p>继续习题1的数据。类似于习题2，使用vector函数集合Tb数据，使用不一样的变量名，如TB2。</p></li>
+<li>在R中生成下面的矩阵，并确定它的转置矩阵，逆矩阵，同时计算<em>D</em>和它的逆矩阵之乘积（结果将是单位矩阵）。
+<span class="math display">\[
+D=\begin{bmatrix}
+1&amp;2&amp;3\\
+4&amp;2&amp;1\\
+2&amp;3&amp;0\\
+\end{bmatrix}
+\]</span></li>
+<li><p>继续习题1至3的问题。生成一个包含习题1表中所有数据的数据框，并将长度数据值的平方根加到这个数据框中，再用list函数完成同样的操作，比较它们之间的不同点。</p></li>
+<li><p>文件ISIT.xls包含了深海生物发光的数据，准备一个电子数据表，并且把数据提取到ascii文件中，依次使用read.table和scan函数将这些数据载入到R中，使用两个不同的变量来储存数据，比较它们的不同点，使用is.matrix和is.data.frame函数回答这个问题。</p></li>
+<li><p>文件Deer.xls包含了习题1讨论的马鹿数据，但也包含其他动物的数据，把需要的数据从Excel提取到Ascii文件中，并将它载入R。</p></li>
+</ol>
+</div>
+</div>

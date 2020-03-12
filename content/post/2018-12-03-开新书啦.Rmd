@@ -1,0 +1,13 @@
+---
+title: 开新书啦
+author: Dr.二哈
+date: '2018-12-03'
+slug: 开新书啦
+categories: []
+tags:
+  - 杂
+header:
+  caption: ''
+  image: ''
+---
+如题，开个新书，R语言统计分析与应用。之前那个书感觉开不下去了~~~

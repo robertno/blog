@@ -1,0 +1,154 @@
+---
+title: 关于pheatmap绘制热图横轴标签倾斜以及几个热图代码
+author: Dr.二哈
+date: '2018-10-28'
+slug: 关于pheatmap绘制热图横轴标签倾斜以及几个热图代码
+categories:
+  - R
+tags:
+  - R
+header:
+  caption: ''
+  image: ''
+---
+这几天忙着做实验的同时还再帮某兄弟解决作图，这兄弟想做个热图，我就用pheatmap给他做，结果做完了发现，诶？尼玛，这横轴标签怎么是垂直的，于是又找解决方法，终于找到了一个。
+上代码。
+
+```r
+#创建数据
+test = matrix(rnorm(200), 20, 10)
+test[1:10, seq(1, 10, 2)] = test[1:10, seq(1, 10, 2)] + 3
+test[11:20, seq(2, 10, 2)] = test[11:20, seq(2, 10, 2)] + 2
+test[15:20, seq(2, 10, 2)] = test[15:20, seq(2, 10, 2)] + 4
+colnames(test) = paste("Test", 1:10, sep = "")
+rownames(test) = paste("Gene", 1:20, sep = "")
+head(test)
+```
+
+```
+##          Test1      Test2    Test3      Test4    Test5      Test6    Test7
+## Gene1 3.478948 -1.3189620 2.022492 -1.8908125 3.063350  0.6009318 4.317662
+## Gene2 4.354549  0.5188468 4.367425 -0.5386495 1.355116  1.5142165 4.480402
+## Gene3 4.192323 -1.0382861 3.509188  0.8541905 3.635153  0.4159976 3.793672
+## Gene4 3.353073  0.2624581 3.759387  0.5848898 3.004100 -0.4968918 1.091723
+## Gene5 3.129363 -0.9422255 4.558563  0.7275991 2.571372 -1.4574945 3.016973
+## Gene6 3.206768 -1.6356026 2.877822 -0.6683236 3.490102 -1.7531713 2.106235
+##             Test8    Test9     Test10
+## Gene1  1.83005199 2.235624 -1.3683971
+## Gene2  0.38677603 3.843029 -1.0146326
+## Gene3 -1.66711704 1.493430 -0.4044687
+## Gene4  0.02498933 1.995961  1.8579663
+## Gene5 -0.60796743 1.950566  0.6641153
+## Gene6  1.21738912 2.711145 -2.3203194
+```
+
+```r
+library(pheatmap)
+library(vegan)
+```
+
+```
+## 载入需要的程辑包：permute
+```
+
+```
+## 载入需要的程辑包：lattice
+```
+
+```
+## This is vegan 2.5-2
+```
+
+```r
+library(permute)
+library(lattice)
+pheatmap(test)
+```
+
+<img src="/post/2018-10-28-关于pheatmap绘制热图横轴标签倾斜_files/figure-html/unnamed-chunk-1-1.png" width="672" />
+
+```r
+#看到没有，图下面的Test1-10字样都是垂直的
+#要想修改，就要改pheatmap包里面的东西
+#修改pheatmap:::draw_colnames什么的
+#先载入grid包
+library(grid)
+draw_colnames_45 <- function (coln, ...) {
+  m = length(coln)
+  x = (1:m)/m - 1/2/m
+  grid.text(coln, x = x, y = unit(0.96, "npc"), vjust = .5, 
+            hjust = 1, rot = 45, gp = gpar(...)) ## 注意缺省值为 'hjust=0' 和'rot=270'
+}
+#然后将default draw_colnames覆盖
+assignInNamespace(x="draw_colnames", value="draw_colnames_45",
+                  ns=asNamespace("pheatmap"))
+#再作图，这回就妥了
+pheatmap(test)
+```
+
+<img src="/post/2018-10-28-关于pheatmap绘制热图横轴标签倾斜_files/figure-html/unnamed-chunk-1-2.png" width="672" />
+
+```r
+#可以美化下……额，这个美化不好~将就看吧
+pheatmap(test, color = colorRampPalette(c("pink", "white", "red"))(100),
+         scale = "none", legend = TRUE, border_color = "black",
+         treeheight_row = 80, treeheight_col = 80
+         )
+```
+
+<img src="/post/2018-10-28-关于pheatmap绘制热图横轴标签倾斜_files/figure-html/unnamed-chunk-1-3.png" width="672" />
+
+```r
+#另外，输出图片可以用tiff(),png()等命令，这样可以调整分辨率
+#不过建议用tiff()命令
+#注意命令顺序，如下
+tiff("test1.tiff", units="in", width=9, height=6,
+     res=300) ##res设置的是分辨率)
+pheatmap(test, color = colorRampPalette(c("pink", "white", "red"))(100),
+         scale = "none", legend = TRUE, border_color = "black",
+         treeheight_row = 80, treeheight_col = 80
+         )
+dev.off()
+```
+
+```
+## tiff 
+##    3
+```
+备注一下，方法来源于网页https://stackoverflow.com/questions/15505607/diagonal-labels-orientation-on-x-axis-in-heatmaps
+另外可以看下其他的绘制热图的代码。
+
+```r
+#载入所需包
+library(ggplot2)
+library(gplots)
+```
+
+```
+## 
+## 载入程辑包：'gplots'
+```
+
+```
+## The following object is masked from 'package:stats':
+## 
+##     lowess
+```
+
+```r
+#最简单的热图
+heatmap(test, scale = "none")
+```
+
+<img src="/post/2018-10-28-关于pheatmap绘制热图横轴标签倾斜_files/figure-html/unnamed-chunk-2-1.png" width="672" />
+
+```r
+#而下面这个出现color key，并且横坐标字体变小，其他与上面一致
+heatmap.2(test, scale = "none", trace = "none", key = TRUE, symkey = FALSE,
+          density.info = "none", 
+          margins = c(4, 8),
+          cexRow = 1, cexCol = 1)
+```
+
+<img src="/post/2018-10-28-关于pheatmap绘制热图横轴标签倾斜_files/figure-html/unnamed-chunk-2-2.png" width="672" />
+这几个程序啥的，我还是喜欢pheatmap，尽管微调美化上有点难度~~~

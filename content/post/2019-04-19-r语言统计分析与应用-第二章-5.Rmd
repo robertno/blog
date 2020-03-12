@@ -1,0 +1,86 @@
+---
+title: R语言统计分析与应用-第二章-5
+author: Dr.二哈
+date: '2019-04-19'
+slug: r语言统计分析与应用-第二章-5
+categories:
+  - R
+  - 统计
+tags:
+  - R
+  - 杂
+header:
+  caption: ''
+  image: ''
+  preview: yes
+
+---
+
+## 2.3 数据的输入
+
+前面讲了好多的函数以及R的基础知识，但是没有数据怎么办呢?
+下面就介绍几种输入数据的方法。
+
+### 2.3.1 使用键盘输入数据
+
+这是最简单的了，不过只适用于少量的数据。
+
+```{R}
+#newdata <- data.frame(age=numeric(),sex=character(),weight=numeric())
+#newdata <- edit(newdata)
+```
+
+上面创建了一个数据框newdata，其中包含两个数值型变量age以及weight，一个字符型变量sex。
+然后用edit()命令调用文本编辑器，输入数据。
+图我就不展示了，总之就是可以直接用键盘输入数据了。
+
+### 2.3.2 数据集的导入
+
+前文说到直接用键盘输入数据只适用于少量的数据，那么，大量的数据怎么办。
+也只能导入咯~这是一句废话。
+
+1. 从带分隔符的文本文件导入数据
+   用read.table()就可以了，导入数据之后，保存为数据框。
+   命令语法是这样的：
+   > read.table(file, header=TRUE, sep="delimiter",row.names="names")
+
+这里面，file就是要导入的ASCII文本文件；
+header是一个表明首行是否包含了变量名的逻辑值；
+sep用来指定分割数据的分隔符；
+row.names是一个可选参数，用于指定一个或多个表示**行标识符**的变量。
+
+下面是个例子：
+
+```{R}
+#Example2_1 <- read.table("example2_1.csv",                         header = TRUE,sep = ",")
+#Example2_1
+#参数中的sep，可以用sep="\t"来读取制表符分割的文件
+#此参数的默认值为sep=""，即表示分隔符可以是一个或多个空格
+#或者制表符，换行符以及回车符
+```
+
+2. 导入excel数据
+
+当然，对于一般不做生信的人来说，csv文件其实不常见，常用的excel的数据。
+对于这种文件用下面的方法导入，当然方法很多，这只是其中一个：
+
+```{R}
+#install.packages("RODBC")
+#library(RODBC)
+#Example2_2 <- odbcConnectExcel("example2_2.xls")
+#mydata <- sqlFetch(Example2_2, "sheet1")
+#odbcClose(Example2_2)
+```
+
+3. 导入SPSS数据
+
+常见的格式还是SPSS数据。
+
+```{R}
+#library(Hmisc)
+#use.value.labels=TRUE这个参数让函数将带有值标签的标量
+#导入为R中水平对应的因子。
+#mydata <- spss.get("mydata.sav", use.value.labels=TRUE)
+```
+
+嗯，就这样了，第二章断断续续地结束了。

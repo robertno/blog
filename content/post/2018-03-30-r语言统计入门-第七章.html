@@ -1,0 +1,337 @@
+---
+title: "R语言统计入门-第七章"
+author: "Dr.二哈"
+date: '2018-03-30'
+slug: r语言统计入门-第七章
+tags:
+- R
+- 统计
+categories:
+- R
+- 统计
+---
+
+
+
+<div id="-kruskal-wallis" class="section level1">
+<h1>第七章 方差分析与Kruskal-Wallis检验</h1>
+<div class="section level2">
+<h2>7.1 单因素方差分析</h2>
+<p>首先说下单因素方差分析的理论。令<span class="math inline">\(x_{ij}\)</span>表示第<span class="math inline">\(i\)</span>组的第<span class="math inline">\(j\)</span>个观测，<span class="math inline">\(\bar x_i\)</span>是第<span class="math inline">\(i\)</span>组的均值，而<span class="math inline">\(\bar x_.\)</span>是所有观测值的均值。 能将一个观测值分解为： <span class="math display">\[
+x_{ij}=\bar x_.+(\bar x_i-\bar x_.)+(x_{ij}-\bar x_i)
+\]</span> 其中，<span class="math inline">\((\bar x_i-\bar x_.)\)</span>为组内均值与全局均值的差，<span class="math inline">\((x_{ij}-\bar x_i)\)</span>为观测值与组内均值的差。可以不严格地认为这个公式与下面的模型联系起来： <span class="math display">\[
+X_{ij}=\mu+\alpha_i+\epsilon_{ij}, \epsilon \sim N(0,\sigma^2)
+\]</span> 假设所有组别的均值都是一样的，那么所有的<span class="math inline">\(\alpha_i\)</span>都应该是0.注意，假设这里的误差项<span class="math inline">\(\epsilon_{ij}\)</span>是独立且方差相等的。 现在考虑一下括号这一项的平方和，它被成为<em>组内方差</em>： <span class="math display">\[
+SSD_W=\sum_{i}\sum_{j}(x_{ij}-\bar x_i)^2
+\]</span> 与组内方差： <span class="math display">\[
+SSD_B=\sum_{i}\sum_{j}(\bar x_i-\bar x_.)^2=\sum_{i}n_i(\bar x_i-\bar x_.)^2
+\]</span> 可以证明： <span class="math display">\[
+SSD_B+SSD_W=SSD_{total}=\sum_{i}\sum_{j}(x_{ij}-\bar x_.)^2
+\]</span> 这意味着全局的方差能够被分解为描述组件均值的部分与描述组内数值的部分。 实际上，在组间没有任何系统差距的情况下，应该期望平方和的分割按照每一项的自由度来进行。<span class="math inline">\(SSD_B\)</span>的自由度为<span class="math inline">\(k-1\)</span>，而<span class="math inline">\(SSD_W\)</span>的自由度为<span class="math inline">\(N-k\)</span>，其中<span class="math inline">\(k\)</span>是组数，<span class="math inline">\(N\)</span>是所有的观测数。 据此，可以计算<em>平均平方</em>来正则化平方和：</p>
+<p><span class="math display">\[
+MS_W=SSD_W/(N-k)\\
+MS_B=SSD_B/(k-1)
+\]</span> <span class="math inline">\(MS_W\)</span>是将独立的组内方差集成起来的方差，也就是对<span class="math inline">\(\sigma^2\)</span>的估计。在没有真正的组间差异时，<span class="math inline">\(MS_B\)</span>也是一个对<span class="math inline">\(\sigma^2\)</span>的估计，单如果出现了组间差异，那么组件均值的差异和<span class="math inline">\(MS_B\)</span>都会变得更大。所以，这可以成为一个通过对两个估计方差的比较来检查组间均值是否有显著差异的检验。这就是我们的目标是比较各组均值，但是名字称为<em>方差分析</em>的原因。 简单的方差分析能在R中通过函数lm来做到，这也是回归分析里面的函数。同时，R也提供了函数aov和lme（linear mixed effects models，即线性混合效应模型，来自于nlime包）。 本节主要用来自于Altman的“红细胞叶酸盐”数据。</p>
+<pre class="r"><code>library(ISwR)
+attach(red.cell.folate)
+summary(red.cell.folate)</code></pre>
+<pre><code>##      folate          ventilation
+##  Min.   :206.0   N2O+O2,24h:8   
+##  1st Qu.:249.5   N2O+O2,op :9   
+##  Median :274.0   O2,24h    :5   
+##  Mean   :283.2                  
+##  3rd Qu.:305.5                  
+##  Max.   :392.0</code></pre>
+<p>其中，变量ventilation中的属性名称分别表示“24 h内的O<sub>2</sub>与N<sub>2</sub>O含量”，“手术中的O<sub>2</sub>与N<sub>2</sub>O含量”，以及“24 h内的O<sub>2</sub>含量”。 接下来要开始做方差分析。通过函数lm得到一个模型对象，然后用函数anova将方差分析表析取出来。</p>
+<pre class="r"><code>anova(lm(folate~ventilation))</code></pre>
+<pre><code>## Analysis of Variance Table
+## 
+## Response: folate
+##             Df Sum Sq Mean Sq F value  Pr(&gt;F)  
+## ventilation  2  15516  7757.9  3.7113 0.04359 *
+## Residuals   19  39716  2090.3                  
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<p>在结果第一行找到<span class="math inline">\(SSD_B\)</span>和<span class="math inline">\(MS_B\)</span>，在第二行可以找到<span class="math inline">\(SSD_W\)</span>和<span class="math inline">\(MS_W\)</span>。 值得注意的是，在R中，组间方差用分组属性变量的名字（ventilation）来称呼，而组内方差被称为Residual。 接下来用4.1节提到的juul数据集做下一个例子。</p>
+<pre class="r"><code>#这个数据中的变量tanner是数值向量，而不是属性向量
+#对于列出表格而言，这几乎没影响
+#但是这可能造成方差分析出现严重错误
+attach(juul)
+anova(lm(igf1~tanner))</code></pre>
+<pre><code>## Analysis of Variance Table
+## 
+## Response: igf1
+##            Df   Sum Sq  Mean Sq F value    Pr(&gt;F)    
+## tanner      1 10985605 10985605  686.07 &lt; 2.2e-16 ***
+## Residuals 790 12649728    16012                      
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<p>这并没有描述对数据的分组，而是一个对于分组编号的<strong>线性回归</strong>。变量tanner的自由度为1，这是在提醒我们。 改正如下：</p>
+<pre class="r"><code>#重新板顶数据集juul以便使用新的定义
+juul$tanner &lt;- factor(juul$tanner,
+                      labels = c(&quot;Ⅰ&quot;,&quot;Ⅱ&quot;,&quot;Ⅲ&quot;,&quot;Ⅳ&quot;,&quot;Ⅴ&quot;))
+detach(juul)
+attach(juul)
+summary(tanner)</code></pre>
+<pre><code>##    Ⅰ    Ⅱ    Ⅲ    Ⅳ    Ⅴ NA&#39;s 
+##  515  103   72   81  328  240</code></pre>
+<pre class="r"><code>anova(lm(igf1~tanner))</code></pre>
+<pre><code>## Analysis of Variance Table
+## 
+## Response: igf1
+##            Df   Sum Sq Mean Sq F value    Pr(&gt;F)    
+## tanner      4 12696217 3174054  228.35 &lt; 2.2e-16 ***
+## Residuals 787 10939116   13900                      
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<p>一个被绑定的数据框是它本身的一个复制品，Df这一列为tanner分配了4个自由度，这是它应得的。</p>
+<div class="section level3">
+<h3>7.1.1 成对比较和多重检验</h3>
+<p>如果 <em>F</em> 检验告诉我们组间有差异，那么问题马上升为找出差异在哪里。这时候就有必要对单个组进行比较。 能通过summary析取出回归系数以及它们的标准误和 <em>t</em> 检验统计量。这些系数的意义并不是通常的回归线斜率，而是有如下的特定解释：</p>
+<pre class="r"><code>summary(lm(folate~ventilation))</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = folate ~ ventilation)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -73.625 -35.361  -4.444  35.625  75.375 
+## 
+## Coefficients:
+##                      Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)            316.62      16.16  19.588 4.65e-14 ***
+## ventilationN2O+O2,op   -60.18      22.22  -2.709   0.0139 *  
+## ventilationO2,24h      -38.62      26.06  -1.482   0.1548    
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 45.72 on 19 degrees of freedom
+## Multiple R-squared:  0.2809, Adjusted R-squared:  0.2052 
+## F-statistic: 3.711 on 2 and 19 DF,  p-value: 0.04359</code></pre>
+<p>这些估计值应该这样理解： 截距这一项是第一组（N<sub>2</sub>O+O<sub>2</sub>，24 h）的均值，而另外两个是相应组均值与第一组均值的<em>差</em>。 如果比较所有的组别，应该进行<em>多重检验</em>的修正。进行多次检验，会增加其中出现一个显著结果的概率，也就是说，这个 <em>p</em> 值会变得夸张。一个常用的调整方法是<em>Bonferroni修正法</em>。它基于这个事实：在 <em>n</em> 个时间里至少观测到一个事件的概率小于每个事件的概率之和。所以，让显著性水平去除或是等价地用 <em>p</em> 值去乘检验次数，能够得到一个保守的检验，其中显著的结果会少于或等于之前的显著性水平。 函数pairwise.t.test能计算所有的两组比较。它也能针对多重检验做调整，比如这样：</p>
+<pre class="r"><code>pairwise.t.test(folate,ventilation,p.adj=&quot;bonferroni&quot;)</code></pre>
+<pre><code>## 
+##  Pairwise comparisons using t tests with pooled SD 
+## 
+## data:  folate and ventilation 
+## 
+##           N2O+O2,24h N2O+O2,op
+## N2O+O2,op 0.042      -        
+## O2,24h    0.464      1.000    
+## 
+## P value adjustment method: bonferroni</code></pre>
+<p>输出结果是一个成对比较的 <em>p</em> 值表。这里的 <em>p</em> 值已经通过Bonferroni修正过了，即通过未修正的 <em>p</em> 值乘上检验的次数3而得到的。如果得到一个大于1的结果，那么调整过程会将调整过的 <em>p</em> 值设为1。 函数pairwise.t.test的默认设置不是Bonferroni调整法，而是Holm提出的一个变形。在这个方法中，只有最小的 <em>p</em> 值需要乘以所有检验的次数，而第二小的则乘以<span class="math inline">\(n-1\)</span>，以此类推，除非这一步骤让它比前一个数更小了，因为 <em>p</em> 值的顺序不应该被调整而改变。</p>
+<pre class="r"><code>pairwise.t.test(folate, ventilation)</code></pre>
+<pre><code>## 
+##  Pairwise comparisons using t tests with pooled SD 
+## 
+## data:  folate and ventilation 
+## 
+##           N2O+O2,24h N2O+O2,op
+## N2O+O2,op 0.042      -        
+## O2,24h    0.310      0.408    
+## 
+## P value adjustment method: holm</code></pre>
+</div>
+<div class="section level3">
+<h3>7.1.2 放宽对方差的假设</h3>
+<p>传统的单因素方差分析需要假设所有的组方差相等。不过，有另一个不需要这个假设的方法。函数oneway.test可以实现。</p>
+<pre class="r"><code>oneway.test(folate~ventilation)</code></pre>
+<pre><code>## 
+##  One-way analysis of means (not assuming equal variances)
+## 
+## data:  folate and ventilation
+## F = 2.9704, num df = 2.000, denom df = 11.065, p-value = 0.09277</code></pre>
+<p>在这个例子中，<em>p</em>值增大到了一个不显著的值，可能是因为看起来与另外两组不等的组别也有着最大的方差。 也可以进行成对 <em>t</em>检验，使得它们不需要用一个综合的标准差。可以通过参数pool.sd来控制。</p>
+<pre class="r"><code>pairwise.t.test(folate, ventilation, pool.sd = F)</code></pre>
+<pre><code>## 
+##  Pairwise comparisons using t tests with non-pooled SD 
+## 
+## data:  folate and ventilation 
+## 
+##           N2O+O2,24h N2O+O2,op
+## N2O+O2,op 0.087      -        
+## O2,24h    0.321      0.321    
+## 
+## P value adjustment method: holm</code></pre>
+<p>可以再一次看到，结果在去除对方差的限制后就变得不显著了。</p>
+</div>
+<div class="section level3">
+<h3>7.1.3 图像表示</h3>
+<pre class="r"><code>#这这里展示一个图形，原始数据用条形图
+#然后叠加上均值与SEM的值
+xbar &lt;- tapply(folate,ventilation,mean)
+s &lt;- tapply(folate,ventilation,sd)
+n &lt;- tapply(folate,ventilation,length)
+sem &lt;- s/sqrt(n)
+#在stripchart函数中设定为小圆点，即pch=16
+#并通过vertical=T使长条变成垂直的
+stripchart(folate~ventilation,method=&quot;jitter&quot;,
+           jitter=0.05,pch=16,vert=T)
+#误差线用arrows来添加，这个函数在图上添加箭头，修改下就可以了
+#前四个参数表示断点（x1，y1，x2，y2）
+#参数angle指的是箭头与箭柄之间的角度，这里为90°
+#参数code=3表示两端都要有箭头
+#参数length值得是箭头的长度（打印时的尺寸）
+arrows(1:3,xbar+sem,1:3,xbar-sem,angle = 90,code = 3,length = .1)
+#显示均值与连接线可以通过函数lines来表示
+#参数type=“b”表示同时画出点和线，然后在线与线之间给符号留下空间
+#参数pch=4是一个交叉十字
+#参数cex=2让这些符号变成两倍大
+lines(1:3,xbar,pch=4,type = &quot;b&quot;,cex=2)</code></pre>
+<p><img src="/post/2018-03-30-r语言统计入门-第七章_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
+</div>
+<div id="bartlett" class="section level3">
+<h3>7.1.4 Bartlett检验</h3>
+<p>可以用Bartlett检验来看看某个变量的分布是否在所有组中都有一样的方差。虽然与 <em>F</em> 检验一样都能比较两个方差，但它对正态分布的假设是不稳定的。与函数var.test一样，它假设了来自不同组的数据时独立的。</p>
+<pre class="r"><code>bartlett.test(folate~ventilation)</code></pre>
+<pre><code>## 
+##  Bartlett test of homogeneity of variances
+## 
+## data:  folate by ventilation
+## Bartlett&#39;s K-squared = 2.0951, df = 2, p-value = 0.3508</code></pre>
+</div>
+</div>
+<div id="kruskal-wallis" class="section level2">
+<h2>7.2 Kruskal-Wallis检验</h2>
+<p>Kruskal-Wallis是方差分析的非参数版本。基本上与Wilcoxon一样，不过这次检验的计算基于各组与平均秩的离差平方和。我们又一次能够利用分组独立性的假设，这样检验统计量的分布可以变成一个组合的问题，即对一组固定的数字抽样而得的组内秩。</p>
+<pre class="r"><code>kruskal.test(folate~ventilation)</code></pre>
+<pre><code>## 
+##  Kruskal-Wallis rank sum test
+## 
+## data:  folate by ventilation
+## Kruskal-Wallis chi-squared = 4.1852, df = 2, p-value = 0.1234</code></pre>
+<p>可以看出，这个检验没有表现出显著的差异。另外Kruskal-Wallis检验在假设成立的情况下没有参数方法那么高效，虽然它并不总是会给出较大的 <em>p</em> 值。</p>
+</div>
+<div class="section level2">
+<h2>7.3 双因素方差分析</h2>
+<p>令<span class="math inline">\(x_{ij}\)</span>表示一个<span class="math inline">\(m\times n\)</span>表的第<span class="math inline">\(i\)</span>行第<span class="math inline">\(j\)</span>列的观测值。这与单因素方差分析的记号一样，不过现在同一个<span class="math inline">\(j\)</span>对应的观测之间都有联系，所以自然会查看每行的均值<span class="math inline">\(\bar x_{i.}\)</span>与每列的均值<span class="math inline">\(\bar x_{.j}\)</span>。 接着，可以查看行间方差： <span class="math display">\[
+SSD_R=n\sum_{i}(\bar x_{i.}-\bar x_{..})^2
+\]</span> 与列间方差： <span class="math display">\[
+SSD_C=m\sum_{j}(\bar x_{.j}-\bar x_{..})^2
+\]</span> 从总的方差中减去这两部分，就得到了残差方差： <span class="math display">\[
+SSD_{res}=\sum_{i}\sum_{j}(x_{ij}-\bar x_{i.}-\bar x_{.j}+\bar x_{..})
+\]</span> 这可以表达为一个统计模型，其中观测由整体水平，行效应，列效应以及噪声项四部分组成： <span class="math display">\[
+X_{ij}=\mu+\alpha_i+\beta_j+\epsilon_{ij} \qquad \epsilon_{ij}\sim N(0,\sigma^2)
+\]</span> 除非引入一些对参数的限制，否则这个模型中的参数并不是唯一定义的。如果引入<span class="math inline">\(\sum \alpha_i=0\)</span>和<span class="math inline">\(\sum\beta_j=0\)</span>，那么对<span class="math inline">\(\alpha_i\)</span>，<span class="math inline">\(\beta_j\)</span>和<span class="math inline">\(\mu\)</span>的估计就变成了<span class="math inline">\(\bar x_{i.}-\bar x_{..}\)</span>，<span class="math inline">\(\bar x_{.j}-\bar x_{..}\)</span>和<span class="math inline">\(\bar x_{..}\)</span>。 将平方和项厨艺各自的自由度：SSD<sub>R</sub>的是<span class="math inline">\(m-1\)</span>，SSD<sub>C</sub>的是 <span class="math inline">\(n-1\)</span>，SSD<sub>res</sub>的是<span class="math inline">\((m-1)(n-1)\)</span>：然后我们就得到了一系列平均平方。行影响和列影响的 <em>F</em> 检验可以通过用对应的平均平方除以残差平均平方进行。 双因素方差分析需要将数据放在一个向量中，以及与其平行的两个分类属性。以一个使用enalaprilate之后的心率数据作为例子，即数据集heart.rate。</p>
+<pre class="r"><code>attach(heart.rate)
+heart.rate</code></pre>
+<pre><code>##     hr subj time
+## 1   96    1    0
+## 2  110    2    0
+## 3   89    3    0
+## 4   95    4    0
+## 5  128    5    0
+## 6  100    6    0
+## 7   72    7    0
+## 8   79    8    0
+## 9  100    9    0
+## 10  92    1   30
+## 11 106    2   30
+## 12  86    3   30
+## 13  78    4   30
+## 14 124    5   30
+## 15  98    6   30
+## 16  68    7   30
+## 17  75    8   30
+## 18 106    9   30
+## 19  86    1   60
+## 20 108    2   60
+## 21  85    3   60
+## 22  78    4   60
+## 23 118    5   60
+## 24 100    6   60
+## 25  67    7   60
+## 26  74    8   60
+## 27 104    9   60
+## 28  92    1  120
+## 29 114    2  120
+## 30  83    3  120
+## 31  83    4  120
+## 32 118    5  120
+## 33  94    6  120
+## 34  71    7  120
+## 35  74    8  120
+## 36 102    9  120</code></pre>
+<p>如果打开程序包ISwR里data路径下的heart.rate.R文件，就会看到数据框的实际定义是这样的：</p>
+<pre class="r"><code>heart.rate &lt;- data.frame(hr = c(96,110,89,95,128,100,72,79,100,
+                                92,106,86,78,124,98,68,75,106,
+                                86,108,85,78,118,100,67,74,104,
+                                92,114,83,83,118,94,71,74,102),
+                         subj=gl(9,1,36),
+                         time=gl(4,9,36,labels=c(0,30,60,120)))</code></pre>
+<p>函数gl（generate levels）能生成模式属性，专门为平衡的试验涉及而出现。它有3个参数：水平的数目，每块长度（每一水平重复多少次），以及结果的总长度。所以数据框的两个模式就是：</p>
+<pre class="r"><code>gl(9,1,36)</code></pre>
+<pre><code>##  [1] 1 2 3 4 5 6 7 8 9 1 2 3 4 5 6 7 8 9 1 2 3 4 5 6 7 8 9 1 2 3 4 5 6 7 8
+## [36] 9
+## Levels: 1 2 3 4 5 6 7 8 9</code></pre>
+<pre class="r"><code>gl(4,9,36,labels=c(0,30,60,120))</code></pre>
+<pre><code>##  [1] 0   0   0   0   0   0   0   0   0   30  30  30  30  30  30  30  30 
+## [18] 30  60  60  60  60  60  60  60  60  60  120 120 120 120 120 120 120
+## [35] 120 120
+## Levels: 0 30 60 120</code></pre>
+<p>一旦变量被定义好了，双因素方差分析就可以简单地如下计算：</p>
+<pre class="r"><code>anova(lm(hr~subj+time))</code></pre>
+<pre><code>## Analysis of Variance Table
+## 
+## Response: hr
+##           Df Sum Sq Mean Sq F value    Pr(&gt;F)    
+## subj       8 8966.6 1120.82 90.6391 4.863e-16 ***
+## time       3  151.0   50.32  4.0696   0.01802 *  
+## Residuals 24  296.8   12.37                      
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<p>在模式方程（hr~subj+time）中交换subj和time能产生一模一样的分析结果，除了方差分析表中两行的顺序有变化。这是因为在处理一个平衡的设计（一个没有缺失值的完全双因素表）。在不平衡的情况下，属性的顺序会有很大影响。</p>
+<div class="section level3">
+<h3>7.3.1 重复试验的图像</h3>
+<p>在给自己用的时候，做一个意大利面图是很有用的。在这种图中，来自同一个个体的数据被线段连在了仪器。可以使用函数interaction.plot。</p>
+<pre class="r"><code>#interaction.plot这个函数以一个属性为横轴，将另一个属性的数据画出来并用线段标记轨迹
+interaction.plot(time,subj,hr)</code></pre>
+<p><img src="/post/2018-03-30-r语言统计入门-第七章_files/figure-html/unnamed-chunk-17-1.png" width="672" /></p>
+<pre class="r"><code>#实际上还有第四个参数，用来指示程序怎么处理不止一个观测的格子
+#默认情况下，它会选择去平均数
+#这就是为什么这个图中y周意义为hr均值
+#如果更喜欢依照擦亮的时序来画图，可以修改如下：
+interaction.plot(ordered(time),subj,hr)</code></pre>
+<p><img src="/post/2018-03-30-r语言统计入门-第七章_files/figure-html/unnamed-chunk-17-2.png" width="672" /></p>
+</div>
+</div>
+<div id="friedman" class="section level2">
+<h2>7.4 Friedman检验</h2>
+<p>双因素方差分析在每格含有一个观测的情况下有一个非参数版本。Friedman的检验基于每行观测的秩。如果没有列间效应的影响，那么每一行的秩应该都是一样的。一个基于每列平方和的检验可以通过计算与正规化变为一个服从卡方分布的统计量。 在两列的情况下，Friedman检验与符号检验是等价的，这时可以通过二项分布来检验正号对以及负号对的概率是否相等</p>
+<pre class="r"><code>#注意，区组属性在模型方程中用垂直线标明了，这种记法可被读成在subj情况下的time
+friedman.test(hr~time | subj,data = heart.rate)</code></pre>
+<pre><code>## 
+##  Friedman rank sum test
+## 
+## data:  hr and time and subj
+## Friedman chi-squared = 8.5059, df = 3, p-value = 0.03664</code></pre>
+</div>
+<div class="section level2">
+<h2>7.5 回归分析中的方差分析表</h2>
+<p>单因素方差分析中的组间和组内波动可以被推广为<em>模型方差</em>和残差方差<em>： <span class="math display">\[
+SSD_{model}=\sum_{i}(\hat y_i-\hat y_.)^2 \\
+SSD_{res}=\sum_{i}(y_i-\hat y_i)^2
+\]</span> 这两部分分割了整体的波动<span class="math inline">\(\sum_{i}(\hat y_i-\hat y_.)^2\)</span>。这仅在模型含有一个截距项的时候成立。 与7.1节中的相似，可以用一个 </em>F* 检验对模型的显著性做检验。在简单线性回归中，这与检验回归系数是否为0是等价的。 与单因素和双因素方差分析一样，能用函数anova将一个回归分析的方差分析表导出来。在thuesen中，可以这样操作：</p>
+<pre class="r"><code>attach(thuesen)
+lm.velo &lt;- lm(short.velocity~blood.glucose)
+anova(lm.velo)</code></pre>
+<pre><code>## Analysis of Variance Table
+## 
+## Response: short.velocity
+##               Df  Sum Sq  Mean Sq F value Pr(&gt;F)  
+## blood.glucose  1 0.20727 0.207269   4.414 0.0479 *
+## Residuals     21 0.98610 0.046957                 
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+</div>
+<div class="section level2">
+<h2>练习题</h2>
+<ol style="list-style-type: decimal">
+<li>数据zelazo的格式是一个由向量构成的列表，它们分别代表四个组。将这个数据转化为函数lm可用的形式，然后进行相关性检验。考虑用 <em>t</em>检验比较选择的两个组，或者是先将组合并。</li>
+<li>在数据lung中，三种不同的测量方法是否给出了系统性不同的结果，如果是，那么是哪个组表现的不同。</li>
+<li>用非参数方法对数据zelazo和lung重复前两个练习。</li>
+<li>数据juul中的变量igf1有明显的偏斜，并且与Tanner组的方差不一样，尝试通过对数变换与平方根变换来补偿这一点，以及使用Welch检验，即便如此，这个分析仍有问题，为什么？</li>
+</ol>
+</div>
+</div>

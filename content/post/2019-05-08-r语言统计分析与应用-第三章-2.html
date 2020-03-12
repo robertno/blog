@@ -1,0 +1,413 @@
+---
+title: R语言统计分析与应用-第三章-2
+author: Dr.二哈
+date: '2019-05-08'
+slug: r语言统计分析与应用-第三章-2
+categories:
+  - R
+  - 统计
+tags:
+  - R
+  - 统计
+header:
+  caption: ''
+  image: ''
+  preview: yes
+---
+
+
+
+<div id="section" class="section level2">
+<h2>3.5 变量的重命名</h2>
+<p>继续接上期。上期讲到啥了~~</p>
+<p>算了，根据标题来。这一节主要讲如何修改变量的名称。一般来说，可以通过交互式或者编程的方法来实现。</p>
+<p>假设希望将变量名manager变为managerID。</p>
+<pre class="r"><code>#fix(leader)
+#在弹出的界面单击manager就可以修改了</code></pre>
+<p>上面是交互式修改，下面介绍如何用命令行修改。</p>
+<pre class="r"><code>manager &lt;- c(1,2,3,4,5)
+date &lt;- c(&quot;10/20/08&quot;,&quot;10/21/08&quot;,&quot;10/10/08&quot;,&quot;10/19/08&quot;,&quot;6/1/09&quot;)
+country &lt;- c(&quot;US&quot;,&quot;UK&quot;,&quot;US&quot;,&quot;UK&quot;,&quot;US&quot;)
+gender &lt;- c(&quot;M&quot;,&quot;F&quot;,&quot;M&quot;,&quot;F&quot;,&quot;M&quot;)
+age &lt;- c(32,43,26,38,99)
+q1 &lt;- c(5,3,3,3,2)
+q2 &lt;- c(4,5,5,3,2)
+q3 &lt;- c(5,2,5,4,1)
+q4 &lt;- c(5,5,5,NA,1)
+q5 &lt;- c(5,5,2,NA,1)
+leader &lt;- data.frame(manager,date,country,gender,age,
+                     q1,q2,q3,q4,q5,
+                     stringsAsFactors = FALSE)
+#首先调用reshape包
+library(reshape)
+#修改manager和date变量名
+#这里书上出现了个错误。managerID应该用双引号括起来
+leader &lt;- rename(leader, c(manager=&quot;managerID&quot;,
+                           date=&quot;testDate&quot;))
+leader</code></pre>
+<pre><code>##   managerID testDate country gender age q1 q2 q3 q4 q5
+## 1         1 10/20/08      US      M  32  5  4  5  5  5
+## 2         2 10/21/08      UK      F  43  3  5  2  5  5
+## 3         3 10/10/08      US      M  26  3  5  5  5  2
+## 4         4 10/19/08      UK      F  38  3  3  4 NA NA
+## 5         5   6/1/09      US      M  99  2  2  1  1  1</code></pre>
+<pre class="r"><code>#也可以通过names()函数来重命名变量
+#比如讲q1-q5变为item1-item5
+names(leader)[6:10] &lt;- c(&quot;item1&quot;,&quot;item2&quot;,&quot;item3&quot;,
+                         &quot;item4&quot;,&quot;item5&quot;)
+leader</code></pre>
+<pre><code>##   managerID testDate country gender age item1 item2 item3 item4 item5
+## 1         1 10/20/08      US      M  32     5     4     5     5     5
+## 2         2 10/21/08      UK      F  43     3     5     2     5     5
+## 3         3 10/10/08      US      M  26     3     5     5     5     2
+## 4         4 10/19/08      UK      F  38     3     3     4    NA    NA
+## 5         5   6/1/09      US      M  99     2     2     1     1     1</code></pre>
+<p>嗯，就这么简单。</p>
+</div>
+<div id="section-1" class="section level2">
+<h2>3.6 缺失值</h2>
+<p>说起缺失值，很烦的好不好。在实际的数据处理中，经常会遇到缺失值的出现。有些是因为某些样本并没有这个变量（指标），也有些是因为测量过程中出现问题导致的。</p>
+<p>缺失值的存在对后续的数据处理是个很大的问题。在R中，缺失值用NA表示。可以用函数is.na()检测缺失值是否存在。它将返回逻辑值。出现NA就用TRUE，反之则是FALSE。看下面的例子。</p>
+<pre class="r"><code>x &lt;- c(1,2,NA,3,4)
+is.na(x)</code></pre>
+<pre><code>## [1] FALSE FALSE  TRUE FALSE FALSE</code></pre>
+<p>现在将这个函数应用在leader数据框上：</p>
+<pre class="r"><code>is.na(leader[6:10])</code></pre>
+<pre><code>##      item1 item2 item3 item4 item5
+## [1,] FALSE FALSE FALSE FALSE FALSE
+## [2,] FALSE FALSE FALSE FALSE FALSE
+## [3,] FALSE FALSE FALSE FALSE FALSE
+## [4,] FALSE FALSE FALSE  TRUE  TRUE
+## [5,] FALSE FALSE FALSE FALSE FALSE</code></pre>
+<p>那么问题来了，现在已经检测到缺失值了，要怎么处理呢？</p>
+<p>第一种方法是删除这些缺失值，用其余的数据进行之后的运算</p>
+<pre class="r"><code>#先构建几个向量
+a &lt;- c(1,NA,2,3,4)
+b &lt;- c(10,20,NA,30,40)
+z &lt;- a+b
+z</code></pre>
+<pre><code>## [1] 11 NA NA 33 44</code></pre>
+<pre class="r"><code>d &lt;- a[1]+a[2]+a[3]+a[4]+a[5]
+d</code></pre>
+<pre><code>## [1] NA</code></pre>
+<pre class="r"><code>e &lt;- sum(a)
+e</code></pre>
+<pre><code>## [1] NA</code></pre>
+<pre class="r"><code>#可以看出e算不出来，在sum函数中加入na.rm=TRUE删掉缺失值
+e &lt;- sum(a,na.rm = TRUE)</code></pre>
+<p>也可以用函数na.omit()来移除所有含有缺失值的观测，也就是变量，它将删除所有含有缺失值的行。</p>
+<pre class="r"><code>leader</code></pre>
+<pre><code>##   managerID testDate country gender age item1 item2 item3 item4 item5
+## 1         1 10/20/08      US      M  32     5     4     5     5     5
+## 2         2 10/21/08      UK      F  43     3     5     2     5     5
+## 3         3 10/10/08      US      M  26     3     5     5     5     2
+## 4         4 10/19/08      UK      F  38     3     3     4    NA    NA
+## 5         5   6/1/09      US      M  99     2     2     1     1     1</code></pre>
+<pre class="r"><code>newdata &lt;- na.omit(leader)
+newdata</code></pre>
+<pre><code>##   managerID testDate country gender age item1 item2 item3 item4 item5
+## 1         1 10/20/08      US      M  32     5     4     5     5     5
+## 2         2 10/21/08      UK      F  43     3     5     2     5     5
+## 3         3 10/10/08      US      M  26     3     5     5     5     2
+## 5         5   6/1/09      US      M  99     2     2     1     1     1</code></pre>
+<p>可以看见少了两行。要注意的是，这个函数尽量不要用，因为它作用太强了。</p>
+<p>那么问题又来了，不能用这个函数，还能用什么呢。</p>
+<p>在其他地方看到，可以用填补法把缺失值填上去（不影响原有数据的分布）。不过现在忘了在哪里看到了，等有空了再补上。</p>
+</div>
+<div id="section-2" class="section level2">
+<h2>3.8 类型转换</h2>
+<p>嗯，我就是跳过了3.7节，也就是日期值的内容。有兴趣的话自己去看看吧。</p>
+<p>类型转换包括数值型、字符型等的互转，数据框、矩阵等的互转。见下表。</p>
+<table>
+<thead>
+<tr class="header">
+<th align="center">判断</th>
+<th align="center">转换</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center">is.numeric()</td>
+<td align="center">as.numeric()</td>
+</tr>
+<tr class="even">
+<td align="center">is.character()</td>
+<td align="center">as..character()</td>
+</tr>
+<tr class="odd">
+<td align="center">is.vector()</td>
+<td align="center">as.vector()</td>
+</tr>
+<tr class="even">
+<td align="center">is.matrix()</td>
+<td align="center">as.matrix()</td>
+</tr>
+<tr class="odd">
+<td align="center">is.data.frame()</td>
+<td align="center">as.data.frame()</td>
+</tr>
+<tr class="even">
+<td align="center">is.factor()</td>
+<td align="center">as.factor()</td>
+</tr>
+<tr class="odd">
+<td align="center">is.logical()</td>
+<td align="center">as.logical()</td>
+</tr>
+</tbody>
+</table>
+<p>一般来说，先判断类型，再根据需求转换。例子我就不举了，以后会用到。
+算了，讲一个吧。</p>
+<pre class="r"><code>xyz &lt;- c(2,4,5,6,7)
+is.numeric(xyz)</code></pre>
+<pre><code>## [1] TRUE</code></pre>
+<pre class="r"><code>is.vector(xyz)</code></pre>
+<pre><code>## [1] TRUE</code></pre>
+<pre class="r"><code>is.character(xyz)</code></pre>
+<pre><code>## [1] FALSE</code></pre>
+<pre class="r"><code>xyz &lt;- as.character(xyz)
+is.numeric(xyz)</code></pre>
+<pre><code>## [1] FALSE</code></pre>
+<pre class="r"><code>is.vector(xyz)</code></pre>
+<pre><code>## [1] TRUE</code></pre>
+<pre class="r"><code>is.character(xyz)</code></pre>
+<pre><code>## [1] TRUE</code></pre>
+</div>
+<div id="section-3" class="section level2">
+<h2>3.9 数据排序</h2>
+<p>排序嘛，很好理解。举个栗子。</p>
+<pre class="r"><code>#用order()函数
+newdata1 &lt;- leader[order(leader$age)]
+newdata1</code></pre>
+<pre><code>##   country managerID gender testDate age
+## 1      US         1      M 10/20/08  32
+## 2      UK         2      F 10/21/08  43
+## 3      US         3      M 10/10/08  26
+## 4      UK         4      F 10/19/08  38
+## 5      US         5      M   6/1/09  99</code></pre>
+<p>或者</p>
+<pre class="r"><code>attach(leader)</code></pre>
+<pre><code>## The following objects are masked _by_ .GlobalEnv:
+## 
+##     age, country, gender</code></pre>
+<pre class="r"><code>newdata2 &lt;- leader[order(gender,age)]
+newdata2</code></pre>
+<pre><code>##   gender testDate country managerID age
+## 1      M 10/20/08      US         1  32
+## 2      F 10/21/08      UK         2  43
+## 3      M 10/10/08      US         3  26
+## 4      F 10/19/08      UK         4  38
+## 5      M   6/1/09      US         5  99</code></pre>
+</div>
+<div id="section-4" class="section level2">
+<h2>3.10 数据集的合并</h2>
+<p>说实话，我觉得应该先讲数据集的拆分，不过无所谓了。</p>
+<p>数据集的合并可以看成在原来的数据集上添加行或者列。多数情况下，两个<strong>数据框</strong>是通过一个或多个共有变量进行联结的，叫做内联结（inner join）。
+merge()函数是用来<strong>横向</strong>合并数据集的，即<strong>列合并</strong>。</p>
+<blockquote>
+<p>total &lt;- merge(dataframe1,datafame2,by=“ID”)</p>
+</blockquote>
+<p>下面看下具体的例子。</p>
+<pre class="r"><code>library(multilevel)</code></pre>
+<pre><code>## 载入需要的程辑包：nlme</code></pre>
+<pre><code>## 载入需要的程辑包：MASS</code></pre>
+<pre class="r"><code>data(cohesion)
+cohesion</code></pre>
+<pre><code>##     UNIT PLATOON COH01 COH02 COH03 COH04 COH05
+## 1  1044B     1ST     4     5     5     5     5
+## 2  1044B     1ST     3    NA     5     5     5
+## 3  1044B     1ST     2     3     3     3     3
+## 4  1044B     2ND     3     4     3     4     4
+## 5  1044B     2ND     4     4     3     4     4
+## 6  1044B     2ND     3     3     2     2     1
+## 7  1044C     1ST     3     3     3     3     3
+## 8  1044C     1ST     3     1     4     3     4
+## 9  1044C     2ND     3     3     3     3     3
+## 10 1044C     2ND     2     2     2     3     2
+## 11 1044C     2ND     1     1     1     3     3</code></pre>
+<pre class="r"><code>#现在新建一个数据框group.size
+group.size &lt;- data.frame(
+  UNIT=c(&quot;1044B&quot;,&quot;1044B&quot;,&quot;1044C&quot;,&quot;1044C&quot;),
+  PLATOON=c(&quot;1ST&quot;,&quot;2ND&quot;,&quot;1ST&quot;,&quot;2ND&quot;),
+  PSIZE=c(3,3,2,3)
+  )
+group.size</code></pre>
+<pre><code>##    UNIT PLATOON PSIZE
+## 1 1044B     1ST     3
+## 2 1044B     2ND     3
+## 3 1044C     1ST     2
+## 4 1044C     2ND     3</code></pre>
+<pre class="r"><code>new.cohesion &lt;- merge(cohesion,group.size,
+                      by=c(&quot;UNIT&quot;,&quot;PLATOON&quot;))
+new.cohesion</code></pre>
+<pre><code>##     UNIT PLATOON COH01 COH02 COH03 COH04 COH05 PSIZE
+## 1  1044B     1ST     4     5     5     5     5     3
+## 2  1044B     1ST     3    NA     5     5     5     3
+## 3  1044B     1ST     2     3     3     3     3     3
+## 4  1044B     2ND     3     4     3     4     4     3
+## 5  1044B     2ND     4     4     3     4     4     3
+## 6  1044B     2ND     3     3     2     2     1     3
+## 7  1044C     1ST     3     3     3     3     3     2
+## 8  1044C     1ST     3     1     4     3     4     2
+## 9  1044C     2ND     3     3     3     3     3     3
+## 10 1044C     2ND     2     2     2     3     2     3
+## 11 1044C     2ND     1     1     1     3     3     3</code></pre>
+<p>那么，<strong>纵向</strong>合并也就是<strong>行</strong>合并怎么弄呢。用rbind()函数。</p>
+<blockquote>
+<p>total &lt;- rbind(dataframe1,datafame2)</p>
+</blockquote>
+<p>注意一点，两个数据框必须拥有相同的变量，顺序倒是无所谓。如果A数据框含有B数据框没有的变量，那么就采取下面两种方法：
+1. 将它删除；</p>
+<ol start="2" style="list-style-type: decimal">
+<li>在B中追加这个变量并将其值设置为NA。</li>
+</ol>
+</div>
+<div id="section-5" class="section level2">
+<h2>3.11 数据集取子集</h2>
+<p>这节的内容就是在解决第三章开头的第5个问题。</p>
+<p>在实际操作中，经常会出现导入的数据集包含了太多样本以及变量，而仅仅只想针对某些样本或者变量来展开研究。下面一一介绍取子集的方法。</p>
+<div id="section-6" class="section level3">
+<h3>3.11.1 选入样本</h3>
+<p>见例子：</p>
+<pre class="r"><code>data(cohesion)
+cohesion</code></pre>
+<pre><code>##     UNIT PLATOON COH01 COH02 COH03 COH04 COH05
+## 1  1044B     1ST     4     5     5     5     5
+## 2  1044B     1ST     3    NA     5     5     5
+## 3  1044B     1ST     2     3     3     3     3
+## 4  1044B     2ND     3     4     3     4     4
+## 5  1044B     2ND     4     4     3     4     4
+## 6  1044B     2ND     3     3     2     2     1
+## 7  1044C     1ST     3     3     3     3     3
+## 8  1044C     1ST     3     1     4     3     4
+## 9  1044C     2ND     3     3     3     3     3
+## 10 1044C     2ND     2     2     2     3     2
+## 11 1044C     2ND     1     1     1     3     3</code></pre>
+<pre class="r"><code>#选择第一到第三行并命名为newdata3数据集
+#注意方括号的用法&quot;[行, 列]&quot;
+newdata3 &lt;- cohesion[1:3,]
+#按条件筛选
+#注意绝对等于“==”以及连接符“&amp;”
+newdata4 &lt;- cohesion[which(cohesion$UNIT==&quot;1044B&quot;
+                           &amp;
+                             cohesion$COH03&gt;=4),]</code></pre>
+<p>当然，这个方法不唯一，subset()函数也可以。</p>
+</div>
+<div id="section-7" class="section level3">
+<h3>3.11.2 选入变量</h3>
+<p>同样见例子。</p>
+<pre class="r"><code>data(cohesion)
+cohesion</code></pre>
+<pre><code>##     UNIT PLATOON COH01 COH02 COH03 COH04 COH05
+## 1  1044B     1ST     4     5     5     5     5
+## 2  1044B     1ST     3    NA     5     5     5
+## 3  1044B     1ST     2     3     3     3     3
+## 4  1044B     2ND     3     4     3     4     4
+## 5  1044B     2ND     4     4     3     4     4
+## 6  1044B     2ND     3     3     2     2     1
+## 7  1044C     1ST     3     3     3     3     3
+## 8  1044C     1ST     3     1     4     3     4
+## 9  1044C     2ND     3     3     3     3     3
+## 10 1044C     2ND     2     2     2     3     2
+## 11 1044C     2ND     1     1     1     3     3</code></pre>
+<pre class="r"><code>#选择cohesion数据集中第一个到第三个变量，也就是列
+newdata5 &lt;- cohesion[1:3]
+newdata5</code></pre>
+<pre><code>##     UNIT PLATOON COH01
+## 1  1044B     1ST     4
+## 2  1044B     1ST     3
+## 3  1044B     1ST     2
+## 4  1044B     2ND     3
+## 5  1044B     2ND     4
+## 6  1044B     2ND     3
+## 7  1044C     1ST     3
+## 8  1044C     1ST     3
+## 9  1044C     2ND     3
+## 10 1044C     2ND     2
+## 11 1044C     2ND     1</code></pre>
+<pre class="r"><code>#等价于
+v &lt;- c(&quot;UNIT&quot;,&quot;PLATOON&quot;,&quot;COH01&quot;)
+newdata6 &lt;- cohesion[v]
+newdata6</code></pre>
+<pre><code>##     UNIT PLATOON COH01
+## 1  1044B     1ST     4
+## 2  1044B     1ST     3
+## 3  1044B     1ST     2
+## 4  1044B     2ND     3
+## 5  1044B     2ND     4
+## 6  1044B     2ND     3
+## 7  1044C     1ST     3
+## 8  1044C     1ST     3
+## 9  1044C     2ND     3
+## 10 1044C     2ND     2
+## 11 1044C     2ND     1</code></pre>
+</div>
+<div id="section-8" class="section level3">
+<h3>3.11.3 剔除变量</h3>
+<p>捡栗子，不对，见例子：</p>
+<pre class="r"><code>myvariable &lt;- names(cohesion) %in%
+  c(&quot;COH01&quot;,&quot;COH03&quot;,&quot;COH05&quot;)
+newdata7 &lt;- cohesion[!myvariable]
+newdata7</code></pre>
+<pre><code>##     UNIT PLATOON COH02 COH04
+## 1  1044B     1ST     5     5
+## 2  1044B     1ST    NA     5
+## 3  1044B     1ST     3     3
+## 4  1044B     2ND     4     4
+## 5  1044B     2ND     4     4
+## 6  1044B     2ND     3     2
+## 7  1044C     1ST     3     3
+## 8  1044C     1ST     1     3
+## 9  1044C     2ND     3     3
+## 10 1044C     2ND     2     3
+## 11 1044C     2ND     1     3</code></pre>
+<p>下面讲解一下：
+&gt;names(cohesion)产生一个包含所有变量名的字符向量</p>
+<blockquote>
+<p>names(cohesion) %in% c(“COH01”,“COH03”,“COH05”)返回一个逻辑向量，names(cohesion)中每个匹配这三个变量的元素的值为TRUE，反之为FALSE。即c(FALSE,FALSE,TRUE,FALSE,TRUE,FALSE,TRUE)</p>
+</blockquote>
+<blockquote>
+<p>运算符非（即“！”）将逻辑值翻转即c(TRUE,TRUE,FALSE,TRUE,FALSE,TRUE,FALSE)</p>
+</blockquote>
+<blockquote>
+<p>cohesion[c(TRUE,TRUE,FALSE,TRUE,FALSE,TRUE,FALSE)]选了TRUE的列。</p>
+</blockquote>
+<p>于是COH01，COH03，COH05被删除了。
+当然也可以根据这三个变量的位置来操作。</p>
+<pre class="r"><code>newdata8 &lt;- cohesion[c(-3,-5,-7)]
+newdata8</code></pre>
+<pre><code>##     UNIT PLATOON COH02 COH04
+## 1  1044B     1ST     5     5
+## 2  1044B     1ST    NA     5
+## 3  1044B     1ST     3     3
+## 4  1044B     2ND     4     4
+## 5  1044B     2ND     4     4
+## 6  1044B     2ND     3     2
+## 7  1044C     1ST     3     3
+## 8  1044C     1ST     1     3
+## 9  1044C     2ND     3     3
+## 10 1044C     2ND     2     3
+## 11 1044C     2ND     1     3</code></pre>
+</div>
+<div id="subset" class="section level3">
+<h3>3.11.4 subset()函数</h3>
+<p>前面提到了这个函数，举个例子：</p>
+<pre class="r"><code>newdata9 &lt;- subset(cohesion, COH02&gt;=4 | COH02&lt;=1,
+                   select=c(COH01,COH02,COH03,COH04,COH05))
+newdata9</code></pre>
+<pre><code>##    COH01 COH02 COH03 COH04 COH05
+## 1      4     5     5     5     5
+## 4      3     4     3     4     4
+## 5      4     4     3     4     4
+## 8      3     1     4     3     4
+## 11     1     1     1     3     3</code></pre>
+<pre class="r"><code>newdata10 &lt;- subset(cohesion, UNIT==&quot;1044B&quot; &amp; COH02&gt;=4,
+                    select=c(COH01,COH02,COH03,COH04,COH05))
+newdata10</code></pre>
+<pre><code>##   COH01 COH02 COH03 COH04 COH05
+## 1     4     5     5     5     5
+## 4     3     4     3     4     4
+## 5     4     4     3     4     4</code></pre>
+<p>嗯，这章就结束了。</p>
+</div>
+</div>
