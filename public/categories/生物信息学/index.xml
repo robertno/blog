@@ -1,0 +1,619 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>生物信息学 | Bionew</title>
+    <link>/categories/%E7%94%9F%E7%89%A9%E4%BF%A1%E6%81%AF%E5%AD%A6/</link>
+      <atom:link href="/categories/%E7%94%9F%E7%89%A9%E4%BF%A1%E6%81%AF%E5%AD%A6/index.xml" rel="self" type="application/rss+xml" />
+    <description>生物信息学</description>
+    <generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>zh</language><copyright>©`2020`</copyright><lastBuildDate>Tue, 20 Feb 2018 00:00:00 +0000</lastBuildDate>
+    <image>
+      <url>img/map[gravatar:%!s(bool=false) shape:circle]</url>
+      <title>生物信息学</title>
+      <link>/categories/%E7%94%9F%E7%89%A9%E4%BF%A1%E6%81%AF%E5%AD%A6/</link>
+    </image>
+    
+    <item>
+      <title>生物信息学-李霞第二版-第二章</title>
+      <link>/post/%E7%94%9F%E7%89%A9%E4%BF%A1%E6%81%AF%E5%AD%A6-%E6%9D%8E%E9%9C%9E%E7%AC%AC%E4%BA%8C%E7%89%88-%E7%AC%AC%E4%BA%8C%E7%AB%A0/</link>
+      <pubDate>Tue, 20 Feb 2018 00:00:00 +0000</pubDate>
+      <guid>/post/%E7%94%9F%E7%89%A9%E4%BF%A1%E6%81%AF%E5%AD%A6-%E6%9D%8E%E9%9C%9E%E7%AC%AC%E4%BA%8C%E7%89%88-%E7%AC%AC%E4%BA%8C%E7%AB%A0/</guid>
+      <description>&lt;h1 id=&#34;第二章-序列比对&#34;&gt;第二章 序列比对&lt;/h1&gt;
+&lt;h2 id=&#34;第一节-引言&#34;&gt;第一节 引言&lt;/h2&gt;
+&lt;h3 id=&#34;1-名词&#34;&gt;1. 名词&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;序列比对：序列比对对于发现生物序列中有关功能、结构和进化的信息具有非常重要的意义，其主要思想就是运用特定的算法找出两个或多个序列之间产生最大相似性得分的空格插入和序列排列方案。
+&lt;ul&gt;
+&lt;li&gt;在实际操作中，序列比对是计算生物学中解决序列装配、进化树重构及分析基因功能等众多问题的第一步。&lt;/li&gt;
+&lt;li&gt;根据同时比对的序列数量的不同，一般将序列比对分成双序列比对和多序列比对。&lt;/li&gt;
+&lt;li&gt;与双序列比对相比，多序列比对能有效发掘多个序列中的相似性信息。
+&lt;ul&gt;
+&lt;li&gt;当两个序列不能很好地比对并借此揭示序列的变化所蕴含的意义时，通过引入更多的序列，多序列比对可有效地使这两个原本难以直接比对的序列合理地关联起来。&lt;/li&gt;
+&lt;li&gt;其次，多序列比对常常用于分析种系距离很大的多个序列，揭示这些序列中保守的和非保守的区段、保守区段的分布特征以及序列变化的进化趋势，这对于研究生物系统的进化是必不可少的。&lt;/li&gt;
+&lt;li&gt;再者，许多预测&lt;strong&gt;RNA&lt;/strong&gt;和蛋白质结构与功能的算法立足于相应的多序列比对，通过比较未知分子的序列和已知分子的序列来预测前者的结构与功能。
+因此，多序列比对是基因组分析和蛋白质组分析的最常用手段之一。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;同源、相似与距离
+&lt;ul&gt;
+&lt;li&gt;同源：如果两个序列享有一个共同的进化上的祖先，则这两个序列是同源的。&lt;/li&gt;
+&lt;li&gt;同源是个定性的概念，没有“度”的差异。&lt;/li&gt;
+&lt;li&gt;与同源相关但不同的两个概念是相似和距离，它们都是定量的概念，基于对序列中字符的精确比较，既可以说两个序列高度相似，也可以说它们之间的跟离非常小。&lt;/li&gt;
+&lt;li&gt;相似性与距离是两个定量描述多个序列相似程度的度量。&lt;/li&gt;
+&lt;li&gt;使用相似性时，比对计分给出被比对序列间的相似程度，使用距离时，比对计分给出被比对序列间的差异程度。&lt;/li&gt;
+&lt;li&gt;相似性既可用于全局比对也可用于局部比对，而距离一般仅用于全局比对，因为它反映了把一个序列转换成另一个序列所需的字符替换的耗费。&lt;/li&gt;
+&lt;li&gt;同源可进一步分作垂直同源和水平同源。
+&lt;ul&gt;
+&lt;li&gt;垂直同源是指在种系形成过程中起源于一个共同祖先的不同种系中的&lt;strong&gt;DNA&lt;/strong&gt;或蛋白质序列，其关系可用一棵倒置的树说明。&lt;/li&gt;
+&lt;li&gt;水平同源主要是由序列复制事件产生的，例如人&lt;strong&gt;alpha-1&lt;/strong&gt;球蛋白和&lt;strong&gt;alpha-2&lt;/strong&gt;球蛋自是水平同源的，人&lt;strong&gt;alpha-1&lt;/strong&gt;球蛋白和&lt;strong&gt;beta&lt;/strong&gt;球蛋白也是水平同源的。&lt;/li&gt;
+&lt;li&gt;一般假定，同源序列具有相同的功能。例如，与血红蛋白同源的人和鼠的肌球蛋白都能在肌肉中运输氧，但应注意，垂直同源和水平同源基因未必总有相同的功能。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;相似与距离的定量描述
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;相似性可定量地定义为两个序列的函数，即它可有多个值，值的大小取决于两个序列对应位置上相同字符的个数，值越大则表示两个序列越相似。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;编辑距离也可定量地定义为两个序列的函数，其值取决于两个序列对应位置上差异字符的个数，值越小则表示两个序列越相似。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;可以看出，相似性和编辑距离是一对相反的定量描述序列相似性的度量。这样，相似性有两种定量表达的方式：编辑距离和相似性得分。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;使用相似性描述两个序列相似程度，是以某种计分规则计算两个序列相似性所得的分值。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;计分一般是字符位置无关的（字符列无关的），即计算对应字符两两比较的分数，然后将所有字符的分数累加得到两条序列的相似性得分。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;显然，存在许多不同的计分规则可对两两字符比较进行计分。明显地，除了在两个字符上不同的计分规则可以产生差异，序列间排列的不同也影响相似性得分。例如，如果&lt;strong&gt;seql&lt;/strong&gt;与&lt;strong&gt;seq2&lt;/strong&gt;交错一位再比对，则计分结果将显著受到影响。&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;&lt;/th&gt;
+&lt;th&gt;&lt;/th&gt;
+&lt;th&gt;seq1=&lt;/th&gt;
+&lt;th&gt;ATC&lt;/th&gt;
+&lt;th&gt;AGGCT&lt;/th&gt;
+&lt;th&gt;GCTAGCTA&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;seq2=&lt;/td&gt;
+&lt;td&gt;TAC&lt;/td&gt;
+&lt;td&gt;ACCTT&lt;/td&gt;
+&lt;td&gt;CGTGAGCA&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;打分规则1&lt;/td&gt;
+&lt;td&gt;p(a,a)=1&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;p(a,b)=0,(a≠b)&lt;/td&gt;
+&lt;td&gt;相似性得分=&lt;/td&gt;
+&lt;td&gt;1&lt;/td&gt;
+&lt;td&gt;2&lt;/td&gt;
+&lt;td&gt;3&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;打分规则2&lt;/td&gt;
+&lt;td&gt;p(a,a)=0.8&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;p(a,b)=0.2,(a≠b)&lt;/td&gt;
+&lt;td&gt;相似性得分=&lt;/td&gt;
+&lt;td&gt;1.2&lt;/td&gt;
+&lt;td&gt;2.2&lt;/td&gt;
+&lt;td&gt;2.8&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;打分规则BLAST&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;-3&lt;/td&gt;
+&lt;td&gt;-2&lt;/td&gt;
+&lt;td&gt;-6&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;A&lt;/td&gt;
+&lt;td&gt;T&lt;/td&gt;
+&lt;td&gt;C&lt;/td&gt;
+&lt;td&gt;G&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;A&lt;/td&gt;
+&lt;td&gt;5&lt;/td&gt;
+&lt;td&gt;-4&lt;/td&gt;
+&lt;td&gt;-4&lt;/td&gt;
+&lt;td&gt;-4&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;T&lt;/td&gt;
+&lt;td&gt;-4&lt;/td&gt;
+&lt;td&gt;5&lt;/td&gt;
+&lt;td&gt;-4&lt;/td&gt;
+&lt;td&gt;-4&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;C&lt;/td&gt;
+&lt;td&gt;-4&lt;/td&gt;
+&lt;td&gt;-4&lt;/td&gt;
+&lt;td&gt;5&lt;/td&gt;
+&lt;td&gt;-4&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;G&lt;/td&gt;
+&lt;td&gt;-4&lt;/td&gt;
+&lt;td&gt;-4&lt;/td&gt;
+&lt;td&gt;-4&lt;/td&gt;
+&lt;td&gt;5&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;编辑距离一般用海明（Hamming）距离表示，对于两条长度相等的序列，它们的海明距离等于对应位置不同字符的个数。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;| seq1=                        | ATC  | AGGCT | GCTAGCTA |
+| ---------------------------- | ---- | ----- | -------- |
+| seq2=                        | TAC  | ACCTT | CGTGAGCA |
+| Hamming Distance(seq1,seq2)= | 2    | 3     | 6        |
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;ol start=&#34;4&#34;&gt;
+&lt;li&gt;算法实现的比对
+&lt;ul&gt;
+&lt;li&gt;比对两个序列就是找出两个序列的最长公共子序列，它反映了两个序列的最高相似度。&lt;/li&gt;
+&lt;li&gt;序列&lt;em&gt;&lt;strong&gt;v&lt;/strong&gt;&lt;/em&gt;的子序列是&lt;em&gt;&lt;strong&gt;v&lt;/strong&gt;&lt;/em&gt;中一个有序但末必连续的字符序列。&lt;/li&gt;
+&lt;li&gt;例如，若&lt;em&gt;&lt;strong&gt;v&lt;/strong&gt;&lt;/em&gt;=&lt;strong&gt;ATTGCTA&lt;/strong&gt;，则AGCA和ATTA都是v的子序列，而TGTT和TCG则不是。再如，若v=ATCTGAT, w=TGCATA，则v和w存在多个共同子序列，包括TCTA；显然，其中一些共同子序列要比另外一些共同子序列长。但问题是，如何找出最长的共同子序列常常并不是显而易见的。&lt;/li&gt;
+&lt;li&gt;寻找两个序列的最长共同子序列的一个简单方法是，先计算出所有可能的共同子序列，然后找出最长的那个。但此方法不具有实际的可行性，因为当序列较长时计算所有可能的共同子序列极其费时。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;序列比对的作用：
+相比于双序列比对，多序列比对具有更广泛的重要应用，包括以下几个方面。
+&lt;ul&gt;
+&lt;li&gt;获得共性序列：由多序列比对所得到的与所有序列距离最近的序列称为这此序列的共有序列（也称一致序列），共性序列常用于数据库搜索和芯片探针设计，用于识别只有高相似度的序列。&lt;/li&gt;
+&lt;li&gt;序列测序：如一个&lt;strong&gt;DNA&lt;/strong&gt;或蛋白质序列被多个机构测序，则测序结果在某些核苷酸或氨基酸上可能存在差异，对这些测序结果进行全局多序列比对，可发现这些差异之处，形成的共性序列理论上最为接近真实的序列。其次，对包含重叠区的多个测序序列进行局部多序列比对可发现这些重叠区，实现测序序列的拼接。&lt;/li&gt;
+&lt;li&gt;突变分析：同一种系不同个体的基因组存在因突变而产生的差异，最常见的是单核苷酸多态性，指不同个体基因组中单个核苷酸的包括置换、缺失和插入在内的变异，这些差异可通过多序列比对进行揭示。&lt;/li&gt;
+&lt;li&gt;种系分析：相近种系动植物的基因和基因组由于源自共同的直接祖先而具有高度的相似性，反之，远距种系动植物的基因和基因组由于源自不同的直接祖先而享有更少的相似性，这一事实使得多序列比对常常用于根据基因或基因组序列的差异判断种系关系，多序列比对通常是构造种系树的第一步。&lt;/li&gt;
+&lt;li&gt;保守区段分析：基因组中功能不同的区段在进化中面对不同的选择压力，即重要的区段不易接受突变而非重要的区段易于接受突变。任何基因组都包含大量不同的在选择压力下保持进化上稳定的保守区段，多序列比对是找出进化上保守的这此区段的基本方法。&lt;/li&gt;
+&lt;li&gt;基因和蛋白质功能分析：在大量基因和蛋白质的功能得以揭示和更多基因和蛋白质的序列得以测定后，根据与功能已知的同源基因和蛋白质进行多序列比对来推断新基因和蛋白质的功能已成为越来越普遍的一个研究手段。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3 id=&#34;2-英文及缩写&#34;&gt;2. 英文及缩写&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;双序列比对：&lt;strong&gt;pairwaise alignment&lt;/strong&gt;；&lt;/li&gt;
+&lt;li&gt;多序列比对：&lt;strong&gt;multiple alignment&lt;/strong&gt;；&lt;/li&gt;
+&lt;li&gt;同源：&lt;strong&gt;homolog&lt;/strong&gt;；&lt;/li&gt;
+&lt;li&gt;相似：&lt;strong&gt;similarity&lt;/strong&gt;；&lt;/li&gt;
+&lt;li&gt;距离：&lt;strong&gt;distance&lt;/strong&gt;；&lt;/li&gt;
+&lt;li&gt;趋同进化：&lt;strong&gt;convergent evolution&lt;/strong&gt;；&lt;/li&gt;
+&lt;li&gt;垂直同源：&lt;strong&gt;ortholog&lt;/strong&gt;；&lt;/li&gt;
+&lt;li&gt;水平同源：&lt;strong&gt;paralog&lt;/strong&gt;；&lt;/li&gt;
+&lt;li&gt;编辑距离：&lt;strong&gt;edit distance&lt;/strong&gt;；&lt;/li&gt;
+&lt;li&gt;最长公共子序列：&lt;strong&gt;longest common subsequence&lt;/strong&gt;，&lt;strong&gt;LCS&lt;/strong&gt;；&lt;/li&gt;
+&lt;li&gt;共有序列：&lt;strong&gt;consensus sequence&lt;/strong&gt;；&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&#34;第二节-比对算法概要&#34;&gt;第二节 比对算法概要&lt;/h2&gt;
+&lt;h3 id=&#34;1名词&#34;&gt;1.名词&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;替换计分矩阵：对于序列中单个字符的插入和缺失引起的失配，序列比对采用插入空格来处理，使得原本对应的字符仍}日能够对应；而对于序列中单个字符的替换引起的失配，需要考虑不同替换的意义。在双序列比对中对于这类失配应该怎么计分（实际上是罚分）是本节的内容。合理而精确的计分需要考虑替换的各种情形。对于&lt;strong&gt;DNA&lt;/strong&gt;和&lt;strong&gt;RNA&lt;/strong&gt;序列，情况特别简单，施用于4种碱基和6种彼此间替换关系的计分规则可用简单的替换计分矩阵来描述。对于蛋白质序列，因为蛋白质由20种氨基酸构成，且不同的氨基酸具有不同的理化性质，情况较为复杂，存在许多不同的替换计分矩阵。
+&lt;ul&gt;
+&lt;li&gt;通过点矩阵对序列比较进行计分：
+“矩阵作图法”或“对角线作图”由Gibb首先提出。将两条待比较的序列分别放在矩阵的X/Y轴上，从下往上和从左到右比较，当对应行与列的字符匹配时，则在矩阵对应的位置上打点。逐个比较所有的字符对，最终形成一个点矩阵。如果两条序列完全相同，则点矩阵的主对角线各位置都被标记；如果两条序列存在相同的子串，则对每一个子串对有一条与对角线平行的由一系列点组组成的斜线；而对于两条互为反向的序列，则在反对角线方向上有由点组成的斜线。这种反映序列比对的方法在直观地揭示多个相配的子串对时尤其有用，一直被使用到现在。&lt;/li&gt;
+&lt;li&gt;DNA序列比对的替换计分矩阵：
+借鉴上面点矩阵的方法，可以为不同字符间的替换建立替换计分矩阵，它们或依据相应碱基或氨基酸的理化性质而确定，或依据突变实际发生的概率而确定，因此相当客观和固定。
+&lt;ul&gt;
+&lt;li&gt;等价矩阵：是最简单的一种替换计分矩阵，其中，相同核苷酸间的匹配得分为1，不同核苷酸间的替换得分为0。尽管含义清晰明了，由于不含有碱基的任何理化信息和不区别对待不同的替换，在实际的序列比对中较少使用。&lt;/li&gt;
+&lt;li&gt;转换-颠换矩阵：核酸的碱基按照环结构特征被划分为嘌呤（腺嘌呤A，鸟嘌呤G，它们有两个环）和嘧啶（胞嘧啶C，胸腺嘧啶T，它们只有一个环）。如果DNA碱基的替换保持环数不变，则称为转换，如A→G，C→T；如果环数发生变化，则称为颠换，如A→C，A→T等。在进化过程中，转换发生的频率远比颠换高，其中转换的得分为-1. 而颠换的得分为-5&lt;/li&gt;
+&lt;li&gt;BLAST矩阵：经过实际比对发现，如令被比对的两个核苷酸相同时得分为+5，反之得分为-4，则比对效果较好。这个矩阵广泛地被DNA序列比对所采用，称为BLAST矩阵。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;蛋白质序列比对的替换计分矩阵：
+蛋白质序列可由20个氨基酸组成，它们具有不同的生物化学特性，这此特性会影响它们在进化过程中的相互替换性。例如，与体积差异大的氨基酸相比，体积相似的氨基酸更易于彼此并换。另外，与水的亲和性也影响相互替换的概率。再者，生物学家己观察到天冬酰胺（Asn），天冬氨酸（Asp）、谷氨酸（Glu）和丝氨酸（Ser）属于最容易突变的氨基酸，而半胱氨酸（Cys）和色氨酸（Trp）则属于最不易突变的氨基酸。因此，在比较蛋白质序列时，简单的计分系统（例如+1表示匹配，0表示失配，-1表示空格）是不够的，必须使用一个能够充分反映氨基酸的相互替换性的计分系统。下面介绍多个不同的氨基酸替换计分矩阵。
+&lt;ul&gt;
+&lt;li&gt;等价矩阵；&lt;/li&gt;
+&lt;li&gt;遗传密码矩阵；&lt;/li&gt;
+&lt;li&gt;疏水性矩阵；&lt;/li&gt;
+&lt;li&gt;PAM矩阵；&lt;/li&gt;
+&lt;li&gt;BLOSUM矩阵；&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;双序列全局比对：对于两条序列的比对问题，人们提出了很多算法。其中基于动态规划的算法是目前最基本的算法。&lt;/li&gt;
+&lt;li&gt;双序列局部比对：&lt;/li&gt;
+&lt;li&gt;多序列全局比对：主要涉及四个要素：① 选择一组能进行比对的序列（要求是同源序列）；② 选择一个实现比对与计分的算法与软件；③ 确定软件的参数；④ 合理地解释比对的结果。&lt;/li&gt;
+&lt;li&gt;多序列局部比对：&lt;/li&gt;
+&lt;li&gt;比对的显著统计性：&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3 id=&#34;2-英文及缩写-1&#34;&gt;2. 英文及缩写&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;计分矩阵：&lt;strong&gt;substitution matrix&lt;/strong&gt;；&lt;/li&gt;
+&lt;li&gt;等价矩阵：&lt;strong&gt;unitary matrix&lt;/strong&gt;；&lt;/li&gt;
+&lt;li&gt;转换-颠换矩阵：&lt;strong&gt;transition-transversion matrix&lt;/strong&gt;；&lt;/li&gt;
+&lt;li&gt;转换：&lt;strong&gt;transition&lt;/strong&gt;；&lt;/li&gt;
+&lt;li&gt;颠换：&lt;strong&gt;transversion&lt;/strong&gt;；&lt;/li&gt;
+&lt;li&gt;遗传密码矩阵：&lt;strong&gt;genetic code matrix，GCM&lt;/strong&gt;；&lt;/li&gt;
+&lt;li&gt;疏水性矩阵：&lt;strong&gt;hydrophobic matrix&lt;/strong&gt;；&lt;/li&gt;
+&lt;li&gt;PAM矩阵：可接受点突变&lt;strong&gt;point accepted mutation&lt;/strong&gt;，或可接受突变百分比&lt;strong&gt;percent of accepted mutation&lt;/strong&gt;；&lt;/li&gt;
+&lt;li&gt;BLOSUM矩阵：&lt;strong&gt;BLOck SUbstitution Matrix&lt;/strong&gt;；&lt;/li&gt;
+&lt;li&gt;动态规划：&lt;strong&gt;dynamic programming&lt;/strong&gt;；&lt;/li&gt;
+&lt;li&gt;渐进多序列比对：&lt;strong&gt;progressive multiple alignment&lt;/strong&gt;；&lt;/li&gt;
+&lt;li&gt;指导树：&lt;strong&gt;guide tree&lt;/strong&gt;；&lt;/li&gt;
+&lt;li&gt;离异度：&lt;strong&gt;divergence&lt;/strong&gt;；&lt;/li&gt;
+&lt;li&gt;空缺：&lt;strong&gt;gap&lt;/strong&gt;；&lt;/li&gt;
+&lt;li&gt;引入空缺：&lt;strong&gt;gap open&lt;/strong&gt;；&lt;/li&gt;
+&lt;li&gt;扩展空缺：&lt;strong&gt;gap extend&lt;/strong&gt;；&lt;/li&gt;
+&lt;li&gt;分层聚类法：&lt;strong&gt;hierarchical clustering&lt;/strong&gt;；&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&#34;第三节-数据库检索&#34;&gt;第三节 数据库检索&lt;/h2&gt;
+&lt;h3 id=&#34;1-名词-1&#34;&gt;1. 名词&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;经典BLAST：是目前最常用的数据库搜索程序。
+它的要点是片段对的概念，它是指两个给定序列中的一对子序列，它们的长度相等，且可以形成无空格的完全匹配。
+BLAST首先找出查询序列和目标序列间所有匹配程度（以得分计）超过一定阈值的片段对，然后对片段对根据给定的相似性阈值进行延伸，得到一定长度的相似性片段，最后给出高分值片段对。 
+BLAST在线服务实际上包含一组程序，不仅可用于直接对蛋白质序列数据库和核酸序列数据库进行搜索，而且可以将查询序列翻译成蛋自质后再进行搜索，以提高搜索结果的灵敏度。
+&lt;ul&gt;
+&lt;li&gt;BLAS下的应用：BLAST具有非常厂泛的应用：
+(1)确定一个蛋白质或核酸序列有哪些垂直同源或水平同源序列。
+(2)确定哪些蛋白质或基因在特定的物种中出现。
+(3)发现新基因。
+(4)确定一个基因或蛋自质的变种。
+(5)寻找对于一个蛋白质的功能或结构起关键作用的片段。&lt;/li&gt;
+&lt;li&gt;搜索步骤：
+(1)选择感兴趣的序列，可以是FASTA格式的序列，也可以是访问编号。
+(2)选择BLAST程序，包括blastp，blastn，blastx，tblastn，tblastx。
+(3)选择数据库。
+(4)选择参数。&lt;/li&gt;
+&lt;li&gt;常用的输入与输出参数： 
+(1) -p ProgramName：p代表program，可带的选项是blastp，blastn，blastx，tblastn和tblastx。&lt;br&gt;
+(2) -i QueryFile：用于指定包含查询序列的查询文件。 &lt;br&gt;
+(3) -d DatabaseName：选择待搜索的数据库，可以选择多个数据库。 &lt;br&gt;
+(4) -o OutputFileName：数据库搜索输出文件的名称，默认的计算机屏幕。 &lt;br&gt;
+(5) -e ExpectedValue：E期望值，这一参数控制搜索的敏感性。 &lt;br&gt;
+(6) -m SpecifiesAlignmentView：设定搜索结果的显示格式，选项有12个，其中0是默认参数，显示查询序列和目标序列两两比对的信息。 &lt;br&gt;
+(7) -F FiIterQuerySequence：屏蔽简单重复和低复杂度序列的参数，有T（选上）和F（不选）两个选项。 &lt;br&gt;
+(8) -E CostToExtendGap：给出空位延伸罚分。 &lt;br&gt;
+BLAST程序的参数有搜索参数，包括字长（word size）、期望值E、空格罚分、替换计分矩阵、阈值、窗口尺寸（window size）等，以及统计学显著性参数，包括λ和K。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;衍生BLAST
+&lt;ul&gt;
+&lt;li&gt;PSI-BLAST：即Position-Specific Iterated BLAST是一个专门化的搜索工具。&lt;/li&gt;
+&lt;li&gt;PHI-BLAST：即Pattern-Hit Initiated BLAST。能用来帮助判断这个蛋白质属于哪个家族。&lt;/li&gt;
+&lt;li&gt;BLASTZ：是在比对人和鼠的基因组中发展起来的，它适合于比对非常长的序列。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;BLAT：&lt;/li&gt;
+&lt;li&gt;RNA序列搜索：&lt;/li&gt;
+&lt;li&gt;数据库搜索的统计显著性：&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3 id=&#34;2-英文及缩写-2&#34;&gt;2. 英文及缩写&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;BLAST：&lt;strong&gt;Basic Local Alignment Search Tool&lt;/strong&gt;；&lt;/li&gt;
+&lt;li&gt;片段对：&lt;strong&gt;segment pair&lt;/strong&gt;；&lt;/li&gt;
+&lt;li&gt;高分值片段对：&lt;strong&gt;high-scoring pairs&lt;/strong&gt;；&lt;/li&gt;
+&lt;li&gt;位点特异性计分矩阵：&lt;strong&gt;position-specific scoring matrix, PSSM&lt;/strong&gt;；&lt;/li&gt;
+&lt;li&gt;BLAT：&lt;strong&gt;The BLAST-Like Alignment Tool&lt;/strong&gt;；&lt;/li&gt;
+&lt;/ol&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>生物信息学-李霞第二版--第一章</title>
+      <link>/post/%E7%94%9F%E7%89%A9%E4%BF%A1%E6%81%AF%E5%AD%A6-%E6%9D%8E%E9%9C%9E%E7%AC%AC%E4%BA%8C%E7%89%88-%E7%AC%AC%E4%B8%80%E7%AB%A0/</link>
+      <pubDate>Sun, 18 Feb 2018 00:00:00 +0000</pubDate>
+      <guid>/post/%E7%94%9F%E7%89%A9%E4%BF%A1%E6%81%AF%E5%AD%A6-%E6%9D%8E%E9%9C%9E%E7%AC%AC%E4%BA%8C%E7%89%88-%E7%AC%AC%E4%B8%80%E7%AB%A0/</guid>
+      <description>&lt;h1 id=&#34;第一章-生物序列资源&#34;&gt;第一章 生物序列资源&lt;/h1&gt;
+&lt;h2 id=&#34;第一节-引言&#34;&gt;第一节 引言&lt;/h2&gt;
+&lt;h3 id=&#34;1-英文及缩写&#34;&gt;1. 英文及缩写&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;DNA序列：&lt;strong&gt;DNA sequence&lt;/strong&gt;；&lt;/li&gt;
+&lt;li&gt;RNA序列：&lt;strong&gt;RNA sequence&lt;/strong&gt;；&lt;/li&gt;
+&lt;li&gt;微阵列数据和基因表达：&lt;strong&gt;microarray data and gene expression&lt;/strong&gt;；&lt;/li&gt;
+&lt;li&gt;蛋白质序列：&lt;strong&gt;protein sequence&lt;/strong&gt;；&lt;/li&gt;
+&lt;li&gt;分子结构：&lt;strong&gt;structure&lt;/strong&gt;；&lt;/li&gt;
+&lt;li&gt;蛋白质组学和蛋白质互作：&lt;strong&gt;proteomics and interaction&lt;/strong&gt;；&lt;/li&gt;
+&lt;li&gt;代谢和信号通路：&lt;strong&gt;metabolic and signaling pathways&lt;/strong&gt;；&lt;/li&gt;
+&lt;li&gt;人类基因与疾病：&lt;strong&gt;human genes and diseases&lt;/strong&gt;；&lt;/li&gt;
+&lt;li&gt;生理与病理：&lt;strong&gt;physiology and pathology&lt;/strong&gt;；&lt;/li&gt;
+&lt;li&gt;药物与药物靶标：&lt;strong&gt;drug and drug targets&lt;/strong&gt;；&lt;/li&gt;
+&lt;li&gt;细胞器与细胞生物学：&lt;strong&gt;organelle and cell biology&lt;/strong&gt;；&lt;/li&gt;
+&lt;li&gt;人类及其他脊椎动物基因组：&lt;strong&gt;human and other vertebrate genomics&lt;/strong&gt;；&lt;/li&gt;
+&lt;li&gt;非脊椎动物基因组：&lt;strong&gt;non-vertebrate genomics&lt;/strong&gt;；&lt;/li&gt;
+&lt;li&gt;植物基因组：&lt;strong&gt;plants genomics&lt;/strong&gt;；&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&#34;第二节-ncbi数据库与数据资源&#34;&gt;第二节 NCBI数据库与数据资源&lt;/h2&gt;
+&lt;h3 id=&#34;1-名词&#34;&gt;1. 名词&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;三大生物序列信息数据库：&lt;strong&gt;GenBank，EMBL，DDBJ&lt;/strong&gt;；&lt;/li&gt;
+&lt;li&gt;NCBI中较重要的数据子库：
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;GenBank&lt;/strong&gt;：GenBank是NIH遗传序列数据库，集成了所有公开可获得的已注释DNA序列。
+GenBank收录的核酸序列数据根据其不同的研究属性，分属于Nucleotide、GSS和EST三个子库。
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Nucleotide&lt;/strong&gt;：收录绝大多数常规的核酸序列；&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;GSS&lt;/strong&gt;：Genome Survey Sequence，收录测序起始阶段用来进行序列或基因示踪、重复序列或基因数量预判等的各种短读长（reads）序列；&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;EST&lt;/strong&gt;：Expression Sequence Tag，收录cDNA及cDNA特征序列信息。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;RefSeq&lt;/strong&gt;：GenBank中的数据是由用户提交数据构成，具有较高的冗余度和差错率，为更好实现特征序列的查询，NCBI在GenBank数据基础上针对每个基因不同的数据类别提取一个可靠的注释条目作为参考条件，组成RefSeq（reference sequence）数据库。
+其数据标识类似于NM_000572.2，“NM_”代表特异的数据类型，“.2”表示更新版本。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Gene数据库&lt;/strong&gt;：基因数据库收录全部已测序五中的基因注释信息，包括基因的名称、染色体定位、基因序列和编码产物（mRNA，蛋白质）情况、基因功能和相关文献信息等。 &lt;br&gt;
+基因数据库标识符即Entrez gene ID，依据基因的发现顺序由1到多位数字组成，如&lt;em&gt;IL10&lt;/em&gt;基因的标识符为3586。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Genome&lt;/strong&gt;：NCBI收录了超过1000中已经完成测序的生物体全部基因组序列和定位数据，以及正在进行测序的物种阶段性发布的基因组信息。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;遗传多态数据库&lt;/strong&gt;：NCBI中的dbSNP、dbVar、dbGap和ClinVar四个子库涉及DNA多态或变异信息。
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;dbSNP&lt;/strong&gt;：收录了所有物种中发现的短序列多态和突变信息，包括单核苷酸多态、微卫星、小片段插入\删除多态（in/del）等定位、侧翼序列和功能、频率信息。收录的SNP条目一般以“rs+数字”的形式表示；&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;dbVar&lt;/strong&gt;：主要收录较大规模的基因组变异，包括大片段的插入、遗失、易位、倒置和拷贝数多态等信息资源；&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;dbGap&lt;/strong&gt;：收录大量以遗传多态为分子标记物的基因型和表型（疾病）关联性研究数据；&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;ClinVar&lt;/strong&gt;：收录临床中发现或报导的有证据支持的与人类疾病或健康状态有段的变异位点，并与多个疾病和卫生系统数据库进行交互引用。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;GEO&lt;/strong&gt;：Gene Expression Omnibus：接受和管理各研究机构提交的基因芯片或测序技术获得的不同生理、病理状态个体或细胞系基因（包括非编码基因）表达数据。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;蛋白质数据库&lt;/strong&gt;：NCBI蛋白质数据库收录来源于GenPept、RefSeq、Swiss-Prot、PIR、PRF及PDB等蛋白质数据资源的蛋白质序列和注释数据。
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Protein Cluster数据库&lt;/strong&gt;：提供存在一定联系的蛋白质集合信息，并与蛋白质注释、结构、结构域、家族相关数据库之间交互访问；&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Structure数据库&lt;/strong&gt;：是由蛋白质三维结构数据库PDB衍生出来的大分子模建数据库，提供蛋白质三维结构信息及相关的可视化和结构比对工具。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Epigenomics&lt;/strong&gt;：是一个表观基因组数据查询和浏览相结合的数据库。提供DNA甲基化、组蛋自修饰等表观遗传学数据集下载，基因序列、表观遗传状态的定位比较和可视化等。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Unigene数据库&lt;/strong&gt;：针对每一个基因建立一个独立的数据体系，分别将不同来源的基因序列、蛋白质相似性（与模式生物比较）、基因表达（不同组织或发育状态）、染色体定位、cDNA序列、mRNA序列（选择性剪接）、EST序列等进行罗列和比较，旨在为研究者提供全面、丰富的信息资源，更好地对基因的功能和注释信息的可靠性进行梳理。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;与生物医学相关的重要数据库&lt;/strong&gt;：
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;OMIM数据库&lt;/strong&gt;：在文献检索基础上，分别以疾病和基因为中心，阐述遗传变异介导的疾病（表型）相关基因情况，及变异介导的基因参与不同疾病（表型）情况；&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;GdbMHC&lt;/strong&gt;：Database of Major Histocompatibility Complex，收录人类主要组织相容性复合体数据及其相关的分子标记物信息；&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;HIV-1与人类蛋白质互作数据库&lt;/strong&gt;：收录HIV-1蛋自与人类宿主蛋自相互作用信息。NCBI中还包括大量病毒相关信息（如病毒基因组序列，流感. SARS等特种病毒解析，病毒基因组变异等）、药物化学信息和文献数据信息等。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;NCBI提供的重要支持工具&lt;/strong&gt;：
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;BLSAT&lt;/strong&gt;，是由NCBI开发的序列相似性搜索程序，检索速度快，有助于识别基因和基因特征(详见第二章)。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Primer-BLAST工具&lt;/strong&gt;：
+&lt;a href=&#34;http://www.ncbi.nlm.nih.gov/tools/primer-blast&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;Primer-BLAST链接地址&lt;/a&gt;，可用于多方面生物医学研究过程的核酸引物设计。&lt;/li&gt;
+&lt;li&gt;由NCBI提供的其他软件工具还包括:开放阅读框搜索（ORF Finder）、电子PCR和序列提交工具Sequin和BankIt等。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3 id=&#34;2-英文及缩写&#34;&gt;2. 英文及缩写&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;美国国家健康研究所：&lt;strong&gt;NIH&lt;/strong&gt;；&lt;/li&gt;
+&lt;li&gt;国家医学图书馆：&lt;strong&gt;NLM&lt;/strong&gt;；&lt;/li&gt;
+&lt;li&gt;人类拉丁种名：&lt;em&gt;&lt;strong&gt;Homo Sapiens&lt;/strong&gt;&lt;/em&gt;；&lt;/li&gt;
+&lt;li&gt;包括单核苷酸多态：&lt;strong&gt;single nucleotide polymorphysm&lt;/strong&gt;，&lt;strong&gt;SNP&lt;/strong&gt;；&lt;/li&gt;
+&lt;li&gt;微卫星：&lt;strong&gt;microsatelite&lt;/strong&gt;；&lt;/li&gt;
+&lt;li&gt;拷贝数多态：&lt;strong&gt;copy number variation&lt;/strong&gt;，&lt;strong&gt;CNV&lt;/strong&gt;；&lt;/li&gt;
+&lt;li&gt;基因组范围关联分析：&lt;strong&gt;GWAS&lt;/strong&gt;；&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&#34;第三四节-ucsc基因组浏览器与数据资源embl-ebi数据库与数据资源&#34;&gt;第三、四节 UCSC基因组浏览器与数据资源、EMBL-EBI数据库与数据资源&lt;/h2&gt;
+&lt;h3 id=&#34;1-名词-1&#34;&gt;1. 名词&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;UCSC基因组浏览器&lt;/strong&gt;：
+&lt;a href=&#34;http://genome.ucsc.edu&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;UCSC基因组浏览器链接&lt;/a&gt;，重要的基因组数据收集、整理、检索、可视化和辅助研究的重要工具；
+&lt;ul&gt;
+&lt;li&gt;导航栏和工具栏提供多种便利的基因组查询和注释工具
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Browser&lt;/strong&gt;可以缩放和滚动的方式查看染色体的注释；&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Blat&lt;/strong&gt;可以快速将用户输入的序列以图像的方式在基因组中显示；&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Tables&lt;/strong&gt;提供便捷的入口链接到基础数据库；&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Gene Sorter&lt;/strong&gt;展示表达、同源性和以多种方式关联的其他基因组信息；&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;VisiGene&lt;/strong&gt;可以让用户浏览大量的检测小鼠和青蛙表达模式的原位图像；&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Genome Graphs&lt;/strong&gt;允许用户上传或显示基因组范围的数据集等。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;EMBL-EBI数据库&lt;/strong&gt;：
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Ensembl基因组序列数据资源&lt;/strong&gt;：EMBL-EBI中有Ensembl和Ensembl Genmoes基因组序列资源数据库；
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Ensembl数据库&lt;/strong&gt;：提供高质量、综合注释的脊椎动物基因组数据；&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Ensembl Genmoes数据库&lt;/strong&gt;：提供非脊椎动物全基因组数据；&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;ENA欧洲核苷酸数据库&lt;/strong&gt;：提供世界范围的核酸测序原始数据、序列拼接和功能注释信息的维护和下载，并记录和存储数据集测序全过程的技术应用情况：样品分离和材料准备，使用的仪器设备和配置，实验过程的主要环节，数据输出后的序列读取和质量评价，数据的生物信息学拼接、制图、功能注释等。 
+ENA数据包括机构或个人提交的原始数据，序列拼接和小规模测序注释数据，欧洲各大测序中心提供的测序数据，国际核酸序列数据库协作组织的合作伙伴的定期交换数据等。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;UniProt蛋白质数据资源&lt;/strong&gt;：
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;UniProt数据库包括&lt;/strong&gt;：UniProtKnowledgebase（UniProrKB）、UniProt Reference Clusters（UniRef），UniProt Archive（UniParc）三个主要部分，及用于专门存放元基因组和环境基因组数据信息的UniProt Meta-genomic和Environmental Sequences（UniMES）数据库。
+&lt;a href=&#34;http://www.uniprot.org&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;门户链接&lt;/a&gt;或
+&lt;a href=&#34;http://www.ebi.ac.uk/uniprot/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;EBI链接&lt;/a&gt;。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;UniProrKB&lt;/strong&gt;：UniProtKB是UniProt的核心资源，主要包括Swiss-Prot和TrEMBL两部分核心数据。
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;UniProt/Swiss-Prot&lt;/strong&gt;：收录非冗余的、高质量的专家手工注释数据。注释过程针对每一个蛋白质可用的序列信息进行分析、比较、整合，严格审核与本条目相关的文献发表的实验和计算分析。
+对于每一条记录，UniProt/Swiss-Prot期望从文献、其他数据库中搜集每一个物种每一个蛋白质的所有注释信息，以及与蛋白质相关的选择性剪接、多态、翻译后修饰、蛋自质家族等信息。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;UniProtKB/TrEMBL&lt;/strong&gt;：收录的蛋白质信息是经高质量计算分析获得的自动化注释和分类信息，也是Swiss-Prot的资源储备库，一经手工注释后即转入Swiss-Prot。&lt;/li&gt;
+&lt;li&gt;概括起来看，UniProtKB收录的蛋白质序列信息包括:① DDBJ/ENA/GenBank来源的编码序列（CDS）翻译；② PDB中存储了结构信息的蛋自质序列；③ Ensembl和RefSeq提供的序列；④ 直接提交到UniProtKB或文献检索到的氨基酸序列。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3 id=&#34;2-英文及缩写-1&#34;&gt;2. 英文及缩写&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;加州大学圣克鲁兹分校：&lt;strong&gt;University of California，Santa Cruz&lt;/strong&gt;，&lt;strong&gt;UCSC&lt;/strong&gt;；&lt;/li&gt;
+&lt;li&gt;欧洲生物信息学研究所：&lt;strong&gt;EBI&lt;/strong&gt;，
+&lt;a href=&#34;http://www.ebi.ac.uk/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;地址&lt;/a&gt;;&lt;/li&gt;
+&lt;li&gt;欧洲分子生物学实验室：&lt;strong&gt;EMBL&lt;/strong&gt;，
+&lt;a href=&#34;http://www.embl.org/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;地址&lt;/a&gt;；&lt;/li&gt;
+&lt;li&gt;瑞士生物信息学研究所：&lt;strong&gt;SIB&lt;/strong&gt;；&lt;/li&gt;
+&lt;li&gt;DNA元件百科全书计划：&lt;strong&gt;Encyclopedia of DNA Elements&lt;/strong&gt;，&lt;strong&gt;ENCODE&lt;/strong&gt;，
+&lt;a href=&#34;https://www.encodeproject.org&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;地址&lt;/a&gt;;&lt;/li&gt;
+&lt;li&gt;尼安德特人基因组分析：&lt;strong&gt;Neandertal&lt;/strong&gt;，
+&lt;a href=&#34;http://genome.ucsc.edu/Neandertal&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;地址&lt;/a&gt;;&lt;/li&gt;
+&lt;li&gt;哺乳动物：&lt;strong&gt;mammal&lt;/strong&gt;；&lt;/li&gt;
+&lt;li&gt;后口动物：&lt;strong&gt;deuterostome&lt;/strong&gt;；&lt;/li&gt;
+&lt;li&gt;昆虫：&lt;strong&gt;insect&lt;/strong&gt;；&lt;/li&gt;
+&lt;li&gt;线虫：&lt;strong&gt;nematode&lt;/strong&gt;；&lt;/li&gt;
+&lt;li&gt;欧洲核苷酸数据库：&lt;strong&gt;European Nucleotide Archive&lt;/strong&gt;，&lt;strong&gt;ENA&lt;/strong&gt;，
+&lt;a href=&#34;http://www.ebi.ac.uk/ena/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;地址&lt;/a&gt;；&lt;/li&gt;
+&lt;li&gt;国际核酸序列数据库协作组织：&lt;strong&gt;INSDC&lt;/strong&gt;；&lt;/li&gt;
+&lt;li&gt;蛋自质专家注释系统：&lt;strong&gt;Swiss-Prot&lt;/strong&gt;；&lt;/li&gt;
+&lt;li&gt;核酸序列翻译数据库：&lt;strong&gt;TrEMBL&lt;/strong&gt;；&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&#34;第五节-重要的非编码基因数据库&#34;&gt;第五节 重要的非编码基因数据库&lt;/h2&gt;
+&lt;h3 id=&#34;1-名词-2&#34;&gt;1. 名词&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;ENCODE数据库&lt;/strong&gt;：ENCODE全称为DNA元件百科全书计划，与2003年启动，获得并分析了超过15兆兆（15万亿字节）的原始数据，对基因组功能元件进行解析。
+与编码蛋白质相关的基因只占整个基因组的2%，人类基因组中约80%的DNA序列是具有某种特定功能的。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;miRBase&lt;/strong&gt;：miRBase（
+&lt;a href=&#34;http://www.mirbase.org/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;地址&lt;/a&gt;）是存储、维护和命名微小RNA（microRNA）的主要数据库，主要数据资源为microRNA序列和注释信息。miRBase使用友好的网络界面，为用户提供miRNA前体和成熟序列下载。允许用户使用关键词或序列检索数据库，通过关联链接到miRNA的原始参考文献，分析基因组中的定位和挖掘miRNA序列间的关系。miRBase还提供保密的基因命名服务，在新基因发表前指定正式的miRNA名称。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3 id=&#34;2-英文及缩写-2&#34;&gt;2. 英文及缩写&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;微小RNA：&lt;strong&gt;microRNA&lt;/strong&gt;；&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&#34;习题&#34;&gt;习题&lt;/h2&gt;
+&lt;ol&gt;
+&lt;li&gt;生物数据库根据其存储的数据类型可以分为几类？&lt;br&gt;
+答：大致可分为5类：&lt;strong&gt;基因组数据库&lt;/strong&gt;、&lt;strong&gt;核酸序列数据库&lt;/strong&gt;、&lt;strong&gt;蛋白质序列数&lt;/strong&gt;、&lt;strong&gt;生物大分子（主要是蛋白质）三维空间结构数据库&lt;/strong&gt;、及根据生命科学不同研究领域的实际需要，对基因组图谱、核酸和蛋自质序列、蛋自质结构以及文献等数据进行分析、整理、归纳、注释，构建具有特殊生物学意义和专门用途的&lt;strong&gt;二次数据库&lt;/strong&gt;。&lt;/li&gt;
+&lt;li&gt;DDBJ和另外哪两个数据库并称为世界三大核酸数据库，并通过网络查询DDBJ数据库的信息存储情况。&lt;br&gt;
+答：&lt;strong&gt;EMBL&lt;/strong&gt;、&lt;strong&gt;GenBank&lt;/strong&gt;。&lt;/li&gt;
+&lt;li&gt;Entrez Gene数据库从哪些方面对基因进行注释？&lt;br&gt;
+答：注释内容包括基因概况、基因组结构、基因组定位、参考书目、表现型、基因变异、HIV-1互作、通路注释、互作、基因功能、同源性、编码蛋白质情况、序列信息，及交叉引用链接。&lt;/li&gt;
+&lt;li&gt;dbSNP数据库维护的数据类型有哪些，这些数据有什么应用？ 
+答：dbSNP：收录了所有物种中发现的短序列多态和突变信息，包括单核苷酸多态、微卫星、小片段插入\删除多态（in/del）等定位、侧翼序列和功能、频率信息。&lt;/li&gt;
+&lt;li&gt;UCSC基因组浏览器显示的数据资源如何以可出版的图片形式输出？&lt;br&gt;
+答：基因组浏览器图像输出：UCSC基因组浏览器支持生成适于文献出版和打印的高质量图像。打印前用户可以在序列碱基栏左端标签处点击鼠标右键选择配置管理（Configure ruler）按钮，打开设置页面，可在标题栏中添加通道输出图片标题，还可以选择增加组合名称和染色体位置方式将标题加入到通道中。鼠标左键拖拽各通道对应的灰色工具条还可以根据输出需要改变各通道的位置。用户完成通道图像配置后，点击导航栏中view按钮下拉菜单中的PDF/PS选项，选择所需的文件输出格式保存图像。&lt;/li&gt;
+&lt;li&gt;如何利用UCSC模块实现序列数据的批量下载？&lt;br&gt;
+答：&lt;/li&gt;
+&lt;li&gt;EMBL-EBI维护数据的规模化标准有哪些？
+答：数据资源遵循严格的规模化管理：① 可访问性，所有数据和工具完全开放访问；② 兼容性，数据达到世界最高层次的标准化规范，有利于推动数据共享；③ 数据集综合性，与各研究、出版机构和各人数据库达到数据提交、共享协议，保障数据来源和交叉引用；④ 便携性，EBI所有数据库均可下载，全部软件系统可以下载并本地安装；⑤ 保证质量，EBI具有专家注释系统，大量数据资源通过生物医学专家注释保障数据质量。&lt;/li&gt;
+&lt;li&gt;如何利用Ensembl-BioMart平台实现核酸序列数据的查询和下载？&lt;br&gt;
+答：&lt;/li&gt;
+&lt;li&gt;简述UniProt数据的基本构建，并简要介绍UniProtKB的检索流程和主要的分析工具。
+答：UniProt数据库包括UniProtKnowledgebase（UniProrKB）、UniProt Reference Clusters（UniRef）, UniProt Archive（UniParc）三个主要部分，及用于专门存放元基因组和环境基因组数据信息的UniProt Metagenomic和Environmental Sequences（UniMES）数据库。&lt;/li&gt;
+&lt;li&gt;试列举2到3个非编码基因序列维护数据库名称及其存储的数据特点。
+答：&lt;/li&gt;
+&lt;/ol&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>生物信息学-李霞第二版-绪论</title>
+      <link>/post/%E7%94%9F%E7%89%A9%E4%BF%A1%E6%81%AF%E5%AD%A6-%E6%9D%8E%E9%9C%9E%E7%AC%AC%E4%BA%8C%E7%89%88-%E7%BB%AA%E8%AE%BA/</link>
+      <pubDate>Sat, 17 Feb 2018 00:00:00 +0000</pubDate>
+      <guid>/post/%E7%94%9F%E7%89%A9%E4%BF%A1%E6%81%AF%E5%AD%A6-%E6%9D%8E%E9%9C%9E%E7%AC%AC%E4%BA%8C%E7%89%88-%E7%BB%AA%E8%AE%BA/</guid>
+      <description>&lt;h1 id=&#34;绪论&#34;&gt;绪论&lt;/h1&gt;
+&lt;h2 id=&#34;第一节-生物信息学的兴起&#34;&gt;第一节 生物信息学的兴起&lt;/h2&gt;
+&lt;h3 id=&#34;一-名词&#34;&gt;一. 名词：&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;第二代测序技术：边合成边测序；&lt;/li&gt;
+&lt;li&gt;第三代测序技术：单分子测序；&lt;/li&gt;
+&lt;li&gt;新一代测序技术：the next generation sequencing，NGS；&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3 id=&#34;二-英文与缩写&#34;&gt;二. 英文与缩写：&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;美国国立生物技术信息中心： National  Center for Biotechnology Information，NCBI；&lt;/li&gt;
+&lt;li&gt;欧洲生物信息学研究所：European Bioinformatics Institute，EBI；&lt;/li&gt;
+&lt;li&gt;人类基因组计划：human genome project，HGP；&lt;/li&gt;
+&lt;li&gt;人类单体型图计划：the international hapmap project，HapMap；&lt;/li&gt;
+&lt;li&gt;单核苷酸多态性：single nucleotide polymorphysm，SNP；&lt;/li&gt;
+&lt;li&gt;基因组范围关联分析：genome-wide association study，GWAS；&lt;/li&gt;
+&lt;li&gt;非编码基因：non-coding gene；&lt;/li&gt;
+&lt;li&gt;高清傅里叶转化质谱：high-resolution Fourier-transform mass spectrometry；&lt;/li&gt;
+&lt;li&gt;反相蛋白质芯片：reverse-phase protein arrays；&lt;/li&gt;
+&lt;li&gt;人类蛋白质组草图：the draft map of the human proteome；&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&#34;第二节-生物信息学的内涵及其在生命科学中的应用&#34;&gt;第二节 生物信息学的内涵及其在生命科学中的应用&lt;/h2&gt;
+&lt;h3 id=&#34;一-名词-1&#34;&gt;一. 名词：&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;生物信息学：是研究生物医学资源中蕴含的重要信息的学科，其核心是解决生物医学问题，其常规的研究内容可以简单概括为生物大分子的序列，结构和功能，以及它们之间的相互关系；&lt;/li&gt;
+&lt;li&gt;生物信息学的内涵：
+&lt;ul&gt;
+&lt;li&gt;研究领域：
+&lt;ul&gt;
+&lt;li&gt;序列对比：alignment，比较两个或两个以上分子序列的相似程度，包括核酸序列和蛋白质序列的对比过程；&lt;/li&gt;
+&lt;li&gt;序列装配：sequence assembling， 目前广泛应用的核算测序技术一般只能测出几十到几百个碱基对序列，技术的限制决定了测序过程需要对基因组进行打碎，并在测序后进行重新拼接的过程。
+逐步把它们拼接起来形成序列更长的重叠群，直至得到完整序列的过程，即为序列装配；&lt;/li&gt;
+&lt;li&gt;基因识别：gene identification，基因识别的基本问题是在给定的基因组序列基础上，正确识别蛋白质组编码基因在基因组序列中的序列和精确定位；&lt;/li&gt;
+&lt;li&gt;多态和基因间区分析：基因多态的识别和功能鉴定是研究物种进化、种群多样性、人类疾病易感和药物敏感性的关键技术。而基因间区的基因组序列组织形式既有多态（重复片段）性，又具有不规则特性，既可能是重要的未知基因的潜伏区域、重要的功能调控子，也可能是真正意义上的“垃圾”片段，对它们的深入理解是解释华因组功能复杂性的关键因素。&lt;/li&gt;
+&lt;li&gt;RNA表达分析：这里的RNA表达分析主要包括编码RNA和非编码RNA的表达分析。&lt;/li&gt;
+&lt;li&gt;分子进化：分子进化和比较基因组学研究是从生物大分子的角度考虑的物种之间的垂直进化关系（建立系统发生树）或同一物种内不同亚种之间的迁移进化关系；既可以用DNA序列、遗传多态，也可以用蛋白质序列来开展相应的研究，甚至于可通过结构和分子网络层面的对比分析。&lt;/li&gt;
+&lt;li&gt;结构预测：structure prediction，主要针对蛋白质序列和RNA序列进行分析，包括2级和高级结构的预测过程；&lt;/li&gt;
+&lt;li&gt;分子互作：是细胞行使功能过程汇总最主要的作用形式，既包括最早认识到的蛋白质与蛋白质之间的互作关系，也包括蛋白质与核酸、核酸与核酸之间的相互作用。
+分子互作是定性与定量相结合的分析过程，阐明分子互作不仅有利于了解整个细胞活动过程，也将对各种分子的功能和作用方式产生深刻的理解。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3 id=&#34;二-英文及缩写&#34;&gt;二. 英文及缩写&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;高通量组学：high-throughput omics；&lt;/li&gt;
+&lt;li&gt;生物标记：biomarker；&lt;/li&gt;
+&lt;li&gt;模式：pattern；&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&#34;第三节-大数据时代的生物信息学与医学&#34;&gt;第三节 大数据时代的生物信息学与医学&lt;/h2&gt;
+&lt;h3 id=&#34;一-名词-2&#34;&gt;一. 名词：&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;遗传图谱：genetic map，又称为连锁图谱linkage map。以遗传多态性标记位点为“路标”，以遗传学距离为图距的基因组图谱。&lt;/li&gt;
+&lt;li&gt;物理图谱：physical map，HGP DNA物理图谱的构建是基因组DNA测序的基础。&lt;/li&gt;
+&lt;li&gt;序列图谱：sequence map。&lt;/li&gt;
+&lt;li&gt;基因图谱：gene map。&lt;/li&gt;
+&lt;li&gt;组学与生物信息学：组学（X-Omics）概念是参照基因组概念，针对不同层面的生物大分子数据的产生演化而来的描述高通量分子生物数据资源的词汇。
+&lt;ul&gt;
+&lt;li&gt;基因组学：genomics  &lt;br&gt;
+基因组学、结构基因组学、功能基因组学是三个紧密相连的生物信息学重点研究内容。
+基因组学的目标是测定和分析某个（些）物种的全部DNA序列特征。
+结构基因组学可为基因组学提供大量DNA及蛋白质数据，是基因组学的有力支撑及基础。
+功能基因组学的主要任务是充分、合理利用基因组学及结构基因组学提供的信息，系统地研究基因及其产物的功能。
+&lt;ul&gt;
+&lt;li&gt;基因组学：研究生物体基因组的组成情况，以及各基因的结构，彼此间关系及表达调控的科学。&lt;/li&gt;
+&lt;li&gt;结构基因组学： structure genomics，是一门用结构生物学方法在生物体整体水平上（如全生物体、全细胞或整个基因组）对全部蛋白质（受体蛋白质、酶、通道以及与基因调控密切相关的核酸结合蛋白质）、相关蛋白质复合物（如酶和底物，酶与抑制剂，作用源与受体，DNA与其结合蛋白等）、RNA及其他生物大分子进行分析，精细测定其三维结构的学科。&lt;/li&gt;
+&lt;li&gt;功能基因组学：functional gemomics，代表基因组学分析的新阶段，主要利用结构基因组学提供的信息，发展和应用新的实验以及计算方法，通过在基因组或系统水平上全面分析基因功能。其研究内容主要有如下几个方面：
+&lt;ul&gt;
+&lt;li&gt;基因组表达及调控的研究；&lt;/li&gt;
+&lt;li&gt;基因信息的识别；&lt;/li&gt;
+&lt;li&gt;基因功能信息的鉴定；&lt;/li&gt;
+&lt;li&gt;基因多样性分析；&lt;/li&gt;
+&lt;li&gt;比较基因组学comparative genomics&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;转录组学：transcriptomics  &lt;br&gt;
+所谓转录组，就是转录后的所有mRNA的总称，这些能被翻译成蛋白质的编码部分以及非编码部分的功能及相互关系的研究就是转录组的任务。&lt;/li&gt;
+&lt;li&gt;蛋白质组学：proteomics  &lt;br&gt;
+是研究一个生命体在其整个生命周期中发挥作用的全部蛋白质，或者参与特定时间和空间（如特定类型的细胞在某一时期经历特定刺激时）范围相关功能的全体蛋白质的情况，包括表达水平、翻译后的修饰、蛋白质-蛋白质互作关系等特征，从而在蛋白质水平上获得对于有关生物体生理、病理等过程的全面认识。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

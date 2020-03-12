@@ -1,0 +1,1499 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="generator" content="Source Themes Academic 4.8.0">
+
+  
+
+  
+  
+  
+  
+  
+    
+    
+    
+  
+  
+
+  <meta name="author" content="Dr.二哈">
+
+  
+  
+  
+    
+  
+  <meta name="description" content="第十一章 多元回归 终于到了在统计中最常见的多元回归了~这本书之">
+
+  
+  <link rel="alternate" hreflang="zh" href="../../post/r%E8%AF%AD%E8%A8%80%E7%BB%9F%E8%AE%A1%E5%85%A5%E9%97%A8-%E7%AC%AC%E5%8D%81%E4%B8%80%E7%AB%A0/">
+
+  
+
+
+  
+  
+  
+  <meta name="theme-color" content="#2962ff">
+  
+
+  
+  
+  
+  <script src="../../js/mathjax-config.js"></script>
+  
+
+  
+  
+  
+  
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/academicons/1.8.6/css/academicons.min.css" integrity="sha256-uFVgMKfistnJAfoCUQigIl+JfUaP47GrRKjf6CTPVmw=" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.0-1/css/all.min.css" integrity="sha256-4w9DunooKSr3MFXHXWyFER38WmPdm361bQS/2KUWZbU=" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css" integrity="sha256-Vzbj7sDDS/woiFS3uNKo8eIuni59rjyNGtXfstRzStA=" crossorigin="anonymous">
+
+    
+    
+    
+      
+    
+    
+      
+      
+        
+          <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.1/styles/github.min.css" crossorigin="anonymous" title="hl-light">
+          <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.1/styles/dracula.min.css" crossorigin="anonymous" title="hl-dark" disabled>
+        
+      
+    
+
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.5.1/leaflet.css" integrity="sha256-SHMGCYmST46SoyGgo4YR/9AlK1vf3ff84Aq9yK4hdqM=" crossorigin="anonymous">
+    
+
+    
+
+    
+    
+      
+
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/lazysizes/5.1.2/lazysizes.min.js" integrity="sha256-Md1qLToewPeKjfAHU1zyPwOutccPAm5tahnaw7Osw0A=" crossorigin="anonymous" async></script>
+      
+    
+      
+
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" integrity="" crossorigin="anonymous" async></script>
+      
+    
+      
+
+      
+      
+
+      
+    
+
+  
+
+  
+  
+  
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat:400,700%7CRoboto:400,400italic,700%7CRoboto+Mono&display=swap">
+  
+
+  
+  
+  
+  
+  <link rel="stylesheet" href="../../css/academic.css">
+
+  
+
+
+
+
+  
+
+
+  
+
+  <link rel="manifest" href="../../index.webmanifest">
+  <link rel="icon" type="image/png" href="../../images/icon_hu0b7a4cb9992c9ac0e91bd28ffd38dd00_9727_32x32_fill_lanczos_center_2.png">
+  <link rel="apple-touch-icon" type="image/png" href="../../images/icon_hu0b7a4cb9992c9ac0e91bd28ffd38dd00_9727_192x192_fill_lanczos_center_2.png">
+
+  <link rel="canonical" href="../../post/r%E8%AF%AD%E8%A8%80%E7%BB%9F%E8%AE%A1%E5%85%A5%E9%97%A8-%E7%AC%AC%E5%8D%81%E4%B8%80%E7%AB%A0/">
+
+  
+  
+  
+  
+  
+    
+    
+  
+  
+  <meta property="twitter:card" content="summary">
+  
+  <meta property="og:site_name" content="Bionew">
+  <meta property="og:url" content="/post/r%E8%AF%AD%E8%A8%80%E7%BB%9F%E8%AE%A1%E5%85%A5%E9%97%A8-%E7%AC%AC%E5%8D%81%E4%B8%80%E7%AB%A0/">
+  <meta property="og:title" content="R语言统计入门-第十一章 | Bionew">
+  <meta property="og:description" content="第十一章 多元回归 终于到了在统计中最常见的多元回归了~这本书之"><meta property="og:image" content="img/map[gravatar:%!s(bool=false) shape:circle]">
+  <meta property="twitter:image" content="img/map[gravatar:%!s(bool=false) shape:circle]"><meta property="og:locale" content="zh">
+  
+    
+      <meta property="article:published_time" content="2018-09-10T00:00:00&#43;00:00">
+    
+    <meta property="article:modified_time" content="2018-09-10T00:00:00&#43;00:00">
+  
+
+  
+
+
+    
+
+
+
+
+
+
+  
+
+
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "/post/r%E8%AF%AD%E8%A8%80%E7%BB%9F%E8%AE%A1%E5%85%A5%E9%97%A8-%E7%AC%AC%E5%8D%81%E4%B8%80%E7%AB%A0/"
+  },
+  "headline": "R语言统计入门-第十一章",
+  
+  "datePublished": "2018-09-10T00:00:00Z",
+  "dateModified": "2018-09-10T00:00:00Z",
+  
+  "author": {
+    "@type": "Person",
+    "name": "Dr.二哈"
+  },
+  
+  "publisher": {
+    "@type": "Organization",
+    "name": "Bionew",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "/images/icon_hu0b7a4cb9992c9ac0e91bd28ffd38dd00_9727_192x192_fill_lanczos_center_2.png"
+    }
+  },
+  "description": "第十一章 多元回归 终于到了在统计中最常见的多元回归了~这本书之"
+}
+</script>
+
+  
+
+  
+
+
+  
+
+
+  
+
+
+
+
+
+  <title>R语言统计入门-第十一章 | Bionew</title>
+
+</head>
+
+<body id="top" data-spy="scroll" data-offset="70" data-target="#TableOfContents" >
+
+  <aside class="search-results" id="search">
+  <div class="container">
+    <section class="search-header">
+
+      <div class="row no-gutters justify-content-between mb-3">
+        <div class="col-6">
+          <h1>搜索</h1>
+        </div>
+        <div class="col-6 col-search-close">
+          <a class="js-search" href="#"><i class="fas fa-times-circle text-muted" aria-hidden="true"></i></a>
+        </div>
+      </div>
+
+      <div id="search-box">
+        
+        <input name="q" id="search-query" placeholder="搜索..." autocapitalize="off"
+        autocomplete="off" autocorrect="off" spellcheck="false" type="search">
+        
+      </div>
+
+    </section>
+    <section class="section-search-results">
+
+      <div id="search-hits">
+        
+      </div>
+
+    </section>
+  </div>
+</aside>
+
+
+  
+
+
+
+
+
+
+
+<nav class="navbar navbar-expand-lg navbar-light compensate-for-scrollbar" id="navbar-main">
+  <div class="container">
+
+    
+    <div class="d-none d-lg-inline-flex">
+      <a class="navbar-brand" href="../../">Bionew</a>
+    </div>
+    
+
+    
+    <button type="button" class="navbar-toggler" data-toggle="collapse"
+            data-target="#navbar-content" aria-controls="navbar" aria-expanded="false" aria-label="切换导航">
+    <span><i class="fas fa-bars"></i></span>
+    </button>
+    
+
+    
+    <div class="navbar-brand-mobile-wrapper d-inline-flex d-lg-none">
+      <a class="navbar-brand" href="../../">Bionew</a>
+    </div>
+    
+
+    
+    
+    <div class="navbar-collapse main-menu-item collapse justify-content-start" id="navbar-content">
+
+      
+      <ul class="navbar-nav d-md-inline-flex">
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        
+        
+        
+        
+        
+        
+          
+          
+          
+            
+          
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link " href="../../#hero"><span>Demo</span></a>
+        </li>
+
+        
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        
+        
+        
+        
+        
+        
+          
+          
+          
+            
+          
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link " href="../../#posts"><span>Posts</span></a>
+        </li>
+
+        
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        
+        
+        
+        
+        
+        
+          
+          
+          
+            
+          
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link " href="../../#projects"><span>Projects</span></a>
+        </li>
+
+        
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        
+        
+        
+        
+        
+        
+          
+          
+          
+            
+          
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link " href="../../#featured"><span>Publications</span></a>
+        </li>
+
+        
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        
+        
+        
+        
+        
+        
+
+        <li class="nav-item">
+          <a class="nav-link " href="../../courses/"><span>Courses</span></a>
+        </li>
+
+        
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        
+        
+        
+        
+        
+        
+          
+          
+          
+            
+          
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link " href="../../#contact"><span>Contact</span></a>
+        </li>
+
+        
+        
+
+      
+
+        
+      </ul>
+    </div>
+
+    <ul class="nav-icons navbar-nav flex-row ml-auto d-flex pl-md-2">
+      
+      <li class="nav-item">
+        <a class="nav-link js-search" href="#"><i class="fas fa-search" aria-hidden="true"></i></a>
+      </li>
+      
+
+      
+      <li class="nav-item">
+        <a class="nav-link js-dark-toggle" href="#"><i class="fas fa-moon" aria-hidden="true"></i></a>
+      </li>
+      
+
+      
+
+    </ul>
+
+  </div>
+</nav>
+
+
+  <article class="article">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+  
+  
+<div class="article-container pt-3">
+  <h1>R语言统计入门-第十一章</h1>
+
+  
+
+  
+    
+
+
+<div class="article-metadata">
+
+  
+  
+
+  
+  <span class="article-date">
+    
+    
+      
+    
+    Sep 10, 2018
+  </span>
+  
+
+  
+
+  
+  <span class="middot-divider"></span>
+  <span class="article-reading-time">
+    9 分钟阅读时长
+  </span>
+  
+
+  
+  
+  
+
+  
+  
+  <span class="middot-divider"></span>
+  <span class="article-categories">
+    <i class="fas fa-folder mr-1"></i><a href="../../categories/r/">R</a>, <a href="">统计</a></span>
+  
+
+</div>
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+</div>
+
+
+
+  <div class="article-container">
+
+    <div class="article-style">
+      
+
+
+<div id="-" class="section level1">
+<h1>第十一章 多元回归</h1>
+<p>终于到了在统计中最常见的多元回归了~这本书之前都在讲什么</p>
+<p>首先介绍下多元回归的基本模型： <span class="math display">\[
+y=\beta_0+\beta_1x_1+\cdot\cdot\cdot+\beta_kx_k+\epsilon
+\]</span> 其中，<span class="math inline">\(x_1,...,x_k\)</span>等是解释变量（也叫作预测变量）；模型参数<span class="math inline">\(\beta_1,...,\beta_k\)</span>可通过最小二乘法估计得出（具体参见6.1节）。</p>
+<div class="section level2">
+<h2>11.1 多维数据绘图</h2>
+<p>下面以Altman（1991）提到的一个关于囊胞性纤维症患者肺功能的研究为例子。数据包含在ISwR包内的cystfibr数据框中。</p>
+<p>使用pairs函数可以绘制数据集中任意两个变量间的散点图：</p>
+<pre class="r"><code>library(ISwR)
+par(mex = 0.5)
+pairs(cystfibr, gap = 0, cex.labels = 0.9)</code></pre>
+<p><img src="../../post/2018-09-10-r语言统计入门-第十一章_files/figure-html/unnamed-chunk-1-1.png" width="672" /></p>
+<p>在这个代码中，参数gap和cex.lables用来控制图形的外观。前者用来移除各个子图之间的图间距，后者用来缩放图中的字号，而绘图命令mex则用来减少图形边界的行间距。</p>
+<p>用plot命令也能做出类似的图：</p>
+<pre class="r"><code>plot(cystfibr)</code></pre>
+<p><img src="../../post/2018-09-10-r语言统计入门-第十一章_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
+<p>用pairs命令得到的那个图，各个子图相对较小，不适合直接放在论文中。不过，这种图形可以清晰的看到多维数据的整体情况，比如，就可以看到age、height和weight具有强相关关系。</p>
+<p>为了便于直接引用cystfibr数据集中的变量。可以将该数据集加入到当前的搜索路径中：</p>
+<pre class="r"><code>attach(cystfibr)</code></pre>
+<pre><code>## The following object is masked from package:ISwR:
+## 
+##     tlc</code></pre>
+</div>
+<div class="section level2">
+<h2>11.2 模型设定和模型输出</h2>
+<p>多元回归分析的模型是通过在模型公式中的解释变量（~应该就是自变量）之间添加+号来实现：</p>
+<pre class="r"><code>#注意一点，在之前分工作目录中可能会存在名称相同的变量，比如age这个变量，因此在运行这个命令前，需要清空工作目录。
+lm(pemax~age+sex+height+weight+bmp+fev1+rv+frc+tlc)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = pemax ~ age + sex + height + weight + bmp + fev1 + 
+##     rv + frc + tlc)
+## 
+## Coefficients:
+## (Intercept)          age          sex       height       weight  
+##    176.0582      -2.5420      -3.7368      -0.4463       2.9928  
+##         bmp         fev1           rv          frc          tlc  
+##     -1.7449       1.0807       0.1970      -0.3084       0.1886</code></pre>
+<p>这个公式意思就是，pemax这个变量可由一个包含变量age、sex等组成的模型来描述（pemax是患者的最大呼气压力）。</p>
+<p>与前面一样，lm函数返回的结果有限，然而，借助summary函数可以得到更多有趣的结果：</p>
+<pre class="r"><code>summary(lm(pemax~age+sex+height+weight+bmp+fev1+rv+frc+tlc))</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = pemax ~ age + sex + height + weight + bmp + fev1 + 
+##     rv + frc + tlc)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -37.338 -11.532   1.081  13.386  33.405 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)
+## (Intercept) 176.0582   225.8912   0.779    0.448
+## age          -2.5420     4.8017  -0.529    0.604
+## sex          -3.7368    15.4598  -0.242    0.812
+## height       -0.4463     0.9034  -0.494    0.628
+## weight        2.9928     2.0080   1.490    0.157
+## bmp          -1.7449     1.1552  -1.510    0.152
+## fev1          1.0807     1.0809   1.000    0.333
+## rv            0.1970     0.1962   1.004    0.331
+## frc          -0.3084     0.4924  -0.626    0.540
+## tlc           0.1886     0.4997   0.377    0.711
+## 
+## Residual standard error: 25.47 on 15 degrees of freedom
+## Multiple R-squared:  0.6373, Adjusted R-squared:  0.4197 
+## F-statistic: 2.929 on 9 and 15 DF,  p-value: 0.03195</code></pre>
+<p>注意，这个结果表明所有变量对应的 <em>t</em> 值都不显著，但是，联合 <em>F</em> 检验的结果却是显著的，这一定是有原因的。</p>
+<p>这个原因就在于，<em>t</em> 检验说明的是仅仅是，当从模型中删除某个变量而保留其他变量时模型的变化结果；对于变量在简化模型中是否统计显著，则没有做出说明；值得注意的是，<em>t</em> 检验认为<strong>没有一个变量</strong>是<strong>不能</strong>从模型中删除的。</p>
+<p>注意，输出结果中未调整R<sup>2</sup>（Multiple R-squared）和调整后R<sup>2</sup>（Adjusted R-squared）有较大差异，这归咎于模型中较多的变量个数，而这个与方差的自由度密切相关。前者表示的是与空模型相对的残差平方和的变化，后者对应的是残差方差的类似变化：</p>
+<pre class="r"><code>1-25.5^2/var(pemax)</code></pre>
+<pre><code>## [1] 0.4183949</code></pre>
+<p>其中，25.5这个数字取自summary函数输出结果中的<strong>残差标准误（Residual standard error）</strong>。通过anova函数可以得到多元回归分析对应的方差分析表，该表给出了一个截然不同的模型结果：</p>
+<pre class="r"><code>anova(lm(pemax~age+sex+height+weight+bmp+fev1+rv+frc+tlc))</code></pre>
+<pre><code>## Analysis of Variance Table
+## 
+## Response: pemax
+##           Df  Sum Sq Mean Sq F value   Pr(&gt;F)   
+## age        1 10098.5 10098.5 15.5661 0.001296 **
+## sex        1   955.4   955.4  1.4727 0.243680   
+## height     1   155.0   155.0  0.2389 0.632089   
+## weight     1   632.3   632.3  0.9747 0.339170   
+## bmp        1  2862.2  2862.2  4.4119 0.053010 . 
+## fev1       1  1549.1  1549.1  2.3878 0.143120   
+## rv         1   561.9   561.9  0.8662 0.366757   
+## frc        1   194.6   194.6  0.2999 0.592007   
+## tlc        1    92.4    92.4  0.1424 0.711160   
+## Residuals 15  9731.2   648.7                    
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<p>注意，除了最后一行（对应于变量tlc）之外，这里的 <em>F</em> 检验结果与summary函数输出的 <em>t</em> 检验结果几乎完全相悖。这里，age变量的检验结果变得显著了，导致这种结果的原因在于这里的检验过程是逐步进行的；具体而言，对应于（从下至上）将变量逐个从模型中移除，直至剩下age变量。在该过程中，变量bmp的检验结果一度接近5%的临界点，但考虑到检验的个数，这一结果几乎不显著。</p>
+<p>在8次独立的检验中，结果给出小于等于0.053的 <em>p</em> 值的概率仅仅略高于35%。虽然ANOVA表中的检验并非完全独立，但是其近似结果还是不错的。</p>
+<p>ANOVA表的输出结果表明在模型已包含age变量的情况下，再添加其他变量，模型准确度并未得到显著的提高。可以进行联合检验，看看是否可以将age以外的变量全部去掉，做法是求贡献值的平方和加，再对总和进行 <em>F</em> 检验：</p>
+<pre class="r"><code>955.4+155.0+632.3+2862.2+1549.1+561.9+194.6+92.4</code></pre>
+<pre><code>## [1] 7002.9</code></pre>
+<pre class="r"><code>7002.9/8</code></pre>
+<pre><code>## [1] 875.3625</code></pre>
+<pre class="r"><code>875.36/648.7</code></pre>
+<pre><code>## [1] 1.349407</code></pre>
+<pre class="r"><code>1-pf(1.349407, 8,15)</code></pre>
+<pre><code>## [1] 0.2935148</code></pre>
+<p>对应于去掉边框线的表格，它看起来是这样的：</p>
+<table>
+<thead>
+<tr class="header">
+<th></th>
+<th align="center">Df</th>
+<th align="center">Sum Sq</th>
+<th align="center">Mean Sq</th>
+<th align="center">F</th>
+<th align="center">Pr(&gt;F)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>age</td>
+<td align="center">1</td>
+<td align="center">10098.5</td>
+<td align="center">10098.5</td>
+<td align="center">15.566</td>
+<td align="center">0.00130</td>
+</tr>
+<tr class="even">
+<td>others</td>
+<td align="center">8</td>
+<td align="center">7002.9</td>
+<td align="center">875.4</td>
+<td align="center">1.349</td>
+<td align="center">0.29351</td>
+</tr>
+<tr class="odd">
+<td>Residual</td>
+<td align="center">15</td>
+<td align="center">9731.2</td>
+<td align="center">648.7</td>
+<td align="center"></td>
+<td align="center"></td>
+</tr>
+</tbody>
+</table>
+<p>这个表格是自己根据数据整理的~不是系统的输出。</p>
+<p>如要直接得到上述结果，可运行：</p>
+<pre class="r"><code>m1 &lt;- lm(pemax~age+sex+height+weight+bmp+fev1+rv+frc+tlc)
+m2 &lt;- lm(pemax~age)
+anova(m1, m2)</code></pre>
+<pre><code>## Analysis of Variance Table
+## 
+## Model 1: pemax ~ age + sex + height + weight + bmp + fev1 + rv + frc + 
+##     tlc
+## Model 2: pemax ~ age
+##   Res.Df     RSS Df Sum of Sq      F Pr(&gt;F)
+## 1     15  9731.2                           
+## 2     23 16734.2 -8   -7002.9 1.3493 0.2936</code></pre>
+</div>
+<div class="section level2">
+<h2>11.3 模型筛选</h2>
+<p>R有一个按照赤池信息准则（Akaike Information Criterion）进行模型筛选的函数step()。而这个本书不讲~~</p>
+<p>本书只使用一种较为简单的人工向后消元法。</p>
+<p>下面是一个模型降阶的例子，注意，为减少输出结果占用的空间，对输出信息进行了编辑：</p>
+<pre class="r"><code>#书上是只保留了Coefficients这一项
+summary(lm(pemax~age+sex+height+weight+bmp+fev1+rv+frc+tlc))</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = pemax ~ age + sex + height + weight + bmp + fev1 + 
+##     rv + frc + tlc)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -37.338 -11.532   1.081  13.386  33.405 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)
+## (Intercept) 176.0582   225.8912   0.779    0.448
+## age          -2.5420     4.8017  -0.529    0.604
+## sex          -3.7368    15.4598  -0.242    0.812
+## height       -0.4463     0.9034  -0.494    0.628
+## weight        2.9928     2.0080   1.490    0.157
+## bmp          -1.7449     1.1552  -1.510    0.152
+## fev1          1.0807     1.0809   1.000    0.333
+## rv            0.1970     0.1962   1.004    0.331
+## frc          -0.3084     0.4924  -0.626    0.540
+## tlc           0.1886     0.4997   0.377    0.711
+## 
+## Residual standard error: 25.47 on 15 degrees of freedom
+## Multiple R-squared:  0.6373, Adjusted R-squared:  0.4197 
+## F-statistic: 2.929 on 9 and 15 DF,  p-value: 0.03195</code></pre>
+<p>人工进行模型降阶的优点在于该模型引入逻辑结构。在本利中，很自然地会先想到去掉肺功能的指标。</p>
+<pre class="r"><code>summary(lm(pemax~age+sex+height+weight+bmp+fev1+rv+frc))</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = pemax ~ age + sex + height + weight + bmp + fev1 + 
+##     rv + frc)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -38.072 -10.067   0.113  13.526  36.990 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)  
+## (Intercept) 221.8055   185.4350   1.196   0.2491  
+## age          -3.1346     4.4144  -0.710   0.4879  
+## sex          -4.6933    14.8363  -0.316   0.7558  
+## height       -0.5428     0.8428  -0.644   0.5286  
+## weight        3.3157     1.7672   1.876   0.0790 .
+## bmp          -1.9403     1.0047  -1.931   0.0714 .
+## fev1          1.0183     1.0392   0.980   0.3417  
+## rv            0.1857     0.1887   0.984   0.3396  
+## frc          -0.2605     0.4628  -0.563   0.5813  
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 24.78 on 16 degrees of freedom
+## Multiple R-squared:  0.6339, Adjusted R-squared:  0.4508 
+## F-statistic: 3.463 on 8 and 16 DF,  p-value: 0.01649</code></pre>
+<pre class="r"><code>summary(lm(pemax~age+sex+height+weight+bmp+fev1+rv))</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = pemax ~ age + sex + height + weight + bmp + fev1 + 
+##     rv)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -39.425 -12.391   3.834  14.797  36.693 
+## 
+## Coefficients:
+##              Estimate Std. Error t value Pr(&gt;|t|)  
+## (Intercept) 166.71822  154.31294   1.080   0.2951  
+## age          -1.81783    3.66773  -0.496   0.6265  
+## sex           0.10239   11.89990   0.009   0.9932  
+## height       -0.40981    0.79257  -0.517   0.6118  
+## weight        2.87386    1.55120   1.853   0.0814 .
+## bmp          -1.94971    0.98415  -1.981   0.0640 .
+## fev1          1.41526    0.74788   1.892   0.0756 .
+## rv            0.09567    0.09798   0.976   0.3425  
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 24.28 on 17 degrees of freedom
+## Multiple R-squared:  0.6266, Adjusted R-squared:  0.4729 
+## F-statistic: 4.076 on 7 and 17 DF,  p-value: 0.008452</code></pre>
+<pre class="r"><code>summary(lm(pemax~age+sex+height+weight+bmp+fev1))</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = pemax ~ age + sex + height + weight + bmp + fev1)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -43.238  -7.403  -0.081  15.534  36.028 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)  
+## (Intercept) 260.6313   120.5215   2.163   0.0443 *
+## age          -2.9062     3.4898  -0.833   0.4159  
+## sex          -1.2115    11.8083  -0.103   0.9194  
+## height       -0.6067     0.7655  -0.793   0.4384  
+## weight        3.3463     1.4719   2.273   0.0355 *
+## bmp          -2.3042     0.9136  -2.522   0.0213 *
+## fev1          1.0274     0.6329   1.623   0.1219  
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 24.24 on 18 degrees of freedom
+## Multiple R-squared:  0.6057, Adjusted R-squared:  0.4743 
+## F-statistic: 4.608 on 6 and 18 DF,  p-value: 0.00529</code></pre>
+<pre class="r"><code>summary(lm(pemax~age+sex+height+weight+bmp))</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = pemax ~ age + sex + height + weight + bmp)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -43.194  -9.412  -2.425   9.157  40.112 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)  
+## (Intercept) 280.4482   124.9556   2.244   0.0369 *
+## age          -3.0750     3.6352  -0.846   0.4081  
+## sex         -11.5281    10.3720  -1.111   0.2802  
+## height       -0.6853     0.7962  -0.861   0.4001  
+## weight        3.5546     1.5281   2.326   0.0312 *
+## bmp          -1.9613     0.9263  -2.117   0.0476 *
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 25.27 on 19 degrees of freedom
+## Multiple R-squared:  0.548,  Adjusted R-squared:  0.429 
+## F-statistic: 4.606 on 5 and 19 DF,  p-value: 0.006388</code></pre>
+<p>上上述结果看，去掉4个肺功能相关的变量没什么不妥，接下来尝试删除那些描述病人身体发育状态或尺寸信息的变量。在开始时，尽量避免删除weight和bmp变量，因为它们对应的 <em>p</em> 值很接近5%的显著性界限。</p>
+<pre class="r"><code>summary(lm(pemax~age+height+weight+bmp))</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = pemax ~ age + height + weight + bmp)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -41.501 -15.460  -2.838  11.082  42.991 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)  
+## (Intercept) 274.5307   125.5745   2.186   0.0409 *
+## age          -3.0832     3.6566  -0.843   0.4091  
+## height       -0.6985     0.8008  -0.872   0.3934  
+## weight        3.6338     1.5354   2.367   0.0282 *
+## bmp          -1.9621     0.9317  -2.106   0.0480 *
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 25.41 on 20 degrees of freedom
+## Multiple R-squared:  0.5186, Adjusted R-squared:  0.4223 
+## F-statistic: 5.386 on 4 and 20 DF,  p-value: 0.004137</code></pre>
+<pre class="r"><code>summary(lm(pemax~height+weight+bmp))</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = pemax ~ height + weight + bmp)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -41.794 -11.764  -1.218  13.202  43.631 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)  
+## (Intercept) 245.3936   119.8927   2.047   0.0534 .
+## height       -0.8264     0.7808  -1.058   0.3019  
+## weight        2.7717     1.1377   2.436   0.0238 *
+## bmp          -1.4876     0.7375  -2.017   0.0566 .
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 25.24 on 21 degrees of freedom
+## Multiple R-squared:  0.5015, Adjusted R-squared:  0.4302 
+## F-statistic: 7.041 on 3 and 21 DF,  p-value: 0.00187</code></pre>
+<pre class="r"><code>summary(lm(pemax~weight+bmp))</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = pemax ~ weight + bmp)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -42.924 -13.399   4.361  16.642  48.404 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept) 124.8297    37.4786   3.331 0.003033 ** 
+## weight        1.6403     0.3900   4.206 0.000365 ***
+## bmp          -1.0054     0.5814  -1.729 0.097797 .  
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 25.31 on 22 degrees of freedom
+## Multiple R-squared:  0.4749, Adjusted R-squared:  0.4271 
+## F-statistic: 9.947 on 2 and 22 DF,  p-value: 0.0008374</code></pre>
+<pre class="r"><code>summary(lm(pemax~weight))</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = pemax ~ weight)
+## 
+## Residuals:
+##    Min     1Q Median     3Q    Max 
+## -44.30 -22.69   2.23  15.91  48.41 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)  63.5456    12.7016   5.003 4.63e-05 ***
+## weight        1.1867     0.3009   3.944 0.000646 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 26.38 on 23 degrees of freedom
+## Multiple R-squared:  0.4035, Adjusted R-squared:  0.3776 
+## F-statistic: 15.56 on 1 and 23 DF,  p-value: 0.0006457</code></pre>
+<p>注意，一旦删除age和height变量，变量bmp就不再显著了。在原文献（Altman，1991）中，变量weight、feval和bmp在最终结果中对应的 <em>p</em>值都低于5%。然而，并非所有模型降阶过程都是如此。</p>
+<p>特别关注变量age、weight和height是个不错的想法，因为在处理儿童和青少年对应的数据时，这些变量表现出很强的相关性。</p>
+<pre class="r"><code>summary(lm(pemax~age+height+weight))</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = pemax ~ age + height + weight)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -43.675 -21.566   3.229  16.274  48.068 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)
+## (Intercept) 64.65555   82.40935   0.785    0.441
+## age          1.56755    3.14363   0.499    0.623
+## height      -0.07608    0.80278  -0.095    0.925
+## weight       0.86949    0.85922   1.012    0.323
+## 
+## Residual standard error: 27.41 on 21 degrees of freedom
+## Multiple R-squared:  0.4118, Adjusted R-squared:  0.3278 
+## F-statistic: 4.901 on 3 and 21 DF,  p-value: 0.009776</code></pre>
+<pre class="r"><code>summary(lm(pemax~age+height))</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = pemax ~ age + height)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -44.817 -17.883   3.815  18.275  53.824 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)
+## (Intercept)  17.8600    68.2493   0.262    0.796
+## age           2.7178     2.9325   0.927    0.364
+## height        0.3397     0.6900   0.492    0.627
+## 
+## Residual standard error: 27.43 on 22 degrees of freedom
+## Multiple R-squared:  0.3831, Adjusted R-squared:  0.3271 
+## F-statistic: 6.832 on 2 and 22 DF,  p-value: 0.00492</code></pre>
+<pre class="r"><code>summary(lm(pemax~age))</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = pemax ~ age)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -48.666 -17.174   6.209  16.209  51.334 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)   
+## (Intercept)   50.408     16.657   3.026  0.00601 **
+## age            4.055      1.088   3.726  0.00111 **
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 26.97 on 23 degrees of freedom
+## Multiple R-squared:  0.3764, Adjusted R-squared:  0.3492 
+## F-statistic: 13.88 on 1 and 23 DF,  p-value: 0.001109</code></pre>
+<pre class="r"><code>summary(lm(pemax~height))</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = pemax ~ height)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -43.876 -19.306   1.787  18.170  61.464 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)   
+## (Intercept) -33.2757    40.0445  -0.831  0.41453   
+## height        0.9319     0.2596   3.590  0.00155 **
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 27.34 on 23 degrees of freedom
+## Multiple R-squared:  0.3591, Adjusted R-squared:  0.3312 
+## F-statistic: 12.89 on 1 and 23 DF,  p-value: 0.001549</code></pre>
+<p>从上面的结果可以看出，对于变量weight、height和age，没有证据表明哪个比另外两个好。上面所用的消元方法之所以在最后仅留下了weight作为自变量，完全是出于偶然。</p>
+</div>
+<div class="section level2">
+<h2>练习题</h2>
+<ol style="list-style-type: decimal">
+<li>在数据集secher中，对出生体重、腰围和二项骨的直径变量进行对数变换后可得到很好的数据分析结果。请拟合出生体重的预测表达式。在模型中同时纳入腹部直径和二项骨直径时，模型结果如何，模型中两个回归系数之和约为3，如何对其进行解释。</li>
+<li>数据集tlc有一个同名变量tlc，这不是一个很好的命名方式，请解释原因。用数据集中的其余变量来解释tlc变量，并对模型的有效性进行解释。</li>
+<li>数据集cystfibr的分析过程设计sex变量，它是一个二元变量，如何解释回归结果中对应的系数。</li>
+<li>考虑juul2数据集，并筛选出该数据集中年龄超过25岁的子集，用age变量对<span class="math inline">\(\sqrt{igfl}\)</span>变量进行回归分析。在扩展模型中加入变量height和变量weight，计算扩展模型对应的方差分析表，有没有意想不到的结果出现，为什么会这样呢。</li>
+<li>使用多远回归模型，分析冰结师kfmdata数据集中各个解释变量对牛奶摄入量的影响。注意，这里的sex变量是因子型变量，这对分析过程有什么影响？</li>
+</ol>
+</div>
+</div>
+
+    </div>
+
+    
+
+
+
+
+
+<div class="article-tags">
+  
+  <a class="badge badge-light" href="../../tags/r/">R</a>
+  
+  <a class="badge badge-light" href="">统计</a>
+  
+</div>
+
+
+
+<div class="share-box" aria-hidden="true">
+  <ul class="share">
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="https://twitter.com/intent/tweet?url=/post/r%E8%AF%AD%E8%A8%80%E7%BB%9F%E8%AE%A1%E5%85%A5%E9%97%A8-%E7%AC%AC%E5%8D%81%E4%B8%80%E7%AB%A0/&amp;text=R%e8%af%ad%e8%a8%80%e7%bb%9f%e8%ae%a1%e5%85%a5%e9%97%a8-%e7%ac%ac%e5%8d%81%e4%b8%80%e7%ab%a0" target="_blank" rel="noopener" class="share-btn-twitter">
+          <i class="fab fa-twitter"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="https://www.facebook.com/sharer.php?u=/post/r%E8%AF%AD%E8%A8%80%E7%BB%9F%E8%AE%A1%E5%85%A5%E9%97%A8-%E7%AC%AC%E5%8D%81%E4%B8%80%E7%AB%A0/&amp;t=R%e8%af%ad%e8%a8%80%e7%bb%9f%e8%ae%a1%e5%85%a5%e9%97%a8-%e7%ac%ac%e5%8d%81%e4%b8%80%e7%ab%a0" target="_blank" rel="noopener" class="share-btn-facebook">
+          <i class="fab fa-facebook"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="mailto:?subject=R%e8%af%ad%e8%a8%80%e7%bb%9f%e8%ae%a1%e5%85%a5%e9%97%a8-%e7%ac%ac%e5%8d%81%e4%b8%80%e7%ab%a0&amp;body=/post/r%E8%AF%AD%E8%A8%80%E7%BB%9F%E8%AE%A1%E5%85%A5%E9%97%A8-%E7%AC%AC%E5%8D%81%E4%B8%80%E7%AB%A0/" target="_blank" rel="noopener" class="share-btn-email">
+          <i class="fas fa-envelope"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="https://www.linkedin.com/shareArticle?url=/post/r%E8%AF%AD%E8%A8%80%E7%BB%9F%E8%AE%A1%E5%85%A5%E9%97%A8-%E7%AC%AC%E5%8D%81%E4%B8%80%E7%AB%A0/&amp;title=R%e8%af%ad%e8%a8%80%e7%bb%9f%e8%ae%a1%e5%85%a5%e9%97%a8-%e7%ac%ac%e5%8d%81%e4%b8%80%e7%ab%a0" target="_blank" rel="noopener" class="share-btn-linkedin">
+          <i class="fab fa-linkedin-in"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="https://web.whatsapp.com/send?text=R%e8%af%ad%e8%a8%80%e7%bb%9f%e8%ae%a1%e5%85%a5%e9%97%a8-%e7%ac%ac%e5%8d%81%e4%b8%80%e7%ab%a0%20/post/r%E8%AF%AD%E8%A8%80%E7%BB%9F%E8%AE%A1%E5%85%A5%E9%97%A8-%E7%AC%AC%E5%8D%81%E4%B8%80%E7%AB%A0/" target="_blank" rel="noopener" class="share-btn-whatsapp">
+          <i class="fab fa-whatsapp"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="https://service.weibo.com/share/share.php?url=/post/r%E8%AF%AD%E8%A8%80%E7%BB%9F%E8%AE%A1%E5%85%A5%E9%97%A8-%E7%AC%AC%E5%8D%81%E4%B8%80%E7%AB%A0/&amp;title=R%e8%af%ad%e8%a8%80%e7%bb%9f%e8%ae%a1%e5%85%a5%e9%97%a8-%e7%ac%ac%e5%8d%81%e4%b8%80%e7%ab%a0" target="_blank" rel="noopener" class="share-btn-weibo">
+          <i class="fab fa-weibo"></i>
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+  
+  
+  
+    
+  
+  
+  
+  <div class="media author-card content-widget-hr">
+    
+      
+      <img class="avatar mr-3 avatar-circle" src="../../authors/admin/avatar_hu04cc06b45fe3d1130f73ba3a4699b934_34764_270x270_fill_q90_lanczos_center.jpg" alt="Avatar">
+    
+
+    <div class="media-body">
+      <h5 class="card-title"><a href="../../">Dr.二哈</a></h5>
+      <h6 class="card-subtitle">在读苦逼科研狗</h6>
+      <p class="card-text">研究方向：脂质营养，业余时间自学R。</p>
+      <ul class="network-icon" aria-hidden="true">
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <li>
+      <a href="../../#contact" >
+        <i class="fas fa-envelope"></i>
+      </a>
+    </li>
+  
+</ul>
+
+    </div>
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <div class="article-widget content-widget-hr">
+    <h3>相关</h3>
+    <ul>
+      
+      <li><a href="../../post/r%E8%AF%AD%E8%A8%80%E7%BB%9F%E8%AE%A1%E5%85%A5%E9%97%A8-%E7%AC%AC%E5%8D%81%E7%AB%A0/">R语言统计入门-第十章</a></li>
+      
+      <li><a href="../../post/r%E8%AF%AD%E8%A8%80%E7%BB%9F%E8%AE%A1%E5%85%A5%E9%97%A8-%E7%AC%AC%E4%B9%9D%E7%AB%A0/">R语言统计入门-第九章</a></li>
+      
+      <li><a href="../../post/r%E8%AF%AD%E8%A8%80%E7%BB%9F%E8%AE%A1%E5%85%A5%E9%97%A8-%E7%AC%AC%E5%85%AB%E7%AB%A0/">R语言统计入门-第八章</a></li>
+      
+      <li><a href="../../post/r%E8%AF%AD%E8%A8%80%E7%BB%9F%E8%AE%A1%E5%85%A5%E9%97%A8-%E7%AC%AC%E4%B8%83%E7%AB%A0/">R语言统计入门-第七章</a></li>
+      
+      <li><a href="../../post/r%E8%AF%AD%E8%A8%80%E7%BB%9F%E8%AE%A1%E5%85%A5%E9%97%A8-%E7%AC%AC%E5%85%AD%E7%AB%A0/">R语言统计入门-第六章</a></li>
+      
+    </ul>
+  </div>
+  
+
+
+
+  </div>
+</article>
+
+      
+
+    
+    
+    
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.imagesloaded/4.1.4/imagesloaded.pkgd.min.js" integrity="sha256-lqvxZrPLtfffUl2G/e7szqSvPBILGbwmsGE1MKlOi0Q=" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.isotope/3.0.6/isotope.pkgd.min.js" integrity="sha256-CBrpuqrMhXwcLLUd5tvQ4euBHCdh7wGlDfNz8vbu/iI=" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js" integrity="sha256-yt2kYMy0w8AbtF89WXb2P1rfjcP/HTHLT7097U8Y5b8=" crossorigin="anonymous"></script>
+
+      
+
+      
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.1/highlight.min.js" integrity="sha256-eOgo0OtLL4cdq7RdwRUiGKLX9XsIJ7nGhWEKbohmVAQ=" crossorigin="anonymous"></script>
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.1/languages/r.min.js"></script>
+        
+      
+
+    
+
+    
+    
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.5.1/leaflet.js" integrity="sha256-EErZamuLefUnbMBQbsEqu1USa+btR2oIlCpBJbyD4/g=" crossorigin="anonymous"></script>
+    
+
+    
+    
+    <script>const code_highlighting = true;</script>
+    
+
+    
+    
+    <script>const isSiteThemeDark = false;</script>
+    
+
+    
+    
+    
+    
+    
+    
+    <script>
+      const search_config = {"indexURI":"/index.json","minLength":1,"threshold":0.3};
+      const i18n = {"no_results":"没有找到结果","placeholder":"搜索...","results":"搜索结果"};
+      const content_type = {
+        'post': "文章",
+        'project': "项目",
+        'publication' : "出版物",
+        'talk' : "演讲"
+        };
+    </script>
+    
+
+    
+    
+
+    
+    
+    <script id="search-hit-fuse-template" type="text/x-template">
+      <div class="search-hit" id="summary-{{key}}">
+      <div class="search-hit-content">
+        <div class="search-hit-name">
+          <a href="{{relpermalink}}">{{title}}</a>
+          <div class="article-metadata search-hit-type">{{type}}</div>
+          <p class="search-hit-description">{{snippet}}</p>
+        </div>
+      </div>
+      </div>
+    </script>
+    
+
+    
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/3.2.1/fuse.min.js" integrity="sha256-VzgmKYmhsGNNN4Ph1kMW+BjoYJM2jV5i4IlFoeZA9XI=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script>
+    
+
+    
+    
+
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+      
+    
+    
+    
+    
+    <script src="../../js/academic.min.c816d323c3a55093dae0829b44ea1ca8.js"></script>
+
+    
+
+
+
+
+
+
+  
+  
+  <div class="container">
+    <footer class="site-footer">
+  
+  <p class="powered-by">
+    
+      <a href="../../privacy/">Privacy Policy</a>
+    
+    
+       &middot; 
+      <a href="../../terms/">Terms</a>
+    
+  </p>
+  
+
+  <p class="powered-by">
+    ©<code>2020</code> &middot; 
+
+    Powered by the
+    <a href="https://sourcethemes.com/academic/" target="_blank" rel="noopener">Academic theme</a> for
+    <a href="https://gohugo.io" target="_blank" rel="noopener">Hugo</a>.
+
+    
+    <span class="float-right" aria-hidden="true">
+      <a href="#" class="back-to-top">
+        <span class="button_icon">
+          <i class="fas fa-chevron-up fa-2x"></i>
+        </span>
+      </a>
+    </span>
+    
+  </p>
+</footer>
+
+  </div>
+  
+
+  
+<div id="modal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">引用</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <pre><code class="tex hljs"></code></pre>
+      </div>
+      <div class="modal-footer">
+        <a class="btn btn-outline-primary my-1 js-copy-cite" href="#" target="_blank">
+          <i class="fas fa-copy"></i> 复制
+        </a>
+        <a class="btn btn-outline-primary my-1 js-download-cite" href="#" target="_blank">
+          <i class="fas fa-download"></i> 下载
+        </a>
+        <div id="modal-error"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

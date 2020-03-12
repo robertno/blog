@@ -1,0 +1,1595 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="generator" content="Source Themes Academic 4.8.0">
+
+  
+
+  
+  
+  
+  
+  
+    
+    
+    
+  
+  
+
+  <meta name="author" content="Dr.二哈">
+
+  
+  
+  
+    
+  
+  <meta name="description" content="第十章 数据处理的高级技术 10.1 变量的重编码 10.1.1 cut函数 有的时候可">
+
+  
+  <link rel="alternate" hreflang="zh" href="../../post/r%E8%AF%AD%E8%A8%80%E7%BB%9F%E8%AE%A1%E5%85%A5%E9%97%A8-%E7%AC%AC%E5%8D%81%E7%AB%A0/">
+
+  
+
+
+  
+  
+  
+  <meta name="theme-color" content="#2962ff">
+  
+
+  
+  
+  
+  <script src="../../js/mathjax-config.js"></script>
+  
+
+  
+  
+  
+  
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/academicons/1.8.6/css/academicons.min.css" integrity="sha256-uFVgMKfistnJAfoCUQigIl+JfUaP47GrRKjf6CTPVmw=" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.0-1/css/all.min.css" integrity="sha256-4w9DunooKSr3MFXHXWyFER38WmPdm361bQS/2KUWZbU=" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css" integrity="sha256-Vzbj7sDDS/woiFS3uNKo8eIuni59rjyNGtXfstRzStA=" crossorigin="anonymous">
+
+    
+    
+    
+      
+    
+    
+      
+      
+        
+          <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.1/styles/github.min.css" crossorigin="anonymous" title="hl-light">
+          <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.1/styles/dracula.min.css" crossorigin="anonymous" title="hl-dark" disabled>
+        
+      
+    
+
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.5.1/leaflet.css" integrity="sha256-SHMGCYmST46SoyGgo4YR/9AlK1vf3ff84Aq9yK4hdqM=" crossorigin="anonymous">
+    
+
+    
+
+    
+    
+      
+
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/lazysizes/5.1.2/lazysizes.min.js" integrity="sha256-Md1qLToewPeKjfAHU1zyPwOutccPAm5tahnaw7Osw0A=" crossorigin="anonymous" async></script>
+      
+    
+      
+
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" integrity="" crossorigin="anonymous" async></script>
+      
+    
+      
+
+      
+      
+
+      
+    
+
+  
+
+  
+  
+  
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat:400,700%7CRoboto:400,400italic,700%7CRoboto+Mono&display=swap">
+  
+
+  
+  
+  
+  
+  <link rel="stylesheet" href="../../css/academic.css">
+
+  
+
+
+
+
+  
+
+
+  
+
+  <link rel="manifest" href="../../index.webmanifest">
+  <link rel="icon" type="image/png" href="../../images/icon_hu0b7a4cb9992c9ac0e91bd28ffd38dd00_9727_32x32_fill_lanczos_center_2.png">
+  <link rel="apple-touch-icon" type="image/png" href="../../images/icon_hu0b7a4cb9992c9ac0e91bd28ffd38dd00_9727_192x192_fill_lanczos_center_2.png">
+
+  <link rel="canonical" href="../../post/r%E8%AF%AD%E8%A8%80%E7%BB%9F%E8%AE%A1%E5%85%A5%E9%97%A8-%E7%AC%AC%E5%8D%81%E7%AB%A0/">
+
+  
+  
+  
+  
+  
+    
+    
+  
+  
+  <meta property="twitter:card" content="summary">
+  
+  <meta property="og:site_name" content="Bionew">
+  <meta property="og:url" content="/post/r%E8%AF%AD%E8%A8%80%E7%BB%9F%E8%AE%A1%E5%85%A5%E9%97%A8-%E7%AC%AC%E5%8D%81%E7%AB%A0/">
+  <meta property="og:title" content="R语言统计入门-第十章 | Bionew">
+  <meta property="og:description" content="第十章 数据处理的高级技术 10.1 变量的重编码 10.1.1 cut函数 有的时候可"><meta property="og:image" content="img/map[gravatar:%!s(bool=false) shape:circle]">
+  <meta property="twitter:image" content="img/map[gravatar:%!s(bool=false) shape:circle]"><meta property="og:locale" content="zh">
+  
+    
+      <meta property="article:published_time" content="2018-09-07T00:00:00&#43;00:00">
+    
+    <meta property="article:modified_time" content="2018-09-07T00:00:00&#43;00:00">
+  
+
+  
+
+
+    
+
+
+
+
+
+
+  
+
+
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "/post/r%E8%AF%AD%E8%A8%80%E7%BB%9F%E8%AE%A1%E5%85%A5%E9%97%A8-%E7%AC%AC%E5%8D%81%E7%AB%A0/"
+  },
+  "headline": "R语言统计入门-第十章",
+  
+  "datePublished": "2018-09-07T00:00:00Z",
+  "dateModified": "2018-09-07T00:00:00Z",
+  
+  "author": {
+    "@type": "Person",
+    "name": "Dr.二哈"
+  },
+  
+  "publisher": {
+    "@type": "Organization",
+    "name": "Bionew",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "/images/icon_hu0b7a4cb9992c9ac0e91bd28ffd38dd00_9727_192x192_fill_lanczos_center_2.png"
+    }
+  },
+  "description": "第十章 数据处理的高级技术 10.1 变量的重编码 10.1.1 cut函数 有的时候可"
+}
+</script>
+
+  
+
+  
+
+
+  
+
+
+  
+
+
+
+
+
+  <title>R语言统计入门-第十章 | Bionew</title>
+
+</head>
+
+<body id="top" data-spy="scroll" data-offset="70" data-target="#TableOfContents" >
+
+  <aside class="search-results" id="search">
+  <div class="container">
+    <section class="search-header">
+
+      <div class="row no-gutters justify-content-between mb-3">
+        <div class="col-6">
+          <h1>搜索</h1>
+        </div>
+        <div class="col-6 col-search-close">
+          <a class="js-search" href="#"><i class="fas fa-times-circle text-muted" aria-hidden="true"></i></a>
+        </div>
+      </div>
+
+      <div id="search-box">
+        
+        <input name="q" id="search-query" placeholder="搜索..." autocapitalize="off"
+        autocomplete="off" autocorrect="off" spellcheck="false" type="search">
+        
+      </div>
+
+    </section>
+    <section class="section-search-results">
+
+      <div id="search-hits">
+        
+      </div>
+
+    </section>
+  </div>
+</aside>
+
+
+  
+
+
+
+
+
+
+
+<nav class="navbar navbar-expand-lg navbar-light compensate-for-scrollbar" id="navbar-main">
+  <div class="container">
+
+    
+    <div class="d-none d-lg-inline-flex">
+      <a class="navbar-brand" href="../../">Bionew</a>
+    </div>
+    
+
+    
+    <button type="button" class="navbar-toggler" data-toggle="collapse"
+            data-target="#navbar-content" aria-controls="navbar" aria-expanded="false" aria-label="切换导航">
+    <span><i class="fas fa-bars"></i></span>
+    </button>
+    
+
+    
+    <div class="navbar-brand-mobile-wrapper d-inline-flex d-lg-none">
+      <a class="navbar-brand" href="../../">Bionew</a>
+    </div>
+    
+
+    
+    
+    <div class="navbar-collapse main-menu-item collapse justify-content-start" id="navbar-content">
+
+      
+      <ul class="navbar-nav d-md-inline-flex">
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        
+        
+        
+        
+        
+        
+          
+          
+          
+            
+          
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link " href="../../#hero"><span>Demo</span></a>
+        </li>
+
+        
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        
+        
+        
+        
+        
+        
+          
+          
+          
+            
+          
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link " href="../../#posts"><span>Posts</span></a>
+        </li>
+
+        
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        
+        
+        
+        
+        
+        
+          
+          
+          
+            
+          
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link " href="../../#projects"><span>Projects</span></a>
+        </li>
+
+        
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        
+        
+        
+        
+        
+        
+          
+          
+          
+            
+          
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link " href="../../#featured"><span>Publications</span></a>
+        </li>
+
+        
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        
+        
+        
+        
+        
+        
+
+        <li class="nav-item">
+          <a class="nav-link " href="../../courses/"><span>Courses</span></a>
+        </li>
+
+        
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        
+        
+        
+        
+        
+        
+          
+          
+          
+            
+          
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link " href="../../#contact"><span>Contact</span></a>
+        </li>
+
+        
+        
+
+      
+
+        
+      </ul>
+    </div>
+
+    <ul class="nav-icons navbar-nav flex-row ml-auto d-flex pl-md-2">
+      
+      <li class="nav-item">
+        <a class="nav-link js-search" href="#"><i class="fas fa-search" aria-hidden="true"></i></a>
+      </li>
+      
+
+      
+      <li class="nav-item">
+        <a class="nav-link js-dark-toggle" href="#"><i class="fas fa-moon" aria-hidden="true"></i></a>
+      </li>
+      
+
+      
+
+    </ul>
+
+  </div>
+</nav>
+
+
+  <article class="article">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+  
+  
+<div class="article-container pt-3">
+  <h1>R语言统计入门-第十章</h1>
+
+  
+
+  
+    
+
+
+<div class="article-metadata">
+
+  
+  
+
+  
+  <span class="article-date">
+    
+    
+      
+    
+    Sep 7, 2018
+  </span>
+  
+
+  
+
+  
+  <span class="middot-divider"></span>
+  <span class="article-reading-time">
+    20 分钟阅读时长
+  </span>
+  
+
+  
+  
+  
+
+  
+  
+  <span class="middot-divider"></span>
+  <span class="article-categories">
+    <i class="fas fa-folder mr-1"></i><a href="../../categories/r/">R</a>, <a href="">统计</a></span>
+  
+
+</div>
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+</div>
+
+
+
+  <div class="article-container">
+
+    <div class="article-style">
+      
+
+
+<div id="-" class="section level1">
+<h1>第十章 数据处理的高级技术</h1>
+<div class="section level2">
+<h2>10.1 变量的重编码</h2>
+<div id="cut" class="section level3">
+<h3>10.1.1 cut函数</h3>
+<p>有的时候可能需要将一个变量转换成一个分组因子。比如将数据分成5个年龄组进行展示，但是数据集中的年龄是一个定量变量，该变量的值对应的记录单位是整数年或者更细分的时间单位。这个时候就需要cut函数了。</p>
+<p>这个函数有两个基本参数：一个数值向量和一个节点向量。后者的作用是定义一系列数据区间以对变量进行分组。对于每一个区间，都得指定左右两个端点值——也就是说，节点的数目必须等于所有区间数目再加一。一个常见的错误是认为数据区间最外层的节点可以省略及所有区间外的点会被设定为NA。最外层的节点值可用-Inf和Inf来表示。</p>
+<p>默认情况下，数据区间是左开右闭的。也就是说，每个区间都包括右节点。除非设置include.lowest=TRUE使第一个区间成为闭区间，否则，第一个区间不会包含最小节点。</p>
+<p>在流行病学领域，人们可能更多地按照“40-49岁”这种年龄区间来对数据进行分组。这种与默认区间闭合方向相反的分组方式可以通过设置right=FALSE来得到。</p>
+<p>当然，当使用左闭右开类型的区间时，丢失最外区间端点的问题就转移到了最大节点那一端。此时，设定include.lowest事实上将使最大节点值包含到区间里面来。在下面的例子中，区别就在于区间结果是否包含两个年龄刚好16岁的样本。</p>
+<pre class="r"><code>library(ISwR)
+age &lt;- subset(juul, age &gt;= 10 &amp; age &lt;=16)$age
+range(age)</code></pre>
+<pre><code>## [1] 10.01 16.00</code></pre>
+<pre class="r"><code>agegr &lt;- cut(age, seq(10, 16, 2),right = F, include.lowest = T)
+length(age)</code></pre>
+<pre><code>## [1] 502</code></pre>
+<pre class="r"><code>table(agegr)</code></pre>
+<pre><code>## agegr
+## [10,12) [12,14) [14,16] 
+##     190     168     144</code></pre>
+<pre class="r"><code>agegr2 &lt;- cut(age, seq(10, 16, 2), right = F)
+table(agegr2)</code></pre>
+<pre><code>## agegr2
+## [10,12) [12,14) [14,16) 
+##     190     168     142</code></pre>
+<p>有时候想要把数据进行等距分组。此时，可用4.1节中介绍过的quantile函数来生成区间节点。比如，可以运行如下的代码：</p>
+<pre class="r"><code>q &lt;- quantile(age, c(0, 0.25, 0.50, 0.75, 1))
+q</code></pre>
+<pre><code>##      0%     25%     50%     75%    100% 
+## 10.0100 11.3825 12.6400 14.2275 16.0000</code></pre>
+<pre class="r"><code>ageQ &lt;- cut(age, q, include.lowest = T)
+table(ageQ)</code></pre>
+<pre><code>## ageQ
+##   [10,11.4] (11.4,12.6] (12.6,14.2]   (14.2,16] 
+##         126         125         125         126</code></pre>
+<p>有时，cut函数返回的水平名字非常难看。好在可以方便地对其进行调整。如下：</p>
+<pre class="r"><code>levels(ageQ) &lt;- c(&quot;1st&quot;, &quot;2nd&quot;, &quot;3rd&quot;, &quot;4th&quot;)
+levels(agegr) &lt;- c(&quot;10-11&quot;, &quot;12-13&quot;, &quot;14-15&quot;)
+table(ageQ)</code></pre>
+<pre><code>## ageQ
+## 1st 2nd 3rd 4th 
+## 126 125 125 126</code></pre>
+<pre class="r"><code>table(agegr)</code></pre>
+<pre><code>## agegr
+## 10-11 12-13 14-15 
+##   190   168   144</code></pre>
+<p>附：Hmisc包中有一个cut2函数，该函数能对上述操作进行简化。</p>
+</div>
+<div class="section level3">
+<h3>10.1.2 处理因子</h3>
+<p>在1.2.8节中，使用levels &lt;-…… 来改变因子的因子水平集合。</p>
+<p>本小节将继续讨论一些相关内容。</p>
+<p>首先，要注意到，将数值输入转化为因子以及对因子水平进行重命名的操作可以进一步完成：</p>
+<pre class="r"><code>pain &lt;- c(0, 3, 2, 2, 1)
+fpain &lt;- factor(pain, levels = 0:3, labels = c(&quot;none&quot;, &quot;mild&quot;, &quot;medium&quot;, &quot;severe&quot;))</code></pre>
+<p>注意levels与labels之间的区别。后者指的是输出结果的因子水平，而前者对应的是对输入向量的编码（这里对应的是变量pain）。更准确地说，levels指代的是函数输入，而lables指代的是函数的输出。</p>
+<p>若未指明levels参数，函数会将向量中出现的剔除重复项的值排序后作为因子水平。这种操作有时不尽人意，比如，对于文本型变量，系统默认按照“字典顺序”对其进行排序。考虑下面的例子：</p>
+<pre class="r"><code>text.pain &lt;- c(&quot;none&quot;, &quot;severe&quot;, &quot;medium&quot;, &quot;medium&quot;, &quot;mild&quot;)
+factor(text.pain)</code></pre>
+<pre><code>## [1] none   severe medium medium mild  
+## Levels: medium mild none severe</code></pre>
+<p>factor函数把因子当做字符型向量来处理，因而，，可以按照下面的方式来对因子水平的顺序进行重排。</p>
+<pre class="r"><code>ftpain &lt;- factor(text.pain)
+ftpain2 &lt;- factor(ftpain, levels = c(&quot;none&quot;, &quot;mild&quot;, &quot;medium&quot;, &quot;severe&quot;))
+ftpain</code></pre>
+<pre><code>## [1] none   severe medium medium mild  
+## Levels: medium mild none severe</code></pre>
+<pre class="r"><code>ftpain2</code></pre>
+<pre><code>## [1] none   severe medium medium mild  
+## Levels: none mild medium severe</code></pre>
+<p>另一种典型的操作是将两个或多个因子水平进行合并。当各个分组内样本数目太少，无法进行有效的统计分析时，长长需要这样做。比如，可能想将上例中的“medium”水平合并成一个叫“intermediate”的因子水平。为了实现这个目的，levels的赋值形式允许右边是一个列表。</p>
+<pre class="r"><code>ftpain3 &lt;- ftpain2
+levels(ftpain3) &lt;- list(none = &quot;none&quot;, intermediate = c(&quot;mild&quot;, &quot;medium&quot;), severe = &quot;severe&quot;)
+ftpain3</code></pre>
+<pre><code>## [1] none         severe       intermediate intermediate intermediate
+## Levels: none intermediate severe</code></pre>
+<p>然而，直接改变水平名字，给不同的组赋予相同的名字常常更为便捷：</p>
+<pre class="r"><code>ftpain4 &lt;- ftpain2
+levels(ftpain4) &lt;- c(&quot;none&quot;, &quot;intermediate&quot;, &quot;intermediate&quot;, &quot;severe&quot;)
+ftpain4</code></pre>
+<pre><code>## [1] none         severe       intermediate intermediate intermediate
+## Levels: none intermediate severe</code></pre>
+</div>
+<div class="section level3">
+<h3>10.1.3 日期的使用</h3>
+<p>在流行病学和生存数据领域，经常要处理按日历日期格式表示的时间变量。世界上各地使用的日期格式不同，有时，需要读取一些与我们所在地区的时间不同的日期数据。R中的“Date”类以及相关的转换程序可以方便地处理这些问题。</p>
+<p>下面以爱沙尼亚的中风研究数据为例。一个经过预处理的数据保存在数据框stroke中。原始数据保存在ISwR包中的rawdata文件夹中，运行下面的代码可以读入原始数据：</p>
+<pre class="r"><code>stroke &lt;- read.csv2(
+  system.file(&quot;rawdata&quot;, &quot;stroke.csv&quot;, package = &quot;ISwR&quot;),
+  na.strings = &quot;.&quot;
+)
+names(stroke) &lt;- tolower(names(stroke))
+head(stroke)</code></pre>
+<pre><code>##   sex       died       dstr age dgn coma diab minf han
+## 1   1  7.01.1991  2.01.1991  76 INF    0    0    1   0
+## 2   1       &lt;NA&gt;  3.01.1991  58 INF    0    0    0   0
+## 3   1  2.06.1991  8.01.1991  74 INF    0    0    1   1
+## 4   0 13.01.1991 11.01.1991  77 ICH    0    1    0   1
+## 5   0 23.01.1996 13.01.1991  76 INF    0    1    0   1
+## 6   1 13.01.1991 13.01.1991  48 ICH    1    0    0   1</code></pre>
+<p>在上面的数据集中，两个日期变量died和dstr（date of stroke）被存储为因子型变量，这是read.table函数的默认输出结果。使用函数as.Date将他们转换为“Date”类。这种做法简单明了，但需要特别注意日期的格式。</p>
+<p>本例中使用的格式是用点号分割的（日，月份，年份）格式，其中，年份是用四位数字表示的。这种格式非标准格式，因此，需要明确指出：</p>
+<pre class="r"><code>#这里使用百分号表示日期的各个组成部分
+#%d表示某天
+#%m表示某月
+#%Y则是用四位数格式表示年份，注意Y是大写
+stroke &lt;- transform(stroke, 
+                    died = as.Date(died, format=&quot;%d.%m.%Y&quot;),
+                    dstr = as.Date(dstr, format = &quot;%d.%m.%Y&quot;))</code></pre>
+<p>对日期可以进行算术操作，也就是说，它们的操作方式跟数值向量类似：</p>
+<pre class="r"><code>summary(stroke$died)</code></pre>
+<pre><code>##         Min.      1st Qu.       Median         Mean      3rd Qu. 
+## &quot;1991-01-07&quot; &quot;1992-03-14&quot; &quot;1993-01-23&quot; &quot;1993-02-15&quot; &quot;1993-11-04&quot; 
+##         Max.         NA&#39;s 
+## &quot;1996-02-22&quot;        &quot;338&quot;</code></pre>
+<pre class="r"><code>summary(stroke$dstr)</code></pre>
+<pre><code>##         Min.      1st Qu.       Median         Mean      3rd Qu. 
+## &quot;1991-01-02&quot; &quot;1991-11-08&quot; &quot;1992-08-12&quot; &quot;1992-07-27&quot; &quot;1993-04-30&quot; 
+##         Max. 
+## &quot;1993-12-31&quot;</code></pre>
+<pre class="r"><code>summary(stroke$died-stroke$dstr)</code></pre>
+<pre><code>##   Length    Class     Mode 
+##      829 difftime  numeric</code></pre>
+<pre class="r"><code>#注意结果的单位是天
+head(stroke$died-stroke$dstr)</code></pre>
+<pre><code>## Time differences in days
+## [1]    5   NA  145    2 1836    0</code></pre>
+<p>在数据文件中，死亡日期对应为NA的记录表示病人没有在该项研究的结束日，即1996年1月1日前死亡。根据记录，共有6个病人死亡于该日期之后，然而，由于其他病人中很可能存在着死亡未被记录的情况，我们不得不舍弃这些死亡日期，将这些病人的状况记录为存活至研究结束日。 应当将上述数据进行转换，以使得每个病人都对应于一个结束日期以及显示病人在该结束日期时是存活还是死亡的指标。</p>
+<pre class="r"><code>#pmin函数用于计算最小值，但与只返回一个值的min函数不同，它并行地对多个向量进行计算
+#na.rm参数允许函数在计算过程中忽略NA值
+#所以死亡信息缺失或在1996-1-1之后死亡的个体，其死亡日期被记录为1996-1-1，否则就记录病人真正的死亡日期
+#dead对象对应的表达式简单明了，但仍需检查缺失数据在处理过程中是否处理正确
+stroke &lt;- transform(stroke,
+                    end = pmin(died, as.Date(&quot;1991-1-1&quot;, na.rm = T)),
+                    dead = !is.na(died) &amp; died &lt; as.Date(&quot;1996-1-1&quot;))
+head(stroke)</code></pre>
+<pre><code>##   sex       died       dstr age dgn coma diab minf han        end  dead
+## 1   1 1991-01-07 1991-01-02  76 INF    0    0    1   0 1991-01-01  TRUE
+## 2   1       &lt;NA&gt; 1991-01-03  58 INF    0    0    0   0       &lt;NA&gt; FALSE
+## 3   1 1991-06-02 1991-01-08  74 INF    0    0    1   1 1991-01-01  TRUE
+## 4   0 1991-01-13 1991-01-11  77 ICH    0    1    0   1 1991-01-01  TRUE
+## 5   0 1996-01-23 1991-01-13  76 INF    0    1    0   1 1991-01-01 FALSE
+## 6   1 1991-01-13 1991-01-13  48 ICH    1    0    0   1 1991-01-01  TRUE</code></pre>
+<pre class="r"><code>#最后，为了得到每个人的观测时长，运行如下代码
+stroke &lt;- transform(stroke,
+                obstime= as.numeric(end - dstr, units = &quot;days&quot;)/365.25)</code></pre>
+</div>
+<div class="section level3">
+<h3>10.1.4 多变量重编码</h3>
+<p>有时候可能一个数据集包含了大量需要重新编码的变量（比如调查问卷中的数据，可能有很多基于5分打分制的项目）。此时，可以利用数据框具有的列表特性，对数据框应用lapply函数并结合下标选择对数据进行转换。比如，在处理原始中风数据时，可以按照下面的方式来处理数据。</p>
+<pre class="r"><code>rawstroke &lt;- read.csv2(
+  system.file(&quot;rawdata&quot;, &quot;stroke.csv&quot;, package = &quot;ISwR&quot;),
+  na.strings = &quot;.&quot;)
+ix &lt;- c(&quot;DSTR&quot;, &quot;DIED&quot;)
+rawstroke[ix] &lt;- lapply(rawstroke[ix],
+                        as.Date, format = &quot;%d.%m.%Y&quot;)
+head(rawstroke)</code></pre>
+<pre><code>##   SEX       DIED       DSTR AGE DGN COMA DIAB MINF HAN
+## 1   1 1991-01-07 1991-01-02  76 INF    0    0    1   0
+## 2   1       &lt;NA&gt; 1991-01-03  58 INF    0    0    0   0
+## 3   1 1991-06-02 1991-01-08  74 INF    0    0    1   1
+## 4   0 1991-01-13 1991-01-11  77 ICH    0    1    0   1
+## 5   0 1996-01-23 1991-01-13  76 INF    0    1    0   1
+## 6   1 1991-01-13 1991-01-13  48 ICH    1    0    0   1</code></pre>
+<p>类似的，也可以通过一步操作，将4个二进制变量转换成“No/Yes”型因子。</p>
+<pre class="r"><code>ix &lt;- 6:9
+rawstroke[ix] &lt;- lapply(rawstroke[ix],
+                        factor, levels = 0:1, labels = c(&quot;No&quot;, &quot;Yes&quot;))
+head(rawstroke)</code></pre>
+<pre><code>##   SEX       DIED       DSTR AGE DGN COMA DIAB MINF HAN
+## 1   1 1991-01-07 1991-01-02  76 INF   No   No  Yes  No
+## 2   1       &lt;NA&gt; 1991-01-03  58 INF   No   No   No  No
+## 3   1 1991-06-02 1991-01-08  74 INF   No   No  Yes Yes
+## 4   0 1991-01-13 1991-01-11  77 ICH   No  Yes   No Yes
+## 5   0 1996-01-23 1991-01-13  76 INF   No  Yes   No Yes
+## 6   1 1991-01-13 1991-01-13  48 ICH  Yes   No   No Yes</code></pre>
+</div>
+</div>
+<div class="section level2">
+<h2>10.2 条件计算</h2>
+<p>ifelse函数允许对同一数据集的不同部分做不同计算。下面以10.1.3小节中讨论过的中锋数据的一个子集进行演示。但这里使用的是ISwR包中经过预处理的版本。</p>
+<pre class="r"><code>strokesub &lt;- ISwR::stroke[1:10, 2:3]
+strokesub</code></pre>
+<pre><code>##          died       dstr
+## 1  1991-01-07 1991-01-02
+## 2        &lt;NA&gt; 1991-01-03
+## 3  1991-06-02 1991-01-08
+## 4  1991-01-13 1991-01-11
+## 5        &lt;NA&gt; 1991-01-13
+## 6  1991-01-13 1991-01-13
+## 7  1993-12-01 1991-01-14
+## 8  1991-12-12 1991-01-14
+## 9        &lt;NA&gt; 1991-01-15
+## 10 1993-11-10 1991-01-15</code></pre>
+<p>为计算存活模型需要的研究时间和时间/检查指数，可以运行下面的代码：</p>
+<pre class="r"><code>strokesub &lt;- transform(strokesub,
+                       event = !is.na(died))
+strokesub &lt;- transform(strokesub,
+                       obstime = ifelse(
+                         event, died-dstr, as.Date(&quot;1996-1-1&quot;)-dstr)
+                       )
+strokesub</code></pre>
+<pre><code>##          died       dstr event obstime
+## 1  1991-01-07 1991-01-02  TRUE       5
+## 2        &lt;NA&gt; 1991-01-03 FALSE    1824
+## 3  1991-06-02 1991-01-08  TRUE     145
+## 4  1991-01-13 1991-01-11  TRUE       2
+## 5        &lt;NA&gt; 1991-01-13 FALSE    1814
+## 6  1991-01-13 1991-01-13  TRUE       0
+## 7  1993-12-01 1991-01-14  TRUE    1052
+## 8  1991-12-12 1991-01-14  TRUE     332
+## 9        &lt;NA&gt; 1991-01-15 FALSE    1812
+## 10 1993-11-10 1991-01-15  TRUE    1030</code></pre>
+<p>ifelse函数的工作机制是这样的：它有3个参数，test，yes，no。3个向量长度相同（如果长度不同，系统会自动循环补齐）。当test为真的时候，返回对应的YES的结果；当test为假的时候，返回对应的NO的结果；当条件为NA时，结果返回NA。该函数的操作结果就是YES和NO的拼接。</p>
+</div>
+<div class="section level2">
+<h2>10.3 合并与重构数据框</h2>
+<p>这一节主要是对数据框进行增加记录（垂直）或增加变量合并（水平）的方法。</p>
+<div class="section level3">
+<h3>10.3.1 追加数据框</h3>
+<p>当有众多来自于不同数据源的数据框时，往往会需要将它们进行合并构造一个更大的数据框。在这一小节中，将进行“垂直”合并。所有将要合并的数据框必须有一样的变量，但这些变量在各个子数据框中的顺序<strong>不用完全一致</strong>。</p>
+<p>为模拟上述情况，可以假设juul数据集对应的数据是对男孩群体和女孩群体单独进行收集的。此时，数据框中可能不会包含变量sex，因为对于单独的全体，各个样本对应的性别是一样的。同时支队单独一个性别有意义的变量在另一个样本中也将被忽略。</p>
+<pre class="r"><code>attach(juul)</code></pre>
+<pre><code>## The following object is masked _by_ .GlobalEnv:
+## 
+##     age</code></pre>
+<pre class="r"><code>#注意subset函数中select参数的用法。该参数将数据框的列名替换为序列号，并以返回的序列号对数据框进行引用。负号的作用是移除相应的列，比如，上面的代码将删除juulgrl数据集中的testvol列和sex列。
+juulgrl &lt;- subset(juul, sex==2, select=-c(testvol,sex))
+juulboy &lt;- subset(juul, sex==1, select=-c(menarche,sex))</code></pre>
+<p>为了将数据框合并在一起，必须先加入缺少的变量：</p>
+<pre class="r"><code>juulgrl$sex &lt;- factor(&quot;F&quot;)
+juulgrl$testvol &lt;- NA
+juulboy$sex &lt;- factor(&quot;M&quot;)
+juulboy$menarche &lt;- NA</code></pre>
+<p>接着，对数据框使用rbind函数即可：</p>
+<pre class="r"><code>juulall &lt;- rbind(juulboy, juulgrl)
+names(juulall)</code></pre>
+<pre><code>## [1] &quot;age&quot;      &quot;igf1&quot;     &quot;tanner&quot;   &quot;testvol&quot;  &quot;sex&quot;      &quot;menarche&quot;</code></pre>
+<p>注意，rbind函数在操作过程汇总使用了列名（因此，即使两个数据框中列顺序不同，该函数也不会对不相关的变量进行合并），并且以第一个数据框的变量顺序为参考。最终，结果的变量顺序与juulboy数据集的变量顺序一致。也请注意，rbind函数能够很好地处理合并后的因子水平。</p>
+<pre class="r"><code>levels(juulall$sex)</code></pre>
+<pre><code>## [1] &quot;M&quot; &quot;F&quot;</code></pre>
+</div>
+<div class="section level3">
+<h3>10.3.2 合并数据框</h3>
+<p>有时会拿到一些针对同一批病人的独立数据集。比如说，可能会拿到分别包含患者挂号信息、临床化验数据及问卷调查的数据集。使用cbind函数将数据集<strong>并排</strong>连在一起有时也可行，只不过这种做法有风险：如果数据集中的数据不够完整或者多出了不在某个数据集中的观测样本，想要避免这种情况发生，必须有一个独特的样本识别码。</p>
+<p>merge函数就可以处理这类问题。它会比较每个数据集中的一个或多个变量。这组变量在两个数据集中默认具有相同的名字（一般而言，有一个叫做<em>ID</em>的变量标示测试者的身份）。假设在默认情况下，这两个数据集分别称为dfx和dfy，可以简单通过下面来计算合并的数据框：</p>
+<pre class="r"><code>#这里只是举例子~~~并没有数据集~~~所以用#注释掉
+#merge(dfx, dfy)</code></pre>
+<p>然而，有可能这两个数据集有多个名字相同的变量。此时，可以引入一个by参数，它指定了比较的变量名，如：</p>
+<pre class="r"><code>#同上~这里只是举例子~~~
+#merge(dfx, dfy, by=&quot;ID&quot;)</code></pre>
+<p>两个数据集中的任何其他变量都会在结果中的名字后加后缀<strong>.x</strong>或<strong>.y</strong>。为了安全，在任何时候都应该使用这种格式，这种做法也能增加可读性与明确性。如需要匹配的变量在两个数据框中有不用的名字，则可以使用<strong>by.x</strong>和<strong>by.y</strong>。</p>
+<p>下面用nickel数据集来解释上述概念。该数据描述了南威尔士一个镍冶炼工人队的信息。数据集ewrates则包含了按照年份和以5年间隔的年龄进行分组的人群死亡率表格。</p>
+<pre class="r"><code>head(nickel)</code></pre>
+<pre><code>##   id icd exposure      dob  age1st   agein  ageout
+## 1  3   0        5 1889.019 17.4808 45.2273 92.9808
+## 2  4 162        5 1885.978 23.1864 48.2684 63.2712
+## 3  6 163       10 1881.255 25.2452 52.9917 54.1644
+## 4  8 527        9 1886.340 24.7206 47.9067 69.6794
+## 5  9 150        0 1879.500 29.9575 54.7465 76.8442
+## 6 10 163        2 1889.915 21.2877 44.3314 62.5413</code></pre>
+<pre class="r"><code>head(ewrates)</code></pre>
+<pre><code>##   year age lung nasal other
+## 1 1931  10    1     0  1269
+## 2 1931  15    2     0  2201
+## 3 1931  20    6     0  3116
+## 4 1931  25   14     0  3024
+## 5 1931  30   30     1  3188
+## 6 1931  35   68     1  4165</code></pre>
+<p>假设想根据进入研究群体的日期值来合并这两个数据集。其中，年龄信息包含在变量agein中，进入数据集的日期可用dob + agein计算得出。可以用下面的代码计算ewrates对应的群体编码：</p>
+<pre class="r"><code>head(nickel)</code></pre>
+<pre><code>##   id icd exposure      dob  age1st   agein  ageout
+## 1  3   0        5 1889.019 17.4808 45.2273 92.9808
+## 2  4 162        5 1885.978 23.1864 48.2684 63.2712
+## 3  6 163       10 1881.255 25.2452 52.9917 54.1644
+## 4  8 527        9 1886.340 24.7206 47.9067 69.6794
+## 5  9 150        0 1879.500 29.9575 54.7465 76.8442
+## 6 10 163        2 1889.915 21.2877 44.3314 62.5413</code></pre>
+<pre class="r"><code>nickel &lt;- transform(nickel,
+                    agr = trunc(agein/5)*5,
+                    ygr = trunc((dob + agein-1)/5)*5+1)
+head(nickel)</code></pre>
+<pre><code>##   id icd exposure      dob  age1st   agein  ageout agr  ygr
+## 1  3   0        5 1889.019 17.4808 45.2273 92.9808  45 1931
+## 2  4 162        5 1885.978 23.1864 48.2684 63.2712  45 1931
+## 3  6 163       10 1881.255 25.2452 52.9917 54.1644  50 1931
+## 4  8 527        9 1886.340 24.7206 47.9067 69.6794  45 1931
+## 5  9 150        0 1879.500 29.9575 54.7465 76.8442  50 1931
+## 6 10 163        2 1889.915 21.2877 44.3314 62.5413  40 1931</code></pre>
+<p>trunc函数将变量的小数部分进行趋零取整。注意，年龄的每个组起始于可以被5整除的数，年份的每个组截止的时间榆次对应；这也就是在前面ygr的表达式中先减去1，再在结尾后加上1的原因（事实上，这个步骤并不重要，因为本例中所有录入日期都是1934、1939、1944或者1949年的4月1日）。需要注意的是，这里并没有使用与ewrates数据集中相同的变量名。这么做的原因在于，变量名age和year在nickel数据中不便于理解。</p>
+<p>定义了年龄和年份组之后，接下来的合并过程就很简单了。这里只需要注意一下两个数据框中变量名不同的问题。</p>
+<pre class="r"><code>mrg &lt;- merge(nickel, ewrates,
+             by.x = c(&quot;agr&quot;, &quot;ygr&quot;), 
+             by.y = c(&quot;age&quot;, &quot;year&quot;))
+head(mrg, 10)</code></pre>
+<pre><code>##    agr  ygr  id icd exposure      dob  age1st   agein  ageout lung nasal
+## 1   20 1931 273 154        0 1909.500 14.6913 24.7465 55.9302    6     0
+## 2   20 1931 213 162        0 1910.129 14.2018 24.1177 63.0493    6     0
+## 3   20 1931 546   0        0 1909.500 14.4945 24.7465 72.5000    6     0
+## 4   20 1931 574 491        0 1909.729 14.0356 24.5177 70.6592    6     0
+## 5   20 1931 110   0        0 1909.247 14.0302 24.9999 72.7534    6     0
+## 6   20 1931 325 434        0 1910.500 14.0737 23.7465 43.0343    6     0
+## 7   25 1931  56 502        2 1904.500 18.2917 29.7465 51.5847   14     0
+## 8   25 1931 690 420        0 1906.500 17.2206 27.7465 55.1219   14     0
+## 9   25 1931 443 420        0 1905.326 14.5562 28.9204 65.7616   14     0
+## 10  25 1931 137 465        0 1905.386 19.0808 28.8601 74.2794   14     0
+##    other
+## 1   3116
+## 2   3116
+## 3   3116
+## 4   3116
+## 5   3116
+## 6   3116
+## 7   3024
+## 8   3024
+## 9   3024
+## 10  3024</code></pre>
+</div>
+<div class="section level3">
+<h3>10.3.3 重塑数据框</h3>
+<p>纵向数据有两种格式，一是“宽”格式，其中每个时间点为单独的一列，但每个事件只有一个记录；另一种是“长”格式，其中每个事件都有多余记录，每个时间点有一条记录。因为不需要假设事件都是在相同的时间点被记录的，所以长格式使用更广泛，但在实际应用当中，使用宽格式可能会更容易，而且一些统计函数也需要这种格式的输入。</p>
+<p>在任何一种情况下，都需要从一个格式转换到另一个格式。这就是reshape函数的功用。</p>
+<p>例子如下，病人在罹患乳腺癌之后，采用莫西芬进行治疗。使用病人再次期间的骨代谢的随机化研究数据作为例子。治疗开始之后，碱性磷酸酶在基准日以及治疗开始后的第3、6、9、12、18以及24个月后的浓度数据都被记录了下来。</p>
+<pre class="r"><code>head(alkfos)</code></pre>
+<pre><code>##   grp  c0  c3  c6  c9 c12 c18 c24
+## 1   1 142 140 159 162 152 175 148
+## 2   1 120 126 120 146 134 119 116
+## 3   1 175 161 168 164 213 194 221
+## 4   1 234 203 174 197 289 174 189
+## 5   1  94 107 146 124 128  98 114
+## 6   1 128  97 113 203  NA  NA  NA</code></pre>
+<p>在reshape函数最简单使用情况下，它会假设变量名包含了将数据重整为长格式数据所需的必要信息。它默认变量名和测量时间是由<strong>“.”</strong>来分开的，因此，需要强制修改名字格式来满足这一原则。</p>
+<pre class="r"><code>a2 &lt;- alkfos
+names(a2) &lt;- sub(&quot;c&quot;, &quot;c.&quot;, names(a2))
+names(a2)</code></pre>
+<pre><code>## [1] &quot;grp&quot;  &quot;c.0&quot;  &quot;c.3&quot;  &quot;c.6&quot;  &quot;c.9&quot;  &quot;c.12&quot; &quot;c.18&quot; &quot;c.24&quot;</code></pre>
+<p>sub函数的作用是在字符串内做替换操作。在这个例子中，其把<strong>“c”</strong>替换成了<strong>“c.”</strong>。另外一种方式是通过在reshape命令中加入seq=“”来改变原始名字格式(c0, …, c24)。</p>
+<p>命名好变量名之后，接下来唯一要做的就是指明数据重整的方向以及具有时变性特征的变量整合。这里有一个简介的功能，即后者可以用数据集的列下标来指定，这比使用变量名字引用变量更方便。</p>
+<pre class="r"><code>a.long &lt;- reshape(a2, varying = 2:8, direction = &quot;long&quot;)
+head(a.long)</code></pre>
+<pre><code>##     grp time   c id
+## 1.0   1    0 142  1
+## 2.0   1    0 120  2
+## 3.0   1    0 175  3
+## 4.0   1    0 234  4
+## 5.0   1    0  94  5
+## 6.0   1    0 128  6</code></pre>
+<pre class="r"><code>tail(a.long)</code></pre>
+<pre><code>##       grp time   c id
+## 38.24   2   24  95 38
+## 39.24   2   24  NA 39
+## 40.24   2   24 192 40
+## 41.24   2   24  94 41
+## 42.24   2   24 194 42
+## 43.24   2   24 129 43</code></pre>
+<p>注意，结果的排列顺序是，先按照time变量继续排序，对每个time变量，再根据ID进行排序。从技术角度而言，这是最方便生成的格式。如果喜欢相反的排列顺序，可以运行下面的代码：</p>
+<pre class="r"><code>o &lt;- with(a.long, order(id, time))
+head(a.long[o,], 10)</code></pre>
+<pre><code>##      grp time   c id
+## 1.0    1    0 142  1
+## 1.3    1    3 140  1
+## 1.6    1    6 159  1
+## 1.9    1    9 162  1
+## 1.12   1   12 152  1
+## 1.18   1   18 175  1
+## 1.24   1   24 148  1
+## 2.0    1    0 120  2
+## 2.3    1    3 126  2
+## 2.6    1    6 120  2</code></pre>
+<p>我们使用同一个数据集演示一遍相反的操作过程，这次数据集的初始存储格式是长格式。事实上，这个操作过程有点过于简单了，因为reshape已经在它的输出中给出了足够的信息，只需要运行reshape(a.long)命令即可实现向宽格式的转换。为模拟原始数据是长格式的情况，这里先去掉了这些数据当中的“reshape Long”的属性。同时，使用na.omit函数删除数据集中具有缺失数据的记录。</p>
+<pre class="r"><code>a.long2 &lt;- na.omit(a.long)
+attr(a.long2, &quot;reshapeLong&quot;) &lt;- NULL
+#使用下面的代码把a.long2转换为宽格式
+a.wide2 &lt;- reshape(a.long2, direction = &quot;wide&quot;,
+                   v.names = &quot;c&quot;, idvar = &quot;id&quot;,
+                   timevar = &quot;time&quot;)
+head(a.wide2)</code></pre>
+<pre><code>##     grp id c.0 c.3 c.6 c.9 c.12 c.18 c.24
+## 1.0   1  1 142 140 159 162  152  175  148
+## 2.0   1  2 120 126 120 146  134  119  116
+## 3.0   1  3 175 161 168 164  213  194  221
+## 4.0   1  4 234 203 174 197  289  174  189
+## 5.0   1  5  94 107 146 124  128   98  114
+## 6.0   1  6 128  97 113 203   NA   NA   NA</code></pre>
+<p>注意，6号病人对应的缺失记录以NA进行了填充；对他而言，只有前四次的记录。</p>
+<p>参数idvar和timevar指定了结果中变量名包括每次观测对应的ID以及时间的变量名。如它们具有默认的名字，那么，也可以不用指定，但这么做是比较好的做法。参数v.names指明了随时间改变的变量。如果忽略了它，那么grp变量也将被当做时间改变的变量。</p>
+</div>
+</div>
+<div class="section level2">
+<h2>10.4 数据的分组及分案例操作</h2>
+<p>本节的例子包括计算某药物动力学试验中的累计剂量以及各种对数据进行归一化和标准化的方法。</p>
+<p>对于这类问题，最好将数据拆分为包含多个组的列表，接着分别对每个组中包含的列表进行计算，最后将结果放在一起。</p>
+<p>考虑将a.long数据集中碱性磷酸酶值以基准日的观测值为中心进行归一化。可以考虑用split函数生成一个对应于不同测量时间的列表。</p>
+<pre class="r"><code>#这是小写的L不是数字1
+l &lt;- split(a.long$c, a.long$id)
+l[1:3]</code></pre>
+<pre><code>## $`1`
+## [1] 142 140 159 162 152 175 148
+## 
+## $`2`
+## [1] 120 126 120 146 134 119 116
+## 
+## $`3`
+## [1] 175 161 168 164 213 194 221</code></pre>
+<p>接下来，使用lapply函数对列表中的所有元素应用某个特定函数，并将数据保存。</p>
+<pre class="r"><code>#同样是小写的L
+l2 &lt;- lapply(l, function(x) x / x[1])
+l2[1:3]</code></pre>
+<pre><code>## $`1`
+## [1] 1.0000000 0.9859155 1.1197183 1.1408451 1.0704225 1.2323944 1.0422535
+## 
+## $`2`
+## [1] 1.0000000 1.0500000 1.0000000 1.2166667 1.1166667 0.9916667 0.9666667
+## 
+## $`3`
+## [1] 1.0000000 0.9200000 0.9600000 0.9371429 1.2171429 1.1085714 1.2628571</code></pre>
+<p>最后，用split的逆操作函数unsplit将各个<em>切片</em>的结果拼回在一起。请注意，a.long对应的id在time的同一水平下进行了排序，因此，该操作并不是简单地把l2中的元素拼接在一起。第一名病人对应的数据如下：</p>
+<pre class="r"><code>a.long$c.adj &lt;- unsplit(l2, a.long$id)
+subset(a.long, id==1)</code></pre>
+<pre><code>##      grp time   c id     c.adj
+## 1.0    1    0 142  1 1.0000000
+## 1.3    1    3 140  1 0.9859155
+## 1.6    1    6 159  1 1.1197183
+## 1.9    1    9 162  1 1.1408451
+## 1.12   1   12 152  1 1.0704225
+## 1.18   1   18 175  1 1.2323944
+## 1.24   1   24 148  1 1.0422535</code></pre>
+<p>事实上，有一个将这种分割–修改–合并操作规范化的函数，即ave。它的默认功能是用组的平均值来替换数据。不过，基于该函数能够做很多更一般的转换。下面是另一种可得到上述操作结果的方法：</p>
+<pre class="r"><code>a.long$c.adj &lt;- ave(a.long$c, a.long$id,
+                    FUN = function(x) x / x[1])</code></pre>
+<p>在前面的代码中，支队a.long$c进行了操作。当然，也可以使用下面的代码对整个数据框进行<em>切片处理</em>：</p>
+<pre class="r"><code>l &lt;- split(a.long, a.long$id)
+l2 &lt;- lapply(l, transform, c.adj = c / c[1])
+a.long2 &lt;- unsplit(l2, a.long$id)</code></pre>
+<p>请注意lapply的最后一个参数是如何被传递给transform函数的。我们实际上是对列表1中的每个数据框 x 调用了transform(x, c.adj = c / c[1])操作。这种做法比前一种低效，因为该操作设计太多数据的靠背过程，但它对更复杂的数据操作进行了一般性的概括。</p>
+</div>
+<div class="section level2">
+<h2>10.5 时间分割</h2>
+<p>在10.3.2小节中，对nickel和ewrates进行的合并操作不具有太多统计上的意义：只是在死亡率表中并入了对应的个体进入研究群体的年龄。然而，该数据集是关于癌症的，癌症是一种慢性疾病，确诊之后，在20年或更久之后会面临日益增大的风险。加入实验对象一般在50岁左右死亡，那么，对30岁的人来将，群体死亡率几乎和他们无关。</p>
+<p>一个合理的统计研究需要考虑整个后续观察期间的群体死亡率。将这些个体分割成多个<strong>“子个体”</strong>。</p>
+<pre class="r"><code>#在这个数据集中，前六个观测是：
+head(nickel)</code></pre>
+<pre><code>##   id icd exposure      dob  age1st   agein  ageout agr  ygr
+## 1  3   0        5 1889.019 17.4808 45.2273 92.9808  45 1931
+## 2  4 162        5 1885.978 23.1864 48.2684 63.2712  45 1931
+## 3  6 163       10 1881.255 25.2452 52.9917 54.1644  50 1931
+## 4  8 527        9 1886.340 24.7206 47.9067 69.6794  45 1931
+## 5  9 150        0 1879.500 29.9575 54.7465 76.8442  50 1931
+## 6 10 163        2 1889.915 21.2877 44.3314 62.5413  40 1931</code></pre>
+<p>考虑id==4的个体，该个体在48.2684岁时进入研究群体，死亡于63.2712岁（我去~好精确，怎么做到的）。时序分割方法把这个实验人员当成4个独立的研究对象，一个在46.2684岁时进入此项研究，并在50岁时离开（50岁生日）；其他的研究对象分别包括50-55岁，55-60岁以及60-63.2712岁的时间间隔。前三个对象都是需要被去掉的，因为研究对象并没有死亡。</p>
+<p>如果把这些数据与人口列表合并，就能计算出给定年龄区间中的期望死亡人数，并可以将它与实际死亡人数进行比较。</p>
+<p>利用R语言向量化运算的性质，可以通过对各个年龄区间做循环来很好地解决这个问题，同时，要将每个观测时期都“裁剪”到各个年龄区间内。</p>
+<p>为了将观测时期裁剪到年龄介于60-65岁之间，如果进出这个年龄段的时间在该年龄段范围之外，需要对其进行调整。可以删除那些在该年龄段内没有观测数据的案例。另外，如果擦拭对象在这个年龄段内没有死亡，对应的icd应设定为0.</p>
+<p>最简单的方法是<em>“先射击再定靶”</em>。调整后的进入和退出时间为：</p>
+<pre class="r"><code>entry &lt;- pmax(nickel$agein, 60)
+exit &lt;- pmin(nickel$ageout, 65)</code></pre>
+<p>然而，有时会出现观测对象在60岁前就离开了测试群体，也有人在65岁之后才进入测试群体。在这两种情况下，出错的原因就在于entry &gt; exit，因此，可以通过计算下面的值来对此进行检查：</p>
+<pre class="r"><code>valid &lt;- (entry &lt; exit)
+entry &lt;- entry[valid]
+exit &lt;- exit[valid]
+#有效案例对应的审查指标是
+cens &lt;- (nickel$ageout[valid] &gt; 65)
+#下面的代码可以得到切割后的数据集
+nickel60 &lt;- nickel[valid,]
+nickel60$icd[cens] &lt;- 0
+nickel60$agein &lt;- entry
+nickel60$ageout &lt;- exit
+nickel60$agr &lt;- 60
+nickel60ygr &lt;- with(nickel60, trunc((dob + agein - 1)/5)*5+1)</code></pre>
+<p>结果的第一行是：</p>
+<pre class="r"><code>head(nickel60)</code></pre>
+<pre><code>##   id icd exposure      dob  age1st agein  ageout agr  ygr
+## 1  3   0        5 1889.019 17.4808    60 65.0000  60 1931
+## 2  4 162        5 1885.978 23.1864    60 63.2712  60 1931
+## 4  8   0        9 1886.340 24.7206    60 65.0000  60 1931
+## 5  9   0        0 1879.500 29.9575    60 65.0000  60 1931
+## 6 10 163        2 1889.915 21.2877    60 62.5413  60 1931
+## 7 15 334        0 1890.500 23.2836    60 62.0000  60 1931</code></pre>
+<p>有几点需要注意：如有人恰好在65岁时死亡，则被记录为在年龄区间（60-65岁）内死亡。与此对应，我们不会将正好在60岁死亡的人纳入该区间，因为那属于55-60岁区间。因为ygr是基于原始的agein变量计算得出的。所以有必要重算ygr的值。</p>
+<p>为得到整个扩展的数据集，可以将每个年龄区间20-25，25-30等重复上述操作，并用rbind函数将结果返回的16个数据框拼接在一起。不过这太麻烦了，而且可能会出错。一个替代方案就是写一个单独的程序。</p>
+<pre class="r"><code>#首先，将应用到每个组的处理方法封装成函数：
+trim &lt;- function(start)
+{
+  end &lt;- start + 5
+  entry &lt;- pmax(nickel$agein, start)
+  exit &lt;- pmin(nickel$ageout, end)
+  valid &lt;- (entry &lt; exit)
+  cens &lt;- (nickel$ageout[valid] &gt; end)
+  result &lt;- nickel[valid,]
+  result$icd[cens] &lt;- 0
+  result$agein &lt;- entry[valid]
+  result$ageout &lt;- exit[valid]
+  result$agr &lt;- start
+  result$ygr &lt;- with(result, trunc((dob + agein - 1)/5)*5+1)
+  result
+}</code></pre>
+<p>这是一个典型的专用程序。有雨这个函数依赖于已知的各种变量名，而且把间隔长度强制限制为5，因此，它不能用在别的地方（~这不废话吗）。</p>
+<p>在这个定义下，trim(60)等价于前文中计算过的nickel60：</p>
+<pre class="r"><code>head(trim(60))</code></pre>
+<pre><code>##   id icd exposure      dob  age1st agein  ageout agr  ygr
+## 1  3   0        5 1889.019 17.4808    60 65.0000  60 1946
+## 2  4 162        5 1885.978 23.1864    60 63.2712  60 1941
+## 4  8   0        9 1886.340 24.7206    60 65.0000  60 1946
+## 5  9   0        0 1879.500 29.9575    60 65.0000  60 1936
+## 6 10 163        2 1889.915 21.2877    60 62.5413  60 1946
+## 7 15 334        0 1890.500 23.2836    60 62.0000  60 1946</code></pre>
+<p>使用下面的代码，可得到所有间隔的结果：</p>
+<pre class="r"><code>nickel.expand &lt;- do.call(&quot;rbind&quot;, lapply(seq(20, 95, 5), trim))
+head(nickel.expand)</code></pre>
+<pre><code>##      id icd exposure      dob  age1st   agein ageout agr  ygr
+## 84  110   0        0 1909.247 14.0302 24.9999     25  20 1931
+## 156 213   0        0 1910.129 14.2018 24.1177     25  20 1931
+## 197 273   0        0 1909.500 14.6913 24.7465     25  20 1931
+## 236 325   0        0 1910.500 14.0737 23.7465     25  20 1931
+## 384 546   0        0 1909.500 14.4945 24.7465     25  20 1931
+## 400 574   0        0 1909.729 14.0356 24.5177     25  20 1931</code></pre>
+<p>这里的do.call结构调用了rbind，并给了它一个参数列表。这里参数列表对应的是lapply函数的返回值。而lapply函数的作用是对20，25，……，95等值执行trim函数。上面的代码等价于：</p>
+<pre class="r"><code>#这个只是演示~不能运行
+#rbind(trim(20), trim(25),.....,trim(95))</code></pre>
+<p>例如，显示一个实验对象，得到的结果如下：</p>
+<pre class="r"><code>subset(nickel.expand, id==4)</code></pre>
+<pre><code>##      id icd exposure      dob  age1st   agein  ageout agr  ygr
+## 2     4   0        5 1885.978 23.1864 48.2684 50.0000  45 1931
+## 2100  4   0        5 1885.978 23.1864 50.0000 55.0000  50 1931
+## 2102  4   0        5 1885.978 23.1864 55.0000 60.0000  55 1936
+## 2104  4 162        5 1885.978 23.1864 60.0000 63.2712  60 1941</code></pre>
+<p>最后一步，将死亡率表合并，这与10.3.2小节中的步骤一样：</p>
+<pre class="r"><code>nickel.expand &lt;- merge(nickel.expand, ewrates,
+                       by.x = c(&quot;agr&quot;, &quot;ygr&quot;), by.y = c(&quot;age&quot;, &quot;year&quot;))
+head(nickel.expand)</code></pre>
+<pre><code>##   agr  ygr  id icd exposure      dob  age1st   agein ageout lung nasal
+## 1  20 1931 325   0        0 1910.500 14.0737 23.7465     25    6     0
+## 2  20 1931 273   0        0 1909.500 14.6913 24.7465     25    6     0
+## 3  20 1931 110   0        0 1909.247 14.0302 24.9999     25    6     0
+## 4  20 1931 574   0        0 1909.729 14.0356 24.5177     25    6     0
+## 5  20 1931 213   0        0 1910.129 14.2018 24.1177     25    6     0
+## 6  20 1931 546   0        0 1909.500 14.4945 24.7465     25    6     0
+##   other
+## 1  3116
+## 2  3116
+## 3  3116
+## 4  3116
+## 5  3116
+## 6  3116</code></pre>
+</div>
+<div class="section level2">
+<h2>练习题</h2>
+<ol style="list-style-type: decimal">
+<li>生成一个因子，其中thuesen数据中的变量blood.glucose被切分为区间(4,7]、(7,9]、(9,12]、(12,20]。同时，修改因子水平名称为“low”、“intermediate”、“high”和“very high”。</li>
+<li>在bcmort数据集中，四水平因子cohort可以看做两个双水平因子的乘积，比如period和area。如何生成这些变量。</li>
+<li>将ashina数据集转换为长格式。考虑如何编码才能判断vas测量值是是来自第一个还是第二个测量过程。</li>
+<li>将sroke数据按照obsmonths切分到中风后0-0.5、0.5-2、2-12以及12+的时间区间中。</li>
+</ol>
+</div>
+</div>
+
+    </div>
+
+    
+
+
+
+
+
+<div class="article-tags">
+  
+  <a class="badge badge-light" href="../../tags/r/">R</a>
+  
+  <a class="badge badge-light" href="">统计</a>
+  
+</div>
+
+
+
+<div class="share-box" aria-hidden="true">
+  <ul class="share">
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="https://twitter.com/intent/tweet?url=/post/r%E8%AF%AD%E8%A8%80%E7%BB%9F%E8%AE%A1%E5%85%A5%E9%97%A8-%E7%AC%AC%E5%8D%81%E7%AB%A0/&amp;text=R%e8%af%ad%e8%a8%80%e7%bb%9f%e8%ae%a1%e5%85%a5%e9%97%a8-%e7%ac%ac%e5%8d%81%e7%ab%a0" target="_blank" rel="noopener" class="share-btn-twitter">
+          <i class="fab fa-twitter"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="https://www.facebook.com/sharer.php?u=/post/r%E8%AF%AD%E8%A8%80%E7%BB%9F%E8%AE%A1%E5%85%A5%E9%97%A8-%E7%AC%AC%E5%8D%81%E7%AB%A0/&amp;t=R%e8%af%ad%e8%a8%80%e7%bb%9f%e8%ae%a1%e5%85%a5%e9%97%a8-%e7%ac%ac%e5%8d%81%e7%ab%a0" target="_blank" rel="noopener" class="share-btn-facebook">
+          <i class="fab fa-facebook"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="mailto:?subject=R%e8%af%ad%e8%a8%80%e7%bb%9f%e8%ae%a1%e5%85%a5%e9%97%a8-%e7%ac%ac%e5%8d%81%e7%ab%a0&amp;body=/post/r%E8%AF%AD%E8%A8%80%E7%BB%9F%E8%AE%A1%E5%85%A5%E9%97%A8-%E7%AC%AC%E5%8D%81%E7%AB%A0/" target="_blank" rel="noopener" class="share-btn-email">
+          <i class="fas fa-envelope"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="https://www.linkedin.com/shareArticle?url=/post/r%E8%AF%AD%E8%A8%80%E7%BB%9F%E8%AE%A1%E5%85%A5%E9%97%A8-%E7%AC%AC%E5%8D%81%E7%AB%A0/&amp;title=R%e8%af%ad%e8%a8%80%e7%bb%9f%e8%ae%a1%e5%85%a5%e9%97%a8-%e7%ac%ac%e5%8d%81%e7%ab%a0" target="_blank" rel="noopener" class="share-btn-linkedin">
+          <i class="fab fa-linkedin-in"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="https://web.whatsapp.com/send?text=R%e8%af%ad%e8%a8%80%e7%bb%9f%e8%ae%a1%e5%85%a5%e9%97%a8-%e7%ac%ac%e5%8d%81%e7%ab%a0%20/post/r%E8%AF%AD%E8%A8%80%E7%BB%9F%E8%AE%A1%E5%85%A5%E9%97%A8-%E7%AC%AC%E5%8D%81%E7%AB%A0/" target="_blank" rel="noopener" class="share-btn-whatsapp">
+          <i class="fab fa-whatsapp"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="https://service.weibo.com/share/share.php?url=/post/r%E8%AF%AD%E8%A8%80%E7%BB%9F%E8%AE%A1%E5%85%A5%E9%97%A8-%E7%AC%AC%E5%8D%81%E7%AB%A0/&amp;title=R%e8%af%ad%e8%a8%80%e7%bb%9f%e8%ae%a1%e5%85%a5%e9%97%a8-%e7%ac%ac%e5%8d%81%e7%ab%a0" target="_blank" rel="noopener" class="share-btn-weibo">
+          <i class="fab fa-weibo"></i>
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+  
+  
+  
+    
+  
+  
+  
+  <div class="media author-card content-widget-hr">
+    
+      
+      <img class="avatar mr-3 avatar-circle" src="../../authors/admin/avatar_hu04cc06b45fe3d1130f73ba3a4699b934_34764_270x270_fill_q90_lanczos_center.jpg" alt="Avatar">
+    
+
+    <div class="media-body">
+      <h5 class="card-title"><a href="../../">Dr.二哈</a></h5>
+      <h6 class="card-subtitle">在读苦逼科研狗</h6>
+      <p class="card-text">研究方向：脂质营养，业余时间自学R。</p>
+      <ul class="network-icon" aria-hidden="true">
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <li>
+      <a href="../../#contact" >
+        <i class="fas fa-envelope"></i>
+      </a>
+    </li>
+  
+</ul>
+
+    </div>
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <div class="article-widget content-widget-hr">
+    <h3>相关</h3>
+    <ul>
+      
+      <li><a href="../../post/r%E8%AF%AD%E8%A8%80%E7%BB%9F%E8%AE%A1%E5%85%A5%E9%97%A8-%E7%AC%AC%E4%B9%9D%E7%AB%A0/">R语言统计入门-第九章</a></li>
+      
+      <li><a href="../../post/r%E8%AF%AD%E8%A8%80%E7%BB%9F%E8%AE%A1%E5%85%A5%E9%97%A8-%E7%AC%AC%E5%85%AB%E7%AB%A0/">R语言统计入门-第八章</a></li>
+      
+      <li><a href="../../post/r%E8%AF%AD%E8%A8%80%E7%BB%9F%E8%AE%A1%E5%85%A5%E9%97%A8-%E7%AC%AC%E4%B8%83%E7%AB%A0/">R语言统计入门-第七章</a></li>
+      
+      <li><a href="../../post/r%E8%AF%AD%E8%A8%80%E7%BB%9F%E8%AE%A1%E5%85%A5%E9%97%A8-%E7%AC%AC%E5%85%AD%E7%AB%A0/">R语言统计入门-第六章</a></li>
+      
+      <li><a href="../../post/r%E8%AF%AD%E8%A8%80%E7%BB%9F%E8%AE%A1%E5%85%A5%E9%97%A8-%E7%AC%AC%E5%9B%9B%E7%AB%A0/">R语言统计入门-第四章</a></li>
+      
+    </ul>
+  </div>
+  
+
+
+
+  </div>
+</article>
+
+      
+
+    
+    
+    
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.imagesloaded/4.1.4/imagesloaded.pkgd.min.js" integrity="sha256-lqvxZrPLtfffUl2G/e7szqSvPBILGbwmsGE1MKlOi0Q=" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.isotope/3.0.6/isotope.pkgd.min.js" integrity="sha256-CBrpuqrMhXwcLLUd5tvQ4euBHCdh7wGlDfNz8vbu/iI=" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js" integrity="sha256-yt2kYMy0w8AbtF89WXb2P1rfjcP/HTHLT7097U8Y5b8=" crossorigin="anonymous"></script>
+
+      
+
+      
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.1/highlight.min.js" integrity="sha256-eOgo0OtLL4cdq7RdwRUiGKLX9XsIJ7nGhWEKbohmVAQ=" crossorigin="anonymous"></script>
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.1/languages/r.min.js"></script>
+        
+      
+
+    
+
+    
+    
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.5.1/leaflet.js" integrity="sha256-EErZamuLefUnbMBQbsEqu1USa+btR2oIlCpBJbyD4/g=" crossorigin="anonymous"></script>
+    
+
+    
+    
+    <script>const code_highlighting = true;</script>
+    
+
+    
+    
+    <script>const isSiteThemeDark = false;</script>
+    
+
+    
+    
+    
+    
+    
+    
+    <script>
+      const search_config = {"indexURI":"/index.json","minLength":1,"threshold":0.3};
+      const i18n = {"no_results":"没有找到结果","placeholder":"搜索...","results":"搜索结果"};
+      const content_type = {
+        'post': "文章",
+        'project': "项目",
+        'publication' : "出版物",
+        'talk' : "演讲"
+        };
+    </script>
+    
+
+    
+    
+
+    
+    
+    <script id="search-hit-fuse-template" type="text/x-template">
+      <div class="search-hit" id="summary-{{key}}">
+      <div class="search-hit-content">
+        <div class="search-hit-name">
+          <a href="{{relpermalink}}">{{title}}</a>
+          <div class="article-metadata search-hit-type">{{type}}</div>
+          <p class="search-hit-description">{{snippet}}</p>
+        </div>
+      </div>
+      </div>
+    </script>
+    
+
+    
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/3.2.1/fuse.min.js" integrity="sha256-VzgmKYmhsGNNN4Ph1kMW+BjoYJM2jV5i4IlFoeZA9XI=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script>
+    
+
+    
+    
+
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+      
+    
+    
+    
+    
+    <script src="../../js/academic.min.c816d323c3a55093dae0829b44ea1ca8.js"></script>
+
+    
+
+
+
+
+
+
+  
+  
+  <div class="container">
+    <footer class="site-footer">
+  
+  <p class="powered-by">
+    
+      <a href="../../privacy/">Privacy Policy</a>
+    
+    
+       &middot; 
+      <a href="../../terms/">Terms</a>
+    
+  </p>
+  
+
+  <p class="powered-by">
+    ©<code>2020</code> &middot; 
+
+    Powered by the
+    <a href="https://sourcethemes.com/academic/" target="_blank" rel="noopener">Academic theme</a> for
+    <a href="https://gohugo.io" target="_blank" rel="noopener">Hugo</a>.
+
+    
+    <span class="float-right" aria-hidden="true">
+      <a href="#" class="back-to-top">
+        <span class="button_icon">
+          <i class="fas fa-chevron-up fa-2x"></i>
+        </span>
+      </a>
+    </span>
+    
+  </p>
+</footer>
+
+  </div>
+  
+
+  
+<div id="modal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">引用</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <pre><code class="tex hljs"></code></pre>
+      </div>
+      <div class="modal-footer">
+        <a class="btn btn-outline-primary my-1 js-copy-cite" href="#" target="_blank">
+          <i class="fas fa-copy"></i> 复制
+        </a>
+        <a class="btn btn-outline-primary my-1 js-download-cite" href="#" target="_blank">
+          <i class="fas fa-download"></i> 下载
+        </a>
+        <div id="modal-error"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

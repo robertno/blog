@@ -1,0 +1,1257 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="generator" content="Source Themes Academic 4.8.0">
+
+  
+
+  
+  
+  
+  
+  
+    
+    
+    
+  
+  
+
+  <meta name="author" content="Dr.二哈">
+
+  
+  
+  
+    
+  
+  <meta name="description" content="第三章 基本数据管理 前面讲了一些常用的函数以及数据的输入，在数">
+
+  
+  <link rel="alternate" hreflang="zh" href="../../post/r%E8%AF%AD%E8%A8%80%E7%BB%9F%E8%AE%A1%E5%88%86%E6%9E%90%E4%B8%8E%E5%BA%94%E7%94%A8-%E7%AC%AC%E4%B8%89%E7%AB%A0-1/">
+
+  
+
+
+  
+  
+  
+  <meta name="theme-color" content="#2962ff">
+  
+
+  
+  
+  
+  <script src="../../js/mathjax-config.js"></script>
+  
+
+  
+  
+  
+  
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/academicons/1.8.6/css/academicons.min.css" integrity="sha256-uFVgMKfistnJAfoCUQigIl+JfUaP47GrRKjf6CTPVmw=" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.0-1/css/all.min.css" integrity="sha256-4w9DunooKSr3MFXHXWyFER38WmPdm361bQS/2KUWZbU=" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css" integrity="sha256-Vzbj7sDDS/woiFS3uNKo8eIuni59rjyNGtXfstRzStA=" crossorigin="anonymous">
+
+    
+    
+    
+      
+    
+    
+      
+      
+        
+          <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.1/styles/github.min.css" crossorigin="anonymous" title="hl-light">
+          <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.1/styles/dracula.min.css" crossorigin="anonymous" title="hl-dark" disabled>
+        
+      
+    
+
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.5.1/leaflet.css" integrity="sha256-SHMGCYmST46SoyGgo4YR/9AlK1vf3ff84Aq9yK4hdqM=" crossorigin="anonymous">
+    
+
+    
+
+    
+    
+      
+
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/lazysizes/5.1.2/lazysizes.min.js" integrity="sha256-Md1qLToewPeKjfAHU1zyPwOutccPAm5tahnaw7Osw0A=" crossorigin="anonymous" async></script>
+      
+    
+      
+
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" integrity="" crossorigin="anonymous" async></script>
+      
+    
+      
+
+      
+      
+
+      
+    
+
+  
+
+  
+  
+  
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat:400,700%7CRoboto:400,400italic,700%7CRoboto+Mono&display=swap">
+  
+
+  
+  
+  
+  
+  <link rel="stylesheet" href="../../css/academic.css">
+
+  
+
+
+
+
+  
+
+
+  
+
+  <link rel="manifest" href="../../index.webmanifest">
+  <link rel="icon" type="image/png" href="../../images/icon_hu0b7a4cb9992c9ac0e91bd28ffd38dd00_9727_32x32_fill_lanczos_center_2.png">
+  <link rel="apple-touch-icon" type="image/png" href="../../images/icon_hu0b7a4cb9992c9ac0e91bd28ffd38dd00_9727_192x192_fill_lanczos_center_2.png">
+
+  <link rel="canonical" href="../../post/r%E8%AF%AD%E8%A8%80%E7%BB%9F%E8%AE%A1%E5%88%86%E6%9E%90%E4%B8%8E%E5%BA%94%E7%94%A8-%E7%AC%AC%E4%B8%89%E7%AB%A0-1/">
+
+  
+  
+  
+  
+  
+    
+    
+  
+  
+  <meta property="twitter:card" content="summary">
+  
+  <meta property="og:site_name" content="Bionew">
+  <meta property="og:url" content="/post/r%E8%AF%AD%E8%A8%80%E7%BB%9F%E8%AE%A1%E5%88%86%E6%9E%90%E4%B8%8E%E5%BA%94%E7%94%A8-%E7%AC%AC%E4%B8%89%E7%AB%A0-1/">
+  <meta property="og:title" content="R语言统计分析与应用-第三章-1 | Bionew">
+  <meta property="og:description" content="第三章 基本数据管理 前面讲了一些常用的函数以及数据的输入，在数"><meta property="og:image" content="img/map[gravatar:%!s(bool=false) shape:circle]">
+  <meta property="twitter:image" content="img/map[gravatar:%!s(bool=false) shape:circle]"><meta property="og:locale" content="zh">
+  
+    
+      <meta property="article:published_time" content="2019-04-20T00:00:00&#43;00:00">
+    
+    <meta property="article:modified_time" content="2019-04-20T00:00:00&#43;00:00">
+  
+
+  
+
+
+    
+
+
+
+
+
+
+  
+
+
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "/post/r%E8%AF%AD%E8%A8%80%E7%BB%9F%E8%AE%A1%E5%88%86%E6%9E%90%E4%B8%8E%E5%BA%94%E7%94%A8-%E7%AC%AC%E4%B8%89%E7%AB%A0-1/"
+  },
+  "headline": "R语言统计分析与应用-第三章-1",
+  
+  "datePublished": "2019-04-20T00:00:00Z",
+  "dateModified": "2019-04-20T00:00:00Z",
+  
+  "author": {
+    "@type": "Person",
+    "name": "Dr.二哈"
+  },
+  
+  "publisher": {
+    "@type": "Organization",
+    "name": "Bionew",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "/images/icon_hu0b7a4cb9992c9ac0e91bd28ffd38dd00_9727_192x192_fill_lanczos_center_2.png"
+    }
+  },
+  "description": "第三章 基本数据管理 前面讲了一些常用的函数以及数据的输入，在数"
+}
+</script>
+
+  
+
+  
+
+
+  
+
+
+  
+
+
+
+
+
+  <title>R语言统计分析与应用-第三章-1 | Bionew</title>
+
+</head>
+
+<body id="top" data-spy="scroll" data-offset="70" data-target="#TableOfContents" >
+
+  <aside class="search-results" id="search">
+  <div class="container">
+    <section class="search-header">
+
+      <div class="row no-gutters justify-content-between mb-3">
+        <div class="col-6">
+          <h1>搜索</h1>
+        </div>
+        <div class="col-6 col-search-close">
+          <a class="js-search" href="#"><i class="fas fa-times-circle text-muted" aria-hidden="true"></i></a>
+        </div>
+      </div>
+
+      <div id="search-box">
+        
+        <input name="q" id="search-query" placeholder="搜索..." autocapitalize="off"
+        autocomplete="off" autocorrect="off" spellcheck="false" type="search">
+        
+      </div>
+
+    </section>
+    <section class="section-search-results">
+
+      <div id="search-hits">
+        
+      </div>
+
+    </section>
+  </div>
+</aside>
+
+
+  
+
+
+
+
+
+
+
+<nav class="navbar navbar-expand-lg navbar-light compensate-for-scrollbar" id="navbar-main">
+  <div class="container">
+
+    
+    <div class="d-none d-lg-inline-flex">
+      <a class="navbar-brand" href="../../">Bionew</a>
+    </div>
+    
+
+    
+    <button type="button" class="navbar-toggler" data-toggle="collapse"
+            data-target="#navbar-content" aria-controls="navbar" aria-expanded="false" aria-label="切换导航">
+    <span><i class="fas fa-bars"></i></span>
+    </button>
+    
+
+    
+    <div class="navbar-brand-mobile-wrapper d-inline-flex d-lg-none">
+      <a class="navbar-brand" href="../../">Bionew</a>
+    </div>
+    
+
+    
+    
+    <div class="navbar-collapse main-menu-item collapse justify-content-start" id="navbar-content">
+
+      
+      <ul class="navbar-nav d-md-inline-flex">
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        
+        
+        
+        
+        
+        
+          
+          
+          
+            
+          
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link " href="../../#hero"><span>Demo</span></a>
+        </li>
+
+        
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        
+        
+        
+        
+        
+        
+          
+          
+          
+            
+          
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link " href="../../#posts"><span>Posts</span></a>
+        </li>
+
+        
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        
+        
+        
+        
+        
+        
+          
+          
+          
+            
+          
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link " href="../../#projects"><span>Projects</span></a>
+        </li>
+
+        
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        
+        
+        
+        
+        
+        
+          
+          
+          
+            
+          
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link " href="../../#featured"><span>Publications</span></a>
+        </li>
+
+        
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        
+        
+        
+        
+        
+        
+
+        <li class="nav-item">
+          <a class="nav-link " href="../../courses/"><span>Courses</span></a>
+        </li>
+
+        
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        
+        
+        
+        
+        
+        
+          
+          
+          
+            
+          
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link " href="../../#contact"><span>Contact</span></a>
+        </li>
+
+        
+        
+
+      
+
+        
+      </ul>
+    </div>
+
+    <ul class="nav-icons navbar-nav flex-row ml-auto d-flex pl-md-2">
+      
+      <li class="nav-item">
+        <a class="nav-link js-search" href="#"><i class="fas fa-search" aria-hidden="true"></i></a>
+      </li>
+      
+
+      
+      <li class="nav-item">
+        <a class="nav-link js-dark-toggle" href="#"><i class="fas fa-moon" aria-hidden="true"></i></a>
+      </li>
+      
+
+      
+
+    </ul>
+
+  </div>
+</nav>
+
+
+  <article class="article">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+  
+  
+<div class="article-container pt-3">
+  <h1>R语言统计分析与应用-第三章-1</h1>
+
+  
+
+  
+    
+
+
+<div class="article-metadata">
+
+  
+  
+
+  
+  <span class="article-date">
+    
+    
+      
+    
+    Apr 20, 2019
+  </span>
+  
+
+  
+
+  
+  <span class="middot-divider"></span>
+  <span class="article-reading-time">
+    4 分钟阅读时长
+  </span>
+  
+
+  
+  
+  
+
+  
+  
+  <span class="middot-divider"></span>
+  <span class="article-categories">
+    <i class="fas fa-folder mr-1"></i><a href="../../categories/r/">R</a>, <a href="">统计</a></span>
+  
+
+</div>
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+</div>
+
+
+
+  <div class="article-container">
+
+    <div class="article-style">
+      
+
+
+<div id="section" class="section level1">
+<h1>第三章 基本数据管理</h1>
+<p>前面讲了一些常用的函数以及数据的输入，在数据处理过程中，在数据输入之后还要对数据进行筛选啊拆分啊什么的，这一章主要讲的就是这个。</p>
+<p>下面讲一个例子：
+某项研究想确定男性和女性在领导各自企业方式上的不同，主要的问题如下：</p>
+<ol style="list-style-type: decimal">
+<li><p>处于管理岗位的男性和女性在听从上级的程度上是否不同；</p></li>
+<li><p>这种情况是否依国家不同而不同，或者由性别导致的不同是否普遍存在。</p></li>
+</ol>
+<p>针对这两个问题，让多个国家的经理人的上司对其服从程度打分：
+这位经理人在做出决策之前会询问我的意见。</p>
+<table>
+<thead>
+<tr class="header">
+<th align="center">态度</th>
+<th align="center">分数</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center">非常不同意</td>
+<td align="center">1</td>
+</tr>
+<tr class="even">
+<td align="center">不同意</td>
+<td align="center">2</td>
+</tr>
+<tr class="odd">
+<td align="center">中立</td>
+<td align="center">3</td>
+</tr>
+<tr class="even">
+<td align="center">同意</td>
+<td align="center">4</td>
+</tr>
+<tr class="odd">
+<td align="center">非常同意</td>
+<td align="center">5</td>
+</tr>
+</tbody>
+</table>
+<p>在这里，每位上司根据这个对某一名经理人进行评分，为简化，一共5个经理人，5个上司。因此，上司的评分就有q1到q5，共5个向量。</p>
+<pre class="r"><code>manager &lt;- c(1,2,3,4,5)
+date &lt;- c(&quot;10/20/08&quot;,&quot;10/21/08&quot;,&quot;10/10/08&quot;,&quot;10/19/08&quot;,&quot;6/1/09&quot;)
+country &lt;- c(&quot;US&quot;,&quot;UK&quot;,&quot;US&quot;,&quot;UK&quot;,&quot;US&quot;)
+gender &lt;- c(&quot;M&quot;,&quot;F&quot;,&quot;M&quot;,&quot;F&quot;,&quot;M&quot;)
+age &lt;- c(32,43,26,38,99)
+q1 &lt;- c(5,3,3,3,2)
+q2 &lt;- c(4,5,5,3,2)
+q3 &lt;- c(5,2,5,4,1)
+q4 &lt;- c(5,5,5,NA,1)
+q5 &lt;- c(5,5,2,NA,1)
+leader &lt;- data.frame(manager,date,country,gender,age,
+                     q1,q2,q3,q4,q5,
+                     stringsAsFactors = FALSE)
+leader</code></pre>
+<pre><code>##   manager     date country gender age q1 q2 q3 q4 q5
+## 1       1 10/20/08      US      M  32  5  4  5  5  5
+## 2       2 10/21/08      UK      F  43  3  5  2  5  5
+## 3       3 10/10/08      US      M  26  3  5  5  5  2
+## 4       4 10/19/08      UK      F  38  3  3  4 NA NA
+## 5       5   6/1/09      US      M  99  2  2  1  1  1</code></pre>
+<p>为从这些数据里分析出东西来，就要对这些数据进行管理。比如；</p>
+<ol style="list-style-type: decimal">
+<li><p>5个评分（q1到q5）需要组合起来，即为每位经理人生成一个平均服从程度得分；</p></li>
+<li><p>从上面可以看出，有些得分出现了NA缺失值，同时也需要为99岁这样的数据重编码为缺失值，因为99岁这明显不对啊。因此需要一种处理不完整数据的方法；</p></li>
+<li><p>在某些数据集中往往包含了数百个变量，而我们可能只对一些感兴趣，因此希望创建一个只包含那些变量的新数据集；</p></li>
+<li><p>在本例中，领导行为可能随经理人的年龄而改变，即二者存在某种函数关系。要检验这种观点，需要将当前的年龄数值重编码为类别型的年龄组（比如，年轻，中年，年长）；</p></li>
+<li><p>领导行为可能随时间推移而发生变化，我们可能想重点研究最近全球金融危机期间的服从行为。那么，需要将研究范围限定在某一个特定的时间段（比如1/1/09到12/31/09）。</p></li>
+</ol>
+<p>这些问题怎么解决呢，下面将一一介绍。</p>
+<div id="section-1" class="section level2">
+<h2>3.1 创建新变量</h2>
+<p>创建新变量很简单，重点在于如何将新变量整合到原来的数据集中：</p>
+<pre class="r"><code>y1 &lt;- c(1,2,3,4,5)
+y2 &lt;- c(12,13,15,16,17)
+newdata &lt;- data.frame(y1,y2)
+head(newdata)</code></pre>
+<pre><code>##   y1 y2
+## 1  1 12
+## 2  2 13
+## 3  3 15
+## 4  4 16
+## 5  5 17</code></pre>
+<pre class="r"><code>#创建新变量
+sumy &lt;- newdata$y1+newdata$y2
+meany &lt;- (newdata$y1+newdata$y2)/2
+sumy</code></pre>
+<pre><code>## [1] 13 15 18 20 22</code></pre>
+<pre class="r"><code>meany</code></pre>
+<pre><code>## [1]  6.5  7.5  9.0 10.0 11.0</code></pre>
+<pre class="r"><code>#可以看出只是创建了新变量，但是不在newdata中
+#整合到newdata数据框中
+#方法一
+newdata1 &lt;- data.frame(newdata, sumy, meany)
+head(newdata1)</code></pre>
+<pre><code>##   y1 y2 sumy meany
+## 1  1 12   13   6.5
+## 2  2 13   15   7.5
+## 3  3 15   18   9.0
+## 4  4 16   20  10.0
+## 5  5 17   22  11.0</code></pre>
+<pre class="r"><code>#方法二
+newdata2 &lt;- transform(newdata,
+                     sumy=y1+y2,
+                     meany=(y1+y2)/2)
+head(newdata2)</code></pre>
+<pre><code>##   y1 y2 sumy meany
+## 1  1 12   13   6.5
+## 2  2 13   15   7.5
+## 3  3 15   18   9.0
+## 4  4 16   20  10.0
+## 5  5 17   22  11.0</code></pre>
+<pre class="r"><code>#方法三
+newdata3 &lt;- newdata
+attach(newdata3)</code></pre>
+<pre><code>## The following objects are masked _by_ .GlobalEnv:
+## 
+##     y1, y2</code></pre>
+<pre class="r"><code>newdata3$sumy &lt;- y1+y2
+newdata3$meany &lt;- (y1+y2)/2
+detach(newdata3)
+head(newdata3)</code></pre>
+<pre><code>##   y1 y2 sumy meany
+## 1  1 12   13   6.5
+## 2  2 13   15   7.5
+## 3  3 15   18   9.0
+## 4  4 16   20  10.0
+## 5  5 17   22  11.0</code></pre>
+</div>
+<div id="section-2" class="section level2">
+<h2>3.2 向量运算</h2>
+<div id="section-3" class="section level3">
+<h3>3.2.1 添加或删除向量</h3>
+<p>在R中，向量一旦建立起来，里面的元素就已经确定了。因此，如果想添加或删除元素，就需要重新给向量赋值。</p>
+<pre class="r"><code>qwe &lt;- c(12,13,14,23,78)
+#在中间添加一个元素，数值56
+qwe &lt;- c(qwe[1:3],56,qwe[4:5])
+qwe</code></pre>
+<pre><code>## [1] 12 13 14 56 23 78</code></pre>
+</div>
+<div id="section-4" class="section level3">
+<h3>3.2.2 向量运算</h3>
+<p>这部分就是线性代数的内容。嗯……不讲了。看例子吧</p>
+<pre class="r"><code>x &lt;- c(2,3,4)
+y &lt;- c(2,5,7)
+x+y</code></pre>
+<pre><code>## [1]  4  8 11</code></pre>
+<pre class="r"><code>x*y</code></pre>
+<pre><code>## [1]  4 15 28</code></pre>
+</div>
+<div id="section-5" class="section level3">
+<h3>3.2.3 用: 运算符创建向量</h3>
+<p>：运算符用于生成指定范围内数值构成的向量。
+看例子：</p>
+<pre class="r"><code>5:8</code></pre>
+<pre><code>## [1] 5 6 7 8</code></pre>
+<pre class="r"><code>5:1</code></pre>
+<pre><code>## [1] 5 4 3 2 1</code></pre>
+<pre class="r"><code>#要注意运算符的优先级
+i &lt;- 2
+#冒号的优先级高于减号，所以先计算i:i，变成个一元向量，然后再减1
+i:i-1</code></pre>
+<pre><code>## [1] 1</code></pre>
+<pre class="r"><code>#括号的优先级高于冒号，所以先计算i-1，于是就相当于计算2:1
+i:(i-1)</code></pre>
+<pre><code>## [1] 2 1</code></pre>
+<p>注意了，这个地方书上说的不对，解释的也是乱七八糟。它的结果是：
+i:i-1的结果是“0 1”，i:(i-1)的结果是“1”。</p>
+</div>
+<div id="seqrep" class="section level3">
+<h3>3.2.4 使用seq()以及rep()函数创建向量</h3>
+<p>比上面那个冒号“：”运算符更常用的是seq()函数。它用来生成等差数列。</p>
+<pre class="r"><code>seq(from=10,to=30,by=3)</code></pre>
+<pre><code>## [1] 10 13 16 19 22 25 28</code></pre>
+<pre class="r"><code>?seq()</code></pre>
+<pre><code>## starting httpd help server ... done</code></pre>
+<pre class="r"><code>seq(10,30,3)</code></pre>
+<pre><code>## [1] 10 13 16 19 22 25 28</code></pre>
+<p>rep()函数可以把同一常数放在向量中，语法是：</p>
+<p>rep(x, times, each)，前两个参数很好理解，最后的each参数是指定x交替重复的次数。</p>
+<pre class="r"><code>x &lt;- rep(7,5)
+x</code></pre>
+<pre><code>## [1] 7 7 7 7 7</code></pre>
+<pre class="r"><code>y &lt;- rep(c(1,2,3),3)
+y</code></pre>
+<pre><code>## [1] 1 2 3 1 2 3 1 2 3</code></pre>
+<pre class="r"><code>rep(1:3,2)</code></pre>
+<pre><code>## [1] 1 2 3 1 2 3</code></pre>
+<pre class="r"><code>rep(c(2,6,12),each=3)</code></pre>
+<pre><code>## [1]  2  2  2  6  6  6 12 12 12</code></pre>
+</div>
+</div>
+<div id="section-6" class="section level2">
+<h2>3.3 处理数据对象的常用函数</h2>
+<p>这一部分就不再写了，用的时候自然就知道了。</p>
+</div>
+<div id="section-7" class="section level2">
+<h2>3.4 变量的重编码</h2>
+<p>现在解决前言中的问题2：
+&gt; 2. 从上面可以看出，有些得分出现了NA缺失值，同时也需要为99岁这样的数据重编码为缺失值，因为99岁这明显不对啊。因此需要一种处理不完整数据的方法。</p>
+<p>现在将连续型变量age重编码为类别型变量：agecat(Young,Middle Aged,Elder)。</p>
+<pre class="r"><code>#首先把99岁的年龄值编码成缺失值。
+leader$age[leader$age == 99] &lt;- NA
+#然后创建agecat向量
+leader$agecat[leader$age &gt;= 75] &lt;- &quot;Elder&quot;
+leader$agecat[leader$age &lt; 75 &amp; leader$age &gt;=55] &lt;- &quot;Middle Aged&quot;
+leader$agecat[leader$age &lt; 55] &lt;- &quot;Young&quot;
+leader</code></pre>
+<pre><code>##   manager     date country gender age q1 q2 q3 q4 q5 agecat
+## 1       1 10/20/08      US      M  32  5  4  5  5  5  Young
+## 2       2 10/21/08      UK      F  43  3  5  2  5  5  Young
+## 3       3 10/10/08      US      M  26  3  5  5  5  2  Young
+## 4       4 10/19/08      UK      F  38  3  3  4 NA NA  Young
+## 5       5   6/1/09      US      M  NA  2  2  1  1  1   &lt;NA&gt;</code></pre>
+<p>当然这个方法不唯一。</p>
+<p>嗯……今天就到这里。</p>
+</div>
+</div>
+
+    </div>
+
+    
+
+
+
+
+
+<div class="article-tags">
+  
+  <a class="badge badge-light" href="../../tags/r/">R</a>
+  
+  <a class="badge badge-light" href="">统计</a>
+  
+</div>
+
+
+
+<div class="share-box" aria-hidden="true">
+  <ul class="share">
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="https://twitter.com/intent/tweet?url=/post/r%E8%AF%AD%E8%A8%80%E7%BB%9F%E8%AE%A1%E5%88%86%E6%9E%90%E4%B8%8E%E5%BA%94%E7%94%A8-%E7%AC%AC%E4%B8%89%E7%AB%A0-1/&amp;text=R%e8%af%ad%e8%a8%80%e7%bb%9f%e8%ae%a1%e5%88%86%e6%9e%90%e4%b8%8e%e5%ba%94%e7%94%a8-%e7%ac%ac%e4%b8%89%e7%ab%a0-1" target="_blank" rel="noopener" class="share-btn-twitter">
+          <i class="fab fa-twitter"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="https://www.facebook.com/sharer.php?u=/post/r%E8%AF%AD%E8%A8%80%E7%BB%9F%E8%AE%A1%E5%88%86%E6%9E%90%E4%B8%8E%E5%BA%94%E7%94%A8-%E7%AC%AC%E4%B8%89%E7%AB%A0-1/&amp;t=R%e8%af%ad%e8%a8%80%e7%bb%9f%e8%ae%a1%e5%88%86%e6%9e%90%e4%b8%8e%e5%ba%94%e7%94%a8-%e7%ac%ac%e4%b8%89%e7%ab%a0-1" target="_blank" rel="noopener" class="share-btn-facebook">
+          <i class="fab fa-facebook"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="mailto:?subject=R%e8%af%ad%e8%a8%80%e7%bb%9f%e8%ae%a1%e5%88%86%e6%9e%90%e4%b8%8e%e5%ba%94%e7%94%a8-%e7%ac%ac%e4%b8%89%e7%ab%a0-1&amp;body=/post/r%E8%AF%AD%E8%A8%80%E7%BB%9F%E8%AE%A1%E5%88%86%E6%9E%90%E4%B8%8E%E5%BA%94%E7%94%A8-%E7%AC%AC%E4%B8%89%E7%AB%A0-1/" target="_blank" rel="noopener" class="share-btn-email">
+          <i class="fas fa-envelope"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="https://www.linkedin.com/shareArticle?url=/post/r%E8%AF%AD%E8%A8%80%E7%BB%9F%E8%AE%A1%E5%88%86%E6%9E%90%E4%B8%8E%E5%BA%94%E7%94%A8-%E7%AC%AC%E4%B8%89%E7%AB%A0-1/&amp;title=R%e8%af%ad%e8%a8%80%e7%bb%9f%e8%ae%a1%e5%88%86%e6%9e%90%e4%b8%8e%e5%ba%94%e7%94%a8-%e7%ac%ac%e4%b8%89%e7%ab%a0-1" target="_blank" rel="noopener" class="share-btn-linkedin">
+          <i class="fab fa-linkedin-in"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="https://web.whatsapp.com/send?text=R%e8%af%ad%e8%a8%80%e7%bb%9f%e8%ae%a1%e5%88%86%e6%9e%90%e4%b8%8e%e5%ba%94%e7%94%a8-%e7%ac%ac%e4%b8%89%e7%ab%a0-1%20/post/r%E8%AF%AD%E8%A8%80%E7%BB%9F%E8%AE%A1%E5%88%86%E6%9E%90%E4%B8%8E%E5%BA%94%E7%94%A8-%E7%AC%AC%E4%B8%89%E7%AB%A0-1/" target="_blank" rel="noopener" class="share-btn-whatsapp">
+          <i class="fab fa-whatsapp"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="https://service.weibo.com/share/share.php?url=/post/r%E8%AF%AD%E8%A8%80%E7%BB%9F%E8%AE%A1%E5%88%86%E6%9E%90%E4%B8%8E%E5%BA%94%E7%94%A8-%E7%AC%AC%E4%B8%89%E7%AB%A0-1/&amp;title=R%e8%af%ad%e8%a8%80%e7%bb%9f%e8%ae%a1%e5%88%86%e6%9e%90%e4%b8%8e%e5%ba%94%e7%94%a8-%e7%ac%ac%e4%b8%89%e7%ab%a0-1" target="_blank" rel="noopener" class="share-btn-weibo">
+          <i class="fab fa-weibo"></i>
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+  
+  
+  
+    
+  
+  
+  
+  <div class="media author-card content-widget-hr">
+    
+      
+      <img class="avatar mr-3 avatar-circle" src="../../authors/admin/avatar_hu04cc06b45fe3d1130f73ba3a4699b934_34764_270x270_fill_q90_lanczos_center.jpg" alt="Avatar">
+    
+
+    <div class="media-body">
+      <h5 class="card-title"><a href="../../">Dr.二哈</a></h5>
+      <h6 class="card-subtitle">在读苦逼科研狗</h6>
+      <p class="card-text">研究方向：脂质营养，业余时间自学R。</p>
+      <ul class="network-icon" aria-hidden="true">
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <li>
+      <a href="../../#contact" >
+        <i class="fas fa-envelope"></i>
+      </a>
+    </li>
+  
+</ul>
+
+    </div>
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <div class="article-widget content-widget-hr">
+    <h3>相关</h3>
+    <ul>
+      
+      <li><a href="../../post/r%E8%AF%AD%E8%A8%80%E7%BB%9F%E8%AE%A1%E5%88%86%E6%9E%90%E4%B8%8E%E5%BA%94%E7%94%A8-%E7%AC%AC%E4%BA%8C%E7%AB%A0-3/">R语言统计分析与应用-第二章-3</a></li>
+      
+      <li><a href="../../post/r%E8%AF%AD%E8%A8%80%E7%BB%9F%E8%AE%A1%E5%88%86%E6%9E%90%E4%B8%8E%E5%BA%94%E7%94%A8-%E7%AC%AC%E4%BA%8C%E7%AB%A0-4/">R语言统计分析与应用-第二章-4</a></li>
+      
+      <li><a href="../../post/r%E8%AF%AD%E8%A8%80%E7%BB%9F%E8%AE%A1%E5%88%86%E6%9E%90%E4%B8%8E%E5%BA%94%E7%94%A8-%E7%AC%AC%E4%BA%8C%E7%AB%A0-2/">R语言统计分析与应用-第二章-2</a></li>
+      
+      <li><a href="../../post/r%E8%AF%AD%E8%A8%80%E7%BB%9F%E8%AE%A1%E5%88%86%E6%9E%90%E4%B8%8E%E5%BA%94%E7%94%A8-%E7%AC%AC%E4%BA%8C%E7%AB%A0-1/">R语言统计分析与应用-第二章-1</a></li>
+      
+      <li><a href="../../post/r%E8%AF%AD%E8%A8%80%E7%BB%9F%E8%AE%A1%E5%85%A5%E9%97%A8-%E7%AC%AC%E5%8D%81%E4%B8%80%E7%AB%A0/">R语言统计入门-第十一章</a></li>
+      
+    </ul>
+  </div>
+  
+
+
+
+  </div>
+</article>
+
+      
+
+    
+    
+    
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.imagesloaded/4.1.4/imagesloaded.pkgd.min.js" integrity="sha256-lqvxZrPLtfffUl2G/e7szqSvPBILGbwmsGE1MKlOi0Q=" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.isotope/3.0.6/isotope.pkgd.min.js" integrity="sha256-CBrpuqrMhXwcLLUd5tvQ4euBHCdh7wGlDfNz8vbu/iI=" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js" integrity="sha256-yt2kYMy0w8AbtF89WXb2P1rfjcP/HTHLT7097U8Y5b8=" crossorigin="anonymous"></script>
+
+      
+
+      
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.1/highlight.min.js" integrity="sha256-eOgo0OtLL4cdq7RdwRUiGKLX9XsIJ7nGhWEKbohmVAQ=" crossorigin="anonymous"></script>
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.1/languages/r.min.js"></script>
+        
+      
+
+    
+
+    
+    
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.5.1/leaflet.js" integrity="sha256-EErZamuLefUnbMBQbsEqu1USa+btR2oIlCpBJbyD4/g=" crossorigin="anonymous"></script>
+    
+
+    
+    
+    <script>const code_highlighting = true;</script>
+    
+
+    
+    
+    <script>const isSiteThemeDark = false;</script>
+    
+
+    
+    
+    
+    
+    
+    
+    <script>
+      const search_config = {"indexURI":"/index.json","minLength":1,"threshold":0.3};
+      const i18n = {"no_results":"没有找到结果","placeholder":"搜索...","results":"搜索结果"};
+      const content_type = {
+        'post': "文章",
+        'project': "项目",
+        'publication' : "出版物",
+        'talk' : "演讲"
+        };
+    </script>
+    
+
+    
+    
+
+    
+    
+    <script id="search-hit-fuse-template" type="text/x-template">
+      <div class="search-hit" id="summary-{{key}}">
+      <div class="search-hit-content">
+        <div class="search-hit-name">
+          <a href="{{relpermalink}}">{{title}}</a>
+          <div class="article-metadata search-hit-type">{{type}}</div>
+          <p class="search-hit-description">{{snippet}}</p>
+        </div>
+      </div>
+      </div>
+    </script>
+    
+
+    
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/3.2.1/fuse.min.js" integrity="sha256-VzgmKYmhsGNNN4Ph1kMW+BjoYJM2jV5i4IlFoeZA9XI=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script>
+    
+
+    
+    
+
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+      
+    
+    
+    
+    
+    <script src="../../js/academic.min.c816d323c3a55093dae0829b44ea1ca8.js"></script>
+
+    
+
+
+
+
+
+
+  
+  
+  <div class="container">
+    <footer class="site-footer">
+  
+  <p class="powered-by">
+    
+      <a href="../../privacy/">Privacy Policy</a>
+    
+    
+       &middot; 
+      <a href="../../terms/">Terms</a>
+    
+  </p>
+  
+
+  <p class="powered-by">
+    ©<code>2020</code> &middot; 
+
+    Powered by the
+    <a href="https://sourcethemes.com/academic/" target="_blank" rel="noopener">Academic theme</a> for
+    <a href="https://gohugo.io" target="_blank" rel="noopener">Hugo</a>.
+
+    
+    <span class="float-right" aria-hidden="true">
+      <a href="#" class="back-to-top">
+        <span class="button_icon">
+          <i class="fas fa-chevron-up fa-2x"></i>
+        </span>
+      </a>
+    </span>
+    
+  </p>
+</footer>
+
+  </div>
+  
+
+  
+<div id="modal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">引用</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <pre><code class="tex hljs"></code></pre>
+      </div>
+      <div class="modal-footer">
+        <a class="btn btn-outline-primary my-1 js-copy-cite" href="#" target="_blank">
+          <i class="fas fa-copy"></i> 复制
+        </a>
+        <a class="btn btn-outline-primary my-1 js-download-cite" href="#" target="_blank">
+          <i class="fas fa-download"></i> 下载
+        </a>
+        <div id="modal-error"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

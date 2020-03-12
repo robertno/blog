@@ -1,0 +1,1101 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="generator" content="Source Themes Academic 4.8.0">
+
+  
+
+  
+  
+  
+  
+  
+    
+    
+    
+  
+  
+
+  <meta name="author" content="Dr.二哈">
+
+  
+  
+  
+    
+  
+  <meta name="description" content="绪论 第一节 生物信息学的兴起 一. 名词： 第二代测序技术：边合成边">
+
+  
+  <link rel="alternate" hreflang="zh" href="../../post/%E7%94%9F%E7%89%A9%E4%BF%A1%E6%81%AF%E5%AD%A6-%E6%9D%8E%E9%9C%9E%E7%AC%AC%E4%BA%8C%E7%89%88-%E7%BB%AA%E8%AE%BA/">
+
+  
+
+
+  
+  
+  
+  <meta name="theme-color" content="#2962ff">
+  
+
+  
+  
+  
+  <script src="../../js/mathjax-config.js"></script>
+  
+
+  
+  
+  
+  
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/academicons/1.8.6/css/academicons.min.css" integrity="sha256-uFVgMKfistnJAfoCUQigIl+JfUaP47GrRKjf6CTPVmw=" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.0-1/css/all.min.css" integrity="sha256-4w9DunooKSr3MFXHXWyFER38WmPdm361bQS/2KUWZbU=" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css" integrity="sha256-Vzbj7sDDS/woiFS3uNKo8eIuni59rjyNGtXfstRzStA=" crossorigin="anonymous">
+
+    
+    
+    
+      
+    
+    
+      
+      
+        
+          <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.1/styles/github.min.css" crossorigin="anonymous" title="hl-light">
+          <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.1/styles/dracula.min.css" crossorigin="anonymous" title="hl-dark" disabled>
+        
+      
+    
+
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.5.1/leaflet.css" integrity="sha256-SHMGCYmST46SoyGgo4YR/9AlK1vf3ff84Aq9yK4hdqM=" crossorigin="anonymous">
+    
+
+    
+
+    
+    
+      
+
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/lazysizes/5.1.2/lazysizes.min.js" integrity="sha256-Md1qLToewPeKjfAHU1zyPwOutccPAm5tahnaw7Osw0A=" crossorigin="anonymous" async></script>
+      
+    
+      
+
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" integrity="" crossorigin="anonymous" async></script>
+      
+    
+      
+
+      
+      
+
+      
+    
+
+  
+
+  
+  
+  
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat:400,700%7CRoboto:400,400italic,700%7CRoboto+Mono&display=swap">
+  
+
+  
+  
+  
+  
+  <link rel="stylesheet" href="../../css/academic.css">
+
+  
+
+
+
+
+  
+
+
+  
+
+  <link rel="manifest" href="../../index.webmanifest">
+  <link rel="icon" type="image/png" href="../../images/icon_hu0b7a4cb9992c9ac0e91bd28ffd38dd00_9727_32x32_fill_lanczos_center_2.png">
+  <link rel="apple-touch-icon" type="image/png" href="../../images/icon_hu0b7a4cb9992c9ac0e91bd28ffd38dd00_9727_192x192_fill_lanczos_center_2.png">
+
+  <link rel="canonical" href="../../post/%E7%94%9F%E7%89%A9%E4%BF%A1%E6%81%AF%E5%AD%A6-%E6%9D%8E%E9%9C%9E%E7%AC%AC%E4%BA%8C%E7%89%88-%E7%BB%AA%E8%AE%BA/">
+
+  
+  
+  
+  
+  
+    
+    
+  
+  
+  <meta property="twitter:card" content="summary">
+  
+  <meta property="og:site_name" content="Bionew">
+  <meta property="og:url" content="/post/%E7%94%9F%E7%89%A9%E4%BF%A1%E6%81%AF%E5%AD%A6-%E6%9D%8E%E9%9C%9E%E7%AC%AC%E4%BA%8C%E7%89%88-%E7%BB%AA%E8%AE%BA/">
+  <meta property="og:title" content="生物信息学-李霞第二版-绪论 | Bionew">
+  <meta property="og:description" content="绪论 第一节 生物信息学的兴起 一. 名词： 第二代测序技术：边合成边"><meta property="og:image" content="img/map[gravatar:%!s(bool=false) shape:circle]">
+  <meta property="twitter:image" content="img/map[gravatar:%!s(bool=false) shape:circle]"><meta property="og:locale" content="zh">
+  
+    
+      <meta property="article:published_time" content="2018-02-17T00:00:00&#43;00:00">
+    
+    <meta property="article:modified_time" content="2018-02-17T00:00:00&#43;00:00">
+  
+
+  
+
+
+    
+
+
+
+
+
+
+  
+
+
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "/post/%E7%94%9F%E7%89%A9%E4%BF%A1%E6%81%AF%E5%AD%A6-%E6%9D%8E%E9%9C%9E%E7%AC%AC%E4%BA%8C%E7%89%88-%E7%BB%AA%E8%AE%BA/"
+  },
+  "headline": "生物信息学-李霞第二版-绪论",
+  
+  "datePublished": "2018-02-17T00:00:00Z",
+  "dateModified": "2018-02-17T00:00:00Z",
+  
+  "author": {
+    "@type": "Person",
+    "name": "Dr.二哈"
+  },
+  
+  "publisher": {
+    "@type": "Organization",
+    "name": "Bionew",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "/images/icon_hu0b7a4cb9992c9ac0e91bd28ffd38dd00_9727_192x192_fill_lanczos_center_2.png"
+    }
+  },
+  "description": "绪论 第一节 生物信息学的兴起 一. 名词： 第二代测序技术：边合成边"
+}
+</script>
+
+  
+
+  
+
+
+  
+
+
+  
+
+
+
+
+
+  <title>生物信息学-李霞第二版-绪论 | Bionew</title>
+
+</head>
+
+<body id="top" data-spy="scroll" data-offset="70" data-target="#TableOfContents" >
+
+  <aside class="search-results" id="search">
+  <div class="container">
+    <section class="search-header">
+
+      <div class="row no-gutters justify-content-between mb-3">
+        <div class="col-6">
+          <h1>搜索</h1>
+        </div>
+        <div class="col-6 col-search-close">
+          <a class="js-search" href="#"><i class="fas fa-times-circle text-muted" aria-hidden="true"></i></a>
+        </div>
+      </div>
+
+      <div id="search-box">
+        
+        <input name="q" id="search-query" placeholder="搜索..." autocapitalize="off"
+        autocomplete="off" autocorrect="off" spellcheck="false" type="search">
+        
+      </div>
+
+    </section>
+    <section class="section-search-results">
+
+      <div id="search-hits">
+        
+      </div>
+
+    </section>
+  </div>
+</aside>
+
+
+  
+
+
+
+
+
+
+
+<nav class="navbar navbar-expand-lg navbar-light compensate-for-scrollbar" id="navbar-main">
+  <div class="container">
+
+    
+    <div class="d-none d-lg-inline-flex">
+      <a class="navbar-brand" href="../../">Bionew</a>
+    </div>
+    
+
+    
+    <button type="button" class="navbar-toggler" data-toggle="collapse"
+            data-target="#navbar-content" aria-controls="navbar" aria-expanded="false" aria-label="切换导航">
+    <span><i class="fas fa-bars"></i></span>
+    </button>
+    
+
+    
+    <div class="navbar-brand-mobile-wrapper d-inline-flex d-lg-none">
+      <a class="navbar-brand" href="../../">Bionew</a>
+    </div>
+    
+
+    
+    
+    <div class="navbar-collapse main-menu-item collapse justify-content-start" id="navbar-content">
+
+      
+      <ul class="navbar-nav d-md-inline-flex">
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        
+        
+        
+        
+        
+        
+          
+          
+          
+            
+          
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link " href="../../#hero"><span>Demo</span></a>
+        </li>
+
+        
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        
+        
+        
+        
+        
+        
+          
+          
+          
+            
+          
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link " href="../../#posts"><span>Posts</span></a>
+        </li>
+
+        
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        
+        
+        
+        
+        
+        
+          
+          
+          
+            
+          
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link " href="../../#projects"><span>Projects</span></a>
+        </li>
+
+        
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        
+        
+        
+        
+        
+        
+          
+          
+          
+            
+          
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link " href="../../#featured"><span>Publications</span></a>
+        </li>
+
+        
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        
+        
+        
+        
+        
+        
+
+        <li class="nav-item">
+          <a class="nav-link " href="../../courses/"><span>Courses</span></a>
+        </li>
+
+        
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        
+        
+        
+        
+        
+        
+          
+          
+          
+            
+          
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link " href="../../#contact"><span>Contact</span></a>
+        </li>
+
+        
+        
+
+      
+
+        
+      </ul>
+    </div>
+
+    <ul class="nav-icons navbar-nav flex-row ml-auto d-flex pl-md-2">
+      
+      <li class="nav-item">
+        <a class="nav-link js-search" href="#"><i class="fas fa-search" aria-hidden="true"></i></a>
+      </li>
+      
+
+      
+      <li class="nav-item">
+        <a class="nav-link js-dark-toggle" href="#"><i class="fas fa-moon" aria-hidden="true"></i></a>
+      </li>
+      
+
+      
+
+    </ul>
+
+  </div>
+</nav>
+
+
+  <article class="article">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+  
+  
+<div class="article-container pt-3">
+  <h1>生物信息学-李霞第二版-绪论</h1>
+
+  
+
+  
+    
+
+
+<div class="article-metadata">
+
+  
+  
+
+  
+  <span class="article-date">
+    
+    
+      
+    
+    Feb 17, 2018
+  </span>
+  
+
+  
+
+  
+  <span class="middot-divider"></span>
+  <span class="article-reading-time">
+    5 分钟阅读时长
+  </span>
+  
+
+  
+  
+  
+
+  
+  
+  <span class="middot-divider"></span>
+  <span class="article-categories">
+    <i class="fas fa-folder mr-1"></i><a href="">生物信息学</a></span>
+  
+
+</div>
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+</div>
+
+
+
+  <div class="article-container">
+
+    <div class="article-style">
+      <h1 id="绪论">绪论</h1>
+<h2 id="第一节-生物信息学的兴起">第一节 生物信息学的兴起</h2>
+<h3 id="一-名词">一. 名词：</h3>
+<ol>
+<li>第二代测序技术：边合成边测序；</li>
+<li>第三代测序技术：单分子测序；</li>
+<li>新一代测序技术：the next generation sequencing，NGS；</li>
+</ol>
+<h3 id="二-英文与缩写">二. 英文与缩写：</h3>
+<ol>
+<li>美国国立生物技术信息中心： National  Center for Biotechnology Information，NCBI；</li>
+<li>欧洲生物信息学研究所：European Bioinformatics Institute，EBI；</li>
+<li>人类基因组计划：human genome project，HGP；</li>
+<li>人类单体型图计划：the international hapmap project，HapMap；</li>
+<li>单核苷酸多态性：single nucleotide polymorphysm，SNP；</li>
+<li>基因组范围关联分析：genome-wide association study，GWAS；</li>
+<li>非编码基因：non-coding gene；</li>
+<li>高清傅里叶转化质谱：high-resolution Fourier-transform mass spectrometry；</li>
+<li>反相蛋白质芯片：reverse-phase protein arrays；</li>
+<li>人类蛋白质组草图：the draft map of the human proteome；</li>
+</ol>
+<h2 id="第二节-生物信息学的内涵及其在生命科学中的应用">第二节 生物信息学的内涵及其在生命科学中的应用</h2>
+<h3 id="一-名词-1">一. 名词：</h3>
+<ol>
+<li>生物信息学：是研究生物医学资源中蕴含的重要信息的学科，其核心是解决生物医学问题，其常规的研究内容可以简单概括为生物大分子的序列，结构和功能，以及它们之间的相互关系；</li>
+<li>生物信息学的内涵：
+<ul>
+<li>研究领域：
+<ul>
+<li>序列对比：alignment，比较两个或两个以上分子序列的相似程度，包括核酸序列和蛋白质序列的对比过程；</li>
+<li>序列装配：sequence assembling， 目前广泛应用的核算测序技术一般只能测出几十到几百个碱基对序列，技术的限制决定了测序过程需要对基因组进行打碎，并在测序后进行重新拼接的过程。
+逐步把它们拼接起来形成序列更长的重叠群，直至得到完整序列的过程，即为序列装配；</li>
+<li>基因识别：gene identification，基因识别的基本问题是在给定的基因组序列基础上，正确识别蛋白质组编码基因在基因组序列中的序列和精确定位；</li>
+<li>多态和基因间区分析：基因多态的识别和功能鉴定是研究物种进化、种群多样性、人类疾病易感和药物敏感性的关键技术。而基因间区的基因组序列组织形式既有多态（重复片段）性，又具有不规则特性，既可能是重要的未知基因的潜伏区域、重要的功能调控子，也可能是真正意义上的“垃圾”片段，对它们的深入理解是解释华因组功能复杂性的关键因素。</li>
+<li>RNA表达分析：这里的RNA表达分析主要包括编码RNA和非编码RNA的表达分析。</li>
+<li>分子进化：分子进化和比较基因组学研究是从生物大分子的角度考虑的物种之间的垂直进化关系（建立系统发生树）或同一物种内不同亚种之间的迁移进化关系；既可以用DNA序列、遗传多态，也可以用蛋白质序列来开展相应的研究，甚至于可通过结构和分子网络层面的对比分析。</li>
+<li>结构预测：structure prediction，主要针对蛋白质序列和RNA序列进行分析，包括2级和高级结构的预测过程；</li>
+<li>分子互作：是细胞行使功能过程汇总最主要的作用形式，既包括最早认识到的蛋白质与蛋白质之间的互作关系，也包括蛋白质与核酸、核酸与核酸之间的相互作用。
+分子互作是定性与定量相结合的分析过程，阐明分子互作不仅有利于了解整个细胞活动过程，也将对各种分子的功能和作用方式产生深刻的理解。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<h3 id="二-英文及缩写">二. 英文及缩写</h3>
+<ol>
+<li>高通量组学：high-throughput omics；</li>
+<li>生物标记：biomarker；</li>
+<li>模式：pattern；</li>
+</ol>
+<h2 id="第三节-大数据时代的生物信息学与医学">第三节 大数据时代的生物信息学与医学</h2>
+<h3 id="一-名词-2">一. 名词：</h3>
+<ol>
+<li>遗传图谱：genetic map，又称为连锁图谱linkage map。以遗传多态性标记位点为“路标”，以遗传学距离为图距的基因组图谱。</li>
+<li>物理图谱：physical map，HGP DNA物理图谱的构建是基因组DNA测序的基础。</li>
+<li>序列图谱：sequence map。</li>
+<li>基因图谱：gene map。</li>
+<li>组学与生物信息学：组学（X-Omics）概念是参照基因组概念，针对不同层面的生物大分子数据的产生演化而来的描述高通量分子生物数据资源的词汇。
+<ul>
+<li>基因组学：genomics  <br>
+基因组学、结构基因组学、功能基因组学是三个紧密相连的生物信息学重点研究内容。
+基因组学的目标是测定和分析某个（些）物种的全部DNA序列特征。
+结构基因组学可为基因组学提供大量DNA及蛋白质数据，是基因组学的有力支撑及基础。
+功能基因组学的主要任务是充分、合理利用基因组学及结构基因组学提供的信息，系统地研究基因及其产物的功能。
+<ul>
+<li>基因组学：研究生物体基因组的组成情况，以及各基因的结构，彼此间关系及表达调控的科学。</li>
+<li>结构基因组学： structure genomics，是一门用结构生物学方法在生物体整体水平上（如全生物体、全细胞或整个基因组）对全部蛋白质（受体蛋白质、酶、通道以及与基因调控密切相关的核酸结合蛋白质）、相关蛋白质复合物（如酶和底物，酶与抑制剂，作用源与受体，DNA与其结合蛋白等）、RNA及其他生物大分子进行分析，精细测定其三维结构的学科。</li>
+<li>功能基因组学：functional gemomics，代表基因组学分析的新阶段，主要利用结构基因组学提供的信息，发展和应用新的实验以及计算方法，通过在基因组或系统水平上全面分析基因功能。其研究内容主要有如下几个方面：
+<ul>
+<li>基因组表达及调控的研究；</li>
+<li>基因信息的识别；</li>
+<li>基因功能信息的鉴定；</li>
+<li>基因多样性分析；</li>
+<li>比较基因组学comparative genomics</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>转录组学：transcriptomics  <br>
+所谓转录组，就是转录后的所有mRNA的总称，这些能被翻译成蛋白质的编码部分以及非编码部分的功能及相互关系的研究就是转录组的任务。</li>
+<li>蛋白质组学：proteomics  <br>
+是研究一个生命体在其整个生命周期中发挥作用的全部蛋白质，或者参与特定时间和空间（如特定类型的细胞在某一时期经历特定刺激时）范围相关功能的全体蛋白质的情况，包括表达水平、翻译后的修饰、蛋白质-蛋白质互作关系等特征，从而在蛋白质水平上获得对于有关生物体生理、病理等过程的全面认识。</li>
+</ul>
+</li>
+</ol>
+
+    </div>
+
+    
+
+
+
+
+
+<div class="article-tags">
+  
+  <a class="badge badge-light" href="">生信</a>
+  
+</div>
+
+
+
+<div class="share-box" aria-hidden="true">
+  <ul class="share">
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="https://twitter.com/intent/tweet?url=/post/%E7%94%9F%E7%89%A9%E4%BF%A1%E6%81%AF%E5%AD%A6-%E6%9D%8E%E9%9C%9E%E7%AC%AC%E4%BA%8C%E7%89%88-%E7%BB%AA%E8%AE%BA/&amp;text=%e7%94%9f%e7%89%a9%e4%bf%a1%e6%81%af%e5%ad%a6-%e6%9d%8e%e9%9c%9e%e7%ac%ac%e4%ba%8c%e7%89%88-%e7%bb%aa%e8%ae%ba" target="_blank" rel="noopener" class="share-btn-twitter">
+          <i class="fab fa-twitter"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="https://www.facebook.com/sharer.php?u=/post/%E7%94%9F%E7%89%A9%E4%BF%A1%E6%81%AF%E5%AD%A6-%E6%9D%8E%E9%9C%9E%E7%AC%AC%E4%BA%8C%E7%89%88-%E7%BB%AA%E8%AE%BA/&amp;t=%e7%94%9f%e7%89%a9%e4%bf%a1%e6%81%af%e5%ad%a6-%e6%9d%8e%e9%9c%9e%e7%ac%ac%e4%ba%8c%e7%89%88-%e7%bb%aa%e8%ae%ba" target="_blank" rel="noopener" class="share-btn-facebook">
+          <i class="fab fa-facebook"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="mailto:?subject=%e7%94%9f%e7%89%a9%e4%bf%a1%e6%81%af%e5%ad%a6-%e6%9d%8e%e9%9c%9e%e7%ac%ac%e4%ba%8c%e7%89%88-%e7%bb%aa%e8%ae%ba&amp;body=/post/%E7%94%9F%E7%89%A9%E4%BF%A1%E6%81%AF%E5%AD%A6-%E6%9D%8E%E9%9C%9E%E7%AC%AC%E4%BA%8C%E7%89%88-%E7%BB%AA%E8%AE%BA/" target="_blank" rel="noopener" class="share-btn-email">
+          <i class="fas fa-envelope"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="https://www.linkedin.com/shareArticle?url=/post/%E7%94%9F%E7%89%A9%E4%BF%A1%E6%81%AF%E5%AD%A6-%E6%9D%8E%E9%9C%9E%E7%AC%AC%E4%BA%8C%E7%89%88-%E7%BB%AA%E8%AE%BA/&amp;title=%e7%94%9f%e7%89%a9%e4%bf%a1%e6%81%af%e5%ad%a6-%e6%9d%8e%e9%9c%9e%e7%ac%ac%e4%ba%8c%e7%89%88-%e7%bb%aa%e8%ae%ba" target="_blank" rel="noopener" class="share-btn-linkedin">
+          <i class="fab fa-linkedin-in"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="https://web.whatsapp.com/send?text=%e7%94%9f%e7%89%a9%e4%bf%a1%e6%81%af%e5%ad%a6-%e6%9d%8e%e9%9c%9e%e7%ac%ac%e4%ba%8c%e7%89%88-%e7%bb%aa%e8%ae%ba%20/post/%E7%94%9F%E7%89%A9%E4%BF%A1%E6%81%AF%E5%AD%A6-%E6%9D%8E%E9%9C%9E%E7%AC%AC%E4%BA%8C%E7%89%88-%E7%BB%AA%E8%AE%BA/" target="_blank" rel="noopener" class="share-btn-whatsapp">
+          <i class="fab fa-whatsapp"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="https://service.weibo.com/share/share.php?url=/post/%E7%94%9F%E7%89%A9%E4%BF%A1%E6%81%AF%E5%AD%A6-%E6%9D%8E%E9%9C%9E%E7%AC%AC%E4%BA%8C%E7%89%88-%E7%BB%AA%E8%AE%BA/&amp;title=%e7%94%9f%e7%89%a9%e4%bf%a1%e6%81%af%e5%ad%a6-%e6%9d%8e%e9%9c%9e%e7%ac%ac%e4%ba%8c%e7%89%88-%e7%bb%aa%e8%ae%ba" target="_blank" rel="noopener" class="share-btn-weibo">
+          <i class="fab fa-weibo"></i>
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+  
+  
+  
+    
+  
+  
+  
+  <div class="media author-card content-widget-hr">
+    
+      
+      <img class="avatar mr-3 avatar-circle" src="../../authors/admin/avatar_hu04cc06b45fe3d1130f73ba3a4699b934_34764_270x270_fill_q90_lanczos_center.jpg" alt="Avatar">
+    
+
+    <div class="media-body">
+      <h5 class="card-title"><a href="../../">Dr.二哈</a></h5>
+      <h6 class="card-subtitle">在读苦逼科研狗</h6>
+      <p class="card-text">研究方向：脂质营养，业余时间自学R。</p>
+      <ul class="network-icon" aria-hidden="true">
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <li>
+      <a href="../../#contact" >
+        <i class="fas fa-envelope"></i>
+      </a>
+    </li>
+  
+</ul>
+
+    </div>
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+
+
+  </div>
+</article>
+
+      
+
+    
+    
+    
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.imagesloaded/4.1.4/imagesloaded.pkgd.min.js" integrity="sha256-lqvxZrPLtfffUl2G/e7szqSvPBILGbwmsGE1MKlOi0Q=" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.isotope/3.0.6/isotope.pkgd.min.js" integrity="sha256-CBrpuqrMhXwcLLUd5tvQ4euBHCdh7wGlDfNz8vbu/iI=" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js" integrity="sha256-yt2kYMy0w8AbtF89WXb2P1rfjcP/HTHLT7097U8Y5b8=" crossorigin="anonymous"></script>
+
+      
+
+      
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.1/highlight.min.js" integrity="sha256-eOgo0OtLL4cdq7RdwRUiGKLX9XsIJ7nGhWEKbohmVAQ=" crossorigin="anonymous"></script>
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.1/languages/r.min.js"></script>
+        
+      
+
+    
+
+    
+    
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.5.1/leaflet.js" integrity="sha256-EErZamuLefUnbMBQbsEqu1USa+btR2oIlCpBJbyD4/g=" crossorigin="anonymous"></script>
+    
+
+    
+    
+    <script>const code_highlighting = true;</script>
+    
+
+    
+    
+    <script>const isSiteThemeDark = false;</script>
+    
+
+    
+    
+    
+    
+    
+    
+    <script>
+      const search_config = {"indexURI":"/index.json","minLength":1,"threshold":0.3};
+      const i18n = {"no_results":"没有找到结果","placeholder":"搜索...","results":"搜索结果"};
+      const content_type = {
+        'post': "文章",
+        'project': "项目",
+        'publication' : "出版物",
+        'talk' : "演讲"
+        };
+    </script>
+    
+
+    
+    
+
+    
+    
+    <script id="search-hit-fuse-template" type="text/x-template">
+      <div class="search-hit" id="summary-{{key}}">
+      <div class="search-hit-content">
+        <div class="search-hit-name">
+          <a href="{{relpermalink}}">{{title}}</a>
+          <div class="article-metadata search-hit-type">{{type}}</div>
+          <p class="search-hit-description">{{snippet}}</p>
+        </div>
+      </div>
+      </div>
+    </script>
+    
+
+    
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/3.2.1/fuse.min.js" integrity="sha256-VzgmKYmhsGNNN4Ph1kMW+BjoYJM2jV5i4IlFoeZA9XI=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script>
+    
+
+    
+    
+
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+      
+    
+    
+    
+    
+    <script src="../../js/academic.min.c816d323c3a55093dae0829b44ea1ca8.js"></script>
+
+    
+
+
+
+
+
+
+  
+  
+  <div class="container">
+    <footer class="site-footer">
+  
+  <p class="powered-by">
+    
+      <a href="../../privacy/">Privacy Policy</a>
+    
+    
+       &middot; 
+      <a href="../../terms/">Terms</a>
+    
+  </p>
+  
+
+  <p class="powered-by">
+    ©<code>2020</code> &middot; 
+
+    Powered by the
+    <a href="https://sourcethemes.com/academic/" target="_blank" rel="noopener">Academic theme</a> for
+    <a href="https://gohugo.io" target="_blank" rel="noopener">Hugo</a>.
+
+    
+    <span class="float-right" aria-hidden="true">
+      <a href="#" class="back-to-top">
+        <span class="button_icon">
+          <i class="fas fa-chevron-up fa-2x"></i>
+        </span>
+      </a>
+    </span>
+    
+  </p>
+</footer>
+
+  </div>
+  
+
+  
+<div id="modal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">引用</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <pre><code class="tex hljs"></code></pre>
+      </div>
+      <div class="modal-footer">
+        <a class="btn btn-outline-primary my-1 js-copy-cite" href="#" target="_blank">
+          <i class="fas fa-copy"></i> 复制
+        </a>
+        <a class="btn btn-outline-primary my-1 js-download-cite" href="#" target="_blank">
+          <i class="fas fa-download"></i> 下载
+        </a>
+        <div id="modal-error"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

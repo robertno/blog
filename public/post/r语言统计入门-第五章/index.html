@@ -1,0 +1,1298 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="generator" content="Source Themes Academic 4.8.0">
+
+  
+
+  
+  
+  
+  
+  
+    
+    
+    
+  
+  
+
+  <meta name="author" content="Dr.二哈">
+
+  
+  
+  
+    
+  
+  <meta name="description" content="第五章 单样本与双样本检验 本章的主题是进行连续型数据的比较，可">
+
+  
+  <link rel="alternate" hreflang="zh" href="../../post/r%E8%AF%AD%E8%A8%80%E7%BB%9F%E8%AE%A1%E5%85%A5%E9%97%A8-%E7%AC%AC%E4%BA%94%E7%AB%A0/">
+
+  
+
+
+  
+  
+  
+  <meta name="theme-color" content="#2962ff">
+  
+
+  
+  
+  
+  <script src="../../js/mathjax-config.js"></script>
+  
+
+  
+  
+  
+  
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/academicons/1.8.6/css/academicons.min.css" integrity="sha256-uFVgMKfistnJAfoCUQigIl+JfUaP47GrRKjf6CTPVmw=" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.0-1/css/all.min.css" integrity="sha256-4w9DunooKSr3MFXHXWyFER38WmPdm361bQS/2KUWZbU=" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css" integrity="sha256-Vzbj7sDDS/woiFS3uNKo8eIuni59rjyNGtXfstRzStA=" crossorigin="anonymous">
+
+    
+    
+    
+      
+    
+    
+      
+      
+        
+          <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.1/styles/github.min.css" crossorigin="anonymous" title="hl-light">
+          <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.1/styles/dracula.min.css" crossorigin="anonymous" title="hl-dark" disabled>
+        
+      
+    
+
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.5.1/leaflet.css" integrity="sha256-SHMGCYmST46SoyGgo4YR/9AlK1vf3ff84Aq9yK4hdqM=" crossorigin="anonymous">
+    
+
+    
+
+    
+    
+      
+
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/lazysizes/5.1.2/lazysizes.min.js" integrity="sha256-Md1qLToewPeKjfAHU1zyPwOutccPAm5tahnaw7Osw0A=" crossorigin="anonymous" async></script>
+      
+    
+      
+
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" integrity="" crossorigin="anonymous" async></script>
+      
+    
+      
+
+      
+      
+
+      
+    
+
+  
+
+  
+  
+  
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat:400,700%7CRoboto:400,400italic,700%7CRoboto+Mono&display=swap">
+  
+
+  
+  
+  
+  
+  <link rel="stylesheet" href="../../css/academic.css">
+
+  
+
+
+
+
+  
+
+
+  
+
+  <link rel="manifest" href="../../index.webmanifest">
+  <link rel="icon" type="image/png" href="../../images/icon_hu0b7a4cb9992c9ac0e91bd28ffd38dd00_9727_32x32_fill_lanczos_center_2.png">
+  <link rel="apple-touch-icon" type="image/png" href="../../images/icon_hu0b7a4cb9992c9ac0e91bd28ffd38dd00_9727_192x192_fill_lanczos_center_2.png">
+
+  <link rel="canonical" href="../../post/r%E8%AF%AD%E8%A8%80%E7%BB%9F%E8%AE%A1%E5%85%A5%E9%97%A8-%E7%AC%AC%E4%BA%94%E7%AB%A0/">
+
+  
+  
+  
+  
+  
+    
+    
+  
+  
+  <meta property="twitter:card" content="summary">
+  
+  <meta property="og:site_name" content="Bionew">
+  <meta property="og:url" content="/post/r%E8%AF%AD%E8%A8%80%E7%BB%9F%E8%AE%A1%E5%85%A5%E9%97%A8-%E7%AC%AC%E4%BA%94%E7%AB%A0/">
+  <meta property="og:title" content="R语言统计入门-第五章 | Bionew">
+  <meta property="og:description" content="第五章 单样本与双样本检验 本章的主题是进行连续型数据的比较，可"><meta property="og:image" content="img/map[gravatar:%!s(bool=false) shape:circle]">
+  <meta property="twitter:image" content="img/map[gravatar:%!s(bool=false) shape:circle]"><meta property="og:locale" content="zh">
+  
+    
+      <meta property="article:published_time" content="2018-03-14T00:00:00&#43;00:00">
+    
+    <meta property="article:modified_time" content="2018-03-14T00:00:00&#43;00:00">
+  
+
+  
+
+
+    
+
+
+
+
+
+
+  
+
+
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "/post/r%E8%AF%AD%E8%A8%80%E7%BB%9F%E8%AE%A1%E5%85%A5%E9%97%A8-%E7%AC%AC%E4%BA%94%E7%AB%A0/"
+  },
+  "headline": "R语言统计入门-第五章",
+  
+  "datePublished": "2018-03-14T00:00:00Z",
+  "dateModified": "2018-03-14T00:00:00Z",
+  
+  "author": {
+    "@type": "Person",
+    "name": "Dr.二哈"
+  },
+  
+  "publisher": {
+    "@type": "Organization",
+    "name": "Bionew",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "/images/icon_hu0b7a4cb9992c9ac0e91bd28ffd38dd00_9727_192x192_fill_lanczos_center_2.png"
+    }
+  },
+  "description": "第五章 单样本与双样本检验 本章的主题是进行连续型数据的比较，可"
+}
+</script>
+
+  
+
+  
+
+
+  
+
+
+  
+
+
+
+
+
+  <title>R语言统计入门-第五章 | Bionew</title>
+
+</head>
+
+<body id="top" data-spy="scroll" data-offset="70" data-target="#TableOfContents" >
+
+  <aside class="search-results" id="search">
+  <div class="container">
+    <section class="search-header">
+
+      <div class="row no-gutters justify-content-between mb-3">
+        <div class="col-6">
+          <h1>搜索</h1>
+        </div>
+        <div class="col-6 col-search-close">
+          <a class="js-search" href="#"><i class="fas fa-times-circle text-muted" aria-hidden="true"></i></a>
+        </div>
+      </div>
+
+      <div id="search-box">
+        
+        <input name="q" id="search-query" placeholder="搜索..." autocapitalize="off"
+        autocomplete="off" autocorrect="off" spellcheck="false" type="search">
+        
+      </div>
+
+    </section>
+    <section class="section-search-results">
+
+      <div id="search-hits">
+        
+      </div>
+
+    </section>
+  </div>
+</aside>
+
+
+  
+
+
+
+
+
+
+
+<nav class="navbar navbar-expand-lg navbar-light compensate-for-scrollbar" id="navbar-main">
+  <div class="container">
+
+    
+    <div class="d-none d-lg-inline-flex">
+      <a class="navbar-brand" href="../../">Bionew</a>
+    </div>
+    
+
+    
+    <button type="button" class="navbar-toggler" data-toggle="collapse"
+            data-target="#navbar-content" aria-controls="navbar" aria-expanded="false" aria-label="切换导航">
+    <span><i class="fas fa-bars"></i></span>
+    </button>
+    
+
+    
+    <div class="navbar-brand-mobile-wrapper d-inline-flex d-lg-none">
+      <a class="navbar-brand" href="../../">Bionew</a>
+    </div>
+    
+
+    
+    
+    <div class="navbar-collapse main-menu-item collapse justify-content-start" id="navbar-content">
+
+      
+      <ul class="navbar-nav d-md-inline-flex">
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        
+        
+        
+        
+        
+        
+          
+          
+          
+            
+          
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link " href="../../#hero"><span>Demo</span></a>
+        </li>
+
+        
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        
+        
+        
+        
+        
+        
+          
+          
+          
+            
+          
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link " href="../../#posts"><span>Posts</span></a>
+        </li>
+
+        
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        
+        
+        
+        
+        
+        
+          
+          
+          
+            
+          
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link " href="../../#projects"><span>Projects</span></a>
+        </li>
+
+        
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        
+        
+        
+        
+        
+        
+          
+          
+          
+            
+          
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link " href="../../#featured"><span>Publications</span></a>
+        </li>
+
+        
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        
+        
+        
+        
+        
+        
+
+        <li class="nav-item">
+          <a class="nav-link " href="../../courses/"><span>Courses</span></a>
+        </li>
+
+        
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        
+        
+        
+        
+        
+        
+          
+          
+          
+            
+          
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link " href="../../#contact"><span>Contact</span></a>
+        </li>
+
+        
+        
+
+      
+
+        
+      </ul>
+    </div>
+
+    <ul class="nav-icons navbar-nav flex-row ml-auto d-flex pl-md-2">
+      
+      <li class="nav-item">
+        <a class="nav-link js-search" href="#"><i class="fas fa-search" aria-hidden="true"></i></a>
+      </li>
+      
+
+      
+      <li class="nav-item">
+        <a class="nav-link js-dark-toggle" href="#"><i class="fas fa-moon" aria-hidden="true"></i></a>
+      </li>
+      
+
+      
+
+    </ul>
+
+  </div>
+</nav>
+
+
+  <article class="article">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+  
+  
+<div class="article-container pt-3">
+  <h1>R语言统计入门-第五章</h1>
+
+  
+
+  
+    
+
+
+<div class="article-metadata">
+
+  
+  
+
+  
+  <span class="article-date">
+    
+    
+      
+    
+    Mar 14, 2018
+  </span>
+  
+
+  
+
+  
+  <span class="middot-divider"></span>
+  <span class="article-reading-time">
+    10 分钟阅读时长
+  </span>
+  
+
+  
+  
+  
+
+  
+  
+  <span class="middot-divider"></span>
+  <span class="article-categories">
+    <i class="fas fa-folder mr-1"></i><a href="../../categories/r/">R</a>, <a href="">统计</a></span>
+  
+
+</div>
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+</div>
+
+
+
+  <div class="article-container">
+
+    <div class="article-style">
+      
+
+
+<div id="-" class="section level1">
+<h1>第五章 单样本与双样本检验</h1>
+<p> 本章的主题是进行连续型数据的比较，可能是比较两组数据，或者是一组数据与一个预设值。</p>
+<p> 首先介绍两个函数，用来进行 <em>t</em> 检验的t.test和进行Wilcoxon检验的wilcox.test。它们都能够对单样本、双样本与配对样本进行检验。注意的是，双样本Wilcoxon检验在许多教科书中也叫作Mann-Whitney检验。</p>
+<div id="-t-" class="section level2">
+<h2>5.1 单样本 <em>t</em> 检验</h2>
+<p> <em>t</em> 检验假设数据来自一个正态分布。在单样本的情况下，假设<span class="math inline">\(x_1,...,x_n\)</span>来自于服从<span class="math inline">\(N(\mu,\sigma^2)\)</span>的独立随机变量，其中<span class="math inline">\(N(\mu,\sigma^2)\)</span>表示均值为<span class="math inline">\(\mu\)</span>、方差为<span class="math inline">\(\sigma\)</span>的正态分布。希望对假设<span class="math inline">\(\mu=\mu_0\)</span>进行检验。我们能用样本的均值<span class="math inline">\(\overline{x}\)</span>与标准差<span class="math inline">\(s\)</span>来估计真实参数<span class="math inline">\(\mu\)</span>与<span class="math inline">\(\sigma\)</span>。</p>
+<p> 下面讲下均值的标准误，即SEM（Standard Error of the Mean），对<span class="math inline">\(n\)</span>个均值为<span class="math inline">\(\mu\)</span>、方差为<span class="math inline">\(\sigma\)</span>的随机变量求平均值，SEM便用来描述这个平均值的波动性，它的表达式是： <span class="math display">\[
+SEM=\sigma/\sqrt{n}
+\]</span>  这个值能告诉我们观察到的均值偏离真实值多远是比较合适的。对于服从正态分布的数据，有一条一般性准则：有95%的数据会落在<span class="math inline">\(\mu\pm2\sigma\)</span>这个区间里。所以如果<span class="math inline">\(\mu_0\)</span>是真实的平均值，那么<span class="math inline">\(\overline{x}\)</span>就应该落在<span class="math inline">\(\mu_0\pm2SEM\)</span>中。也就是说，可以通过计算： <span class="math display">\[
+t=\frac{\overline{x}-\mu_0}{SEM}
+\]</span> 来判断 <em>t</em> 是否落在了一个接受域中。<em>t</em> 应该以一定的概率落在这个接受域之外，这个概率被称为显著性水平。显著性水平一般被设为5%，此时接受域大致是-2到2的区间。</p>
+<p> 如果 <em>t</em> 落在接受域之外，那么就在预设的显著性水平上拒绝零假设。另一种（等价的）的方法是计算 <em>p</em> 值，它指的是得到一个绝对值上大于或等于当前 <em>t</em> 值的概率，我们能在 <em>p</em> 值小于显著性水平的情况下拒绝零假设。</p>
+<p> 下面是一个具体例子，反映11个女性的每日摄入能量（千焦）记录。</p>
+<pre class="r"><code>daily.intake &lt;- c(5260,5470,6180,6390,6515,6805,7515,7515,8230,8770)
+#先看下简单的描述性统计
+mean(daily.intake)</code></pre>
+<pre><code>## [1] 6865</code></pre>
+<pre class="r"><code>sd(daily.intake)</code></pre>
+<pre><code>## [1] 1139.213</code></pre>
+<pre class="r"><code>quantile(daily.intake)</code></pre>
+<pre><code>##     0%    25%    50%    75%   100% 
+## 5260.0 6232.5 6660.0 7515.0 8770.0</code></pre>
+<pre class="r"><code>#现在想检验一下这些数据是否与推荐值7725千焦相差甚远，假设这些数据来自于正态分布
+#那么目的就是检验这个分布是否满足μ=7725
+#下面用t.test进行
+t.test(daily.intake,mu=7725)</code></pre>
+<pre><code>## 
+##  One Sample t-test
+## 
+## data:  daily.intake
+## t = -2.3872, df = 9, p-value = 0.04074
+## alternative hypothesis: true mean is not equal to 7725
+## 95 percent confidence interval:
+##  6050.056 7679.944
+## sample estimates:
+## mean of x 
+##      6865</code></pre>
+<pre class="r"><code>#t.test函数还有其他参数。这里用mu来指定零假设的均值（默认mu=0）
+#此外，还可以用alternative=&quot;greater&quot;来检验均值是否大于μ
+#或者是alternative=&quot;less&quot;来检验均值是否小于μ
+#还可以通过conf.level=0.99来得到一个99%置信区间</code></pre>
+<p> 下面是对这个结果的解释：</p>
+<p> One Sample t-test</p>
+<p> 这是对所做检验的描述。注意看函数的调用格式，t.test会自动发现用户需要进行一个单样本检验</p>
+<p> data：daily.intake</p>
+<p> 这个是被检验的数据。</p>
+<p> t=-2.8208, df=10, p-value=0.01814</p>
+<p> 这里显示了 <em>t</em> 统计量，相应的自由度df以及准确的 <em>p</em> 值。这里不用拿着一张 <em>t</em> 分布表来查这个统计量落在了那两个分位数之间，就能够立刻看到 <em>p</em> &lt;0.05，于是在自定义的5%显著性水平下，数据显著偏离了原假设中的均值7725千焦。</p>
+<p> alternative hypothesis：true mean is not equal to 7725</p>
+<p> 这里有两个重要的信息：（a）原假设中均值；（b）这是一个双边检验（“not equal to 7725”）。</p>
+<p> 95 percent confidence interval:</p>
+<p> 5986.348 7520.925</p>
+<p> 这是真实均值的95%置信区间：这个区间是一个集合，如果原假设的值来自于这个集合，那么数据便不会显著的偏离。对 <em>t</em> 检验的步骤进行逆向求解，可以得到使得 <em>t</em> 统计量会落在接受域中的一组<span class="math inline">\(\mu_0\)</span>。 <span class="math display">\[
+\overline{x}-t_{0.975}(f)\times SEM\lt\mu\lt\overline{x}+t_{0.975}(f)\times SEM
+\]</span>  sample estimates:</p>
+<p> mean of x</p>
+<p> 6753.636</p>
+<p> 位于最后的这部分是观测值的均值，也就是对真实均数的（点）估计。</p>
+</div>
+<div id="wilcoxon" class="section level2">
+<h2>5.2 Wilcoxon符号秩检验</h2>
+<p> <em>t</em> 检验在用于那些不来自于正态分布的数据时比较稳定，尤其是在大样本情况下。不过有的时候会避免做出这种假设（即非正态分布数据），这时最好用<em>不依赖于分布的方法</em>，这些方法通常都把数据替换成了相应的顺序统计量。</p>
+<p> 对Wilcoxon秩和检验的实际应用基本上与 <em>t</em> 检验相同。</p>
+<pre class="r"><code>#与t.test一样，wilcox.test有mu和alternative两个参数
+#此外，还有correct这个参数，用来指示是否需要进行连续型修正，比如correct=F表示不用
+#还有exact，用来指示是否需要进行精确的计算，也用TRUE和FALSE这两个逻辑值来控制
+wilcox.test(daily.intake, mu=7725)</code></pre>
+<pre><code>## Warning in wilcox.test.default(daily.intake, mu = 7725): cannot compute
+## exact p-value with ties</code></pre>
+<pre><code>## 
+##  Wilcoxon signed rank test with continuity correction
+## 
+## data:  daily.intake
+## V = 8, p-value = 0.05263
+## alternative hypothesis: true location is not equal to 7725</code></pre>
+<p> 这里比t.test的输出更短些，因为一个分参数检验不会出现类似于参数估计以及置信边界等概念。</p>
+<p> 结果里面的<em>V</em>是检验统计量，表示的是正数对应的秩和，在这个例子中，因为存在两个7515，所以<em>p</em>值是通过正态近似的方法来计算的。</p>
+</div>
+<div id="-t-" class="section level2">
+<h2>5.3 两样本 <em>t</em> 检验</h2>
+<p> 两样本 <em>t</em> 检验主要用来检验两个样本是否来自于均值相等的分布。</p>
+<p> 两样本检验和单样本检验的理论基础差别不大。现在从两个组别中抽出数据<span class="math inline">\(x_{11}...,x_{1n_1}\)</span>和<span class="math inline">\(x_{21},...,x_{2n_2}\)</span>，假设它们是从<span class="math inline">\(N(\mu_1,\sigma_1^2)\)</span>与<span class="math inline">\(N(\mu_2,\sigma_2^2)\)</span>两个分布中抽取的样本，并希望检验零假设<span class="math inline">\(\mu_1=\mu_2\)</span>。接着计算： <span class="math display">\[
+t=\frac{\overline{x}_2-\overline{x}_1}{SEDM}
+\]</span>  SEDM（Standard Error of Difference of Means）是<em>均值差的标准误</em>，被定义为： <span class="math display">\[
+SEDM=\sqrt{SEM_1^2+SEM^2_2}
+\]</span>  对于是否假设两组数据的方差相等，SEDM有两种相应计算的方法。“经典”的方法假设方差相等。在这个方法下，先根据两组的标准差计算一个综合性的 <em>s</em> ，然后将它代入SEM。零假设下的 <em>t</em> 值服从自由度为<span class="math inline">\(n_1+n_2-2\)</span>的 <em>t</em> 分布。</p>
+<p> 另一种方法由Welch提出，即以两组各自的标准差<span class="math inline">\(s_1\)</span>和<span class="math inline">\(s_2\)</span>来计算SEM。这个方法算出来 <em>t</em> 统计量已经不满足 <em>t</em> 分布了，不过可以通过一个 <em>t</em> 分布来近似。这个近似分布的自由度能够通过<span class="math inline">\(s_1,s_2\)</span>与样本量来得到，一般不是整数。</p>
+<p> 回头看看每日消耗鞥能量的数据（见1.2.14小节），来比较一下两组女性每日消耗的能量是否有差别。</p>
+<pre class="r"><code>library(ISwR)
+attach(energy)
+energy</code></pre>
+<pre><code>##    expend stature
+## 1    9.21   obese
+## 2    7.53    lean
+## 3    7.48    lean
+## 4    8.08    lean
+## 5    8.09    lean
+## 6   10.15    lean
+## 7    8.40    lean
+## 8   10.88    lean
+## 9    6.13    lean
+## 10   7.90    lean
+## 11  11.51   obese
+## 12  12.79   obese
+## 13   7.05    lean
+## 14  11.85   obese
+## 15   9.97   obese
+## 16   7.48    lean
+## 17   8.79   obese
+## 18   9.69   obese
+## 19   9.68   obese
+## 20   7.58    lean
+## 21   9.19   obese
+## 22   8.11    lean</code></pre>
+<p> 这个数据框的两列包含了所有我们需要的信息。属性变量satrure包含了分组信息，而数值变量expend包含了以兆焦耳为单位的能量消耗。我们只要传递一个模型方程，就能通过R中的t.test和wilcox.test来分析这种格式的数据。</p>
+<p> 我们的目的是两组的水平是否有差异，所以我们用一个 <em>t</em> 检验。</p>
+<pre class="r"><code>#~波浪号是致命expend是通过stature来描述的
+t.test(expend~stature)</code></pre>
+<pre><code>## 
+##  Welch Two Sample t-test
+## 
+## data:  expend by stature
+## t = -3.8555, df = 15.919, p-value = 0.001411
+## alternative hypothesis: true difference in means is not equal to 0
+## 95 percent confidence interval:
+##  -3.459167 -1.004081
+## sample estimates:
+##  mean in group lean mean in group obese 
+##            8.066154           10.297778</code></pre>
+<p> 输出的内容和单样本检验中的基本一致。其中均值之差的置信区间不包含0，与 <em>p</em> 值的结果相统一，意味着在5%的置信水平下差异是显著的。</p>
+<p> R中的 <em>t</em> 检验默认采用Welch的变种算法，当不假设两组方差相等时就应该用它，这也会导致非整数的自由度。</p>
+<p> 为进行平常的 <em>t</em> 检验，应该明确方差相等这个假设，可以通过使参数var.equal=T来达到这一点：</p>
+<pre class="r"><code>t.test(expend~stature, var.equal=T)</code></pre>
+<pre><code>## 
+##  Two Sample t-test
+## 
+## data:  expend by stature
+## t = -3.9456, df = 20, p-value = 0.000799
+## alternative hypothesis: true difference in means is not equal to 0
+## 95 percent confidence interval:
+##  -3.411451 -1.051796
+## sample estimates:
+##  mean in group lean mean in group obese 
+##            8.066154           10.297778</code></pre>
+</div>
+<div class="section level2">
+<h2>5.4 比较方差</h2>
+<p> 虽然在R中不需要假设方差相等也能进行两样本 <em>t</em> 检验，但仍可能对这个假设本身是否正确感兴趣。为此，R提供了var.test函数来做到这一点。这个函数的主要功能是对两样本的方差进行 <em>F</em> 检验。它的使用方法和t.test一样：</p>
+<pre class="r"><code>var.test(expend~stature)</code></pre>
+<pre><code>## 
+##  F test to compare two variances
+## 
+## data:  expend by stature
+## F = 0.78445, num df = 12, denom df = 8, p-value = 0.6797
+## alternative hypothesis: true ratio of variances is not equal to 1
+## 95 percent confidence interval:
+##  0.1867876 2.7547991
+## sample estimates:
+## ratio of variances 
+##           0.784446</code></pre>
+<p> 这里检验结果不显著，所以不能拒绝方差相等这个假设，但是置信区间非常宽。</p>
+</div>
+<div id="wilcoxon" class="section level2">
+<h2>5.5 两样本Wilcoxon检验</h2>
+<p> 如果对正态分布假设有所怀疑，那么可能更需要使用一个非参数检验。两样本Wilcoxon检验用数据的秩（不考虑分组）代替数据本身，然后计算某一组中的秩和。这样便简化成了从1~ n<sub>1</sub>+n<sub>2</sub>中不重复地抽出<em>n<sub>1</sub></em>个数字的问题。</p>
+<pre class="r"><code>wilcox.test(expend~stature)</code></pre>
+<pre><code>## Warning in wilcox.test.default(x = c(7.53, 7.48, 8.08, 8.09, 10.15, 8.4, :
+## cannot compute exact p-value with ties</code></pre>
+<pre><code>## 
+##  Wilcoxon rank sum test with continuity correction
+## 
+## data:  expend by stature
+## W = 12, p-value = 0.002122
+## alternative hypothesis: true location shift is not equal to 0</code></pre>
+<p> 统计量 <em>W</em> 是第一组数据的秩和减去理论最小值（如果最小的<em>n<sub>1</sub></em>个数都在第一组中，那么 <em>W</em> 就等于0）。</p>
+</div>
+<div id="-t-" class="section level2">
+<h2>5.6 配对 <em>t</em> 检验</h2>
+<p> 在同一个实验单位中有着两个度量值时使用配对检验。该检验主要通过做差来将问题简化为单样本检验。不过这种方法意味着我们要假设这个差值与不同水平的度量值是独立的。我们可以将每一对数构成的点与直线y=x画在同一幅图上，或是将每一对数的差与它们的均值画在同一幅图上（即Bland~Altman图），这是有效的图形检查方法。</p>
+<pre class="r"><code>#还是月经前后能量摄入
+attach(intake)
+intake</code></pre>
+<pre><code>##     pre post
+## 1  5260 3910
+## 2  5470 4220
+## 3  5640 3885
+## 4  6180 5160
+## 5  6390 5645
+## 6  6515 4680
+## 7  6805 5265
+## 8  7515 5975
+## 9  7515 6790
+## 10 8230 6900
+## 11 8770 7335</code></pre>
+<pre class="r"><code>#这里的关键是11位女性都被测量了2次，所以查看个人数据的差值是合理的
+post-pre</code></pre>
+<pre><code>##  [1] -1350 -1250 -1755 -1020  -745 -1835 -1540 -1540  -725 -1330 -1435</code></pre>
+<pre class="r"><code>#基本上都是负数
+#这意味着月经后有更低的能量摄入
+#t检验中paired=T表示希望进行一个配对检验
+t.test(pre, post, paired = T)</code></pre>
+<pre><code>## 
+##  Paired t-test
+## 
+## data:  pre and post
+## t = 11.941, df = 10, p-value = 3.059e-07
+## alternative hypothesis: true difference in means is not equal to 0
+## 95 percent confidence interval:
+##  1074.072 1566.838
+## sample estimates:
+## mean of the differences 
+##                1320.455</code></pre>
+<pre class="r"><code>t.test(pre, post)</code></pre>
+<pre><code>## 
+##  Welch Two Sample t-test
+## 
+## data:  pre and post
+## t = 2.6242, df = 19.92, p-value = 0.01629
+## alternative hypothesis: true difference in means is not equal to 0
+## 95 percent confidence interval:
+##   270.5633 2370.3458
+## sample estimates:
+## mean of x mean of y 
+##  6753.636  5433.182</code></pre>
+<pre class="r"><code>#后者的t明显变小了，虽然在5%的水平下显著
+#置信区间几乎是配对检验中的4倍
+#从这两个可以看出，如果没有对比同一个人测量的前后信息，那么准确性就会降低
+#当然也可以得出这样的结论
+#在同一个人上进行两次测量，比对两组分别处于月经前、后的女性进行测量，效率更高</code></pre>
+</div>
+<div id="wilcoxon" class="section level2">
+<h2>5.7 配对Wilcoxon检验</h2>
+<pre class="r"><code>#与t.test函数相同
+wilcox.test(pre, post, paired = T)</code></pre>
+<pre><code>## Warning in wilcox.test.default(pre, post, paired = T): cannot compute exact
+## p-value with ties</code></pre>
+<pre><code>## 
+##  Wilcoxon signed rank test with continuity correction
+## 
+## data:  pre and post
+## V = 66, p-value = 0.00384
+## alternative hypothesis: true location shift is not equal to 0</code></pre>
+<p> 这个结果与 <em>t</em> 检验没有多大差别。<em>p</em> 值没有那么极端。</p>
+<p> 又一次，在由数据相等的情况下无法精确的计算 <em>p</em> 值，这里有两个相等的差值都是-1540。</p>
+<p> 对当前数据很容易计算精确的 <em>p</em> 值。这是11个正差值的概率，加上11个负差值的概率，即<span class="math inline">\(2\times(\frac{1}{2})^{11}=\frac{1}{1024}=0.00098\)</span>，所以近似计算的<em>p</em> 值差不多是真实值的4倍。</p>
+</div>
+<div class="section level2">
+<h2>练习题</h2>
+<ol style="list-style-type: decimal">
+<li>数据集react（注意这是一个向量）的值看起来是正态分布的吗，它的均值在 <em>t</em> 检验下显著地不等于0吗</li>
+<li>在数据集vitcap中使用 <em>t</em> 检验比较两组肺活量，并计算99%置信区间。这个比较结果可能会产生误导，为什么</li>
+<li>用非参数方法对react和vitcap两个数据做分析。</li>
+<li>使用图像法检查intake数据集的配对 <em>t</em> 检验的建设是否合理。</li>
+<li>函数shapiro.test基于Q-Q图的线性性来检验正态性。对react数据进行这个检验，它对移除异常值有帮助吗。</li>
+<li>如果忽略潜在的时间因素影响，能通过简单的方法（怎么做）送ashina里的交叉实验中分析药物效果。提示，考虑个体内部的差异，如果只出现了时间因素的影响，两组差异会有什么表现</li>
+<li>在10个含有25个观测值的模拟正态分布数据上分别做单样本 <em>t</em> 检验。用不同的分布再重复这个实验；尝试自由度为2的<em>t</em> 分布，以及指数分布（在后一种情况下对均值为1的分布做检验）。你能自动化这个实验从而重复更多次吗。</li>
+</ol>
+</div>
+</div>
+
+    </div>
+
+    
+
+
+
+
+
+<div class="article-tags">
+  
+  <a class="badge badge-light" href="../../tags/r/">R</a>
+  
+  <a class="badge badge-light" href="">杂</a>
+  
+</div>
+
+
+
+<div class="share-box" aria-hidden="true">
+  <ul class="share">
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="https://twitter.com/intent/tweet?url=/post/r%E8%AF%AD%E8%A8%80%E7%BB%9F%E8%AE%A1%E5%85%A5%E9%97%A8-%E7%AC%AC%E4%BA%94%E7%AB%A0/&amp;text=R%e8%af%ad%e8%a8%80%e7%bb%9f%e8%ae%a1%e5%85%a5%e9%97%a8-%e7%ac%ac%e4%ba%94%e7%ab%a0" target="_blank" rel="noopener" class="share-btn-twitter">
+          <i class="fab fa-twitter"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="https://www.facebook.com/sharer.php?u=/post/r%E8%AF%AD%E8%A8%80%E7%BB%9F%E8%AE%A1%E5%85%A5%E9%97%A8-%E7%AC%AC%E4%BA%94%E7%AB%A0/&amp;t=R%e8%af%ad%e8%a8%80%e7%bb%9f%e8%ae%a1%e5%85%a5%e9%97%a8-%e7%ac%ac%e4%ba%94%e7%ab%a0" target="_blank" rel="noopener" class="share-btn-facebook">
+          <i class="fab fa-facebook"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="mailto:?subject=R%e8%af%ad%e8%a8%80%e7%bb%9f%e8%ae%a1%e5%85%a5%e9%97%a8-%e7%ac%ac%e4%ba%94%e7%ab%a0&amp;body=/post/r%E8%AF%AD%E8%A8%80%E7%BB%9F%E8%AE%A1%E5%85%A5%E9%97%A8-%E7%AC%AC%E4%BA%94%E7%AB%A0/" target="_blank" rel="noopener" class="share-btn-email">
+          <i class="fas fa-envelope"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="https://www.linkedin.com/shareArticle?url=/post/r%E8%AF%AD%E8%A8%80%E7%BB%9F%E8%AE%A1%E5%85%A5%E9%97%A8-%E7%AC%AC%E4%BA%94%E7%AB%A0/&amp;title=R%e8%af%ad%e8%a8%80%e7%bb%9f%e8%ae%a1%e5%85%a5%e9%97%a8-%e7%ac%ac%e4%ba%94%e7%ab%a0" target="_blank" rel="noopener" class="share-btn-linkedin">
+          <i class="fab fa-linkedin-in"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="https://web.whatsapp.com/send?text=R%e8%af%ad%e8%a8%80%e7%bb%9f%e8%ae%a1%e5%85%a5%e9%97%a8-%e7%ac%ac%e4%ba%94%e7%ab%a0%20/post/r%E8%AF%AD%E8%A8%80%E7%BB%9F%E8%AE%A1%E5%85%A5%E9%97%A8-%E7%AC%AC%E4%BA%94%E7%AB%A0/" target="_blank" rel="noopener" class="share-btn-whatsapp">
+          <i class="fab fa-whatsapp"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="https://service.weibo.com/share/share.php?url=/post/r%E8%AF%AD%E8%A8%80%E7%BB%9F%E8%AE%A1%E5%85%A5%E9%97%A8-%E7%AC%AC%E4%BA%94%E7%AB%A0/&amp;title=R%e8%af%ad%e8%a8%80%e7%bb%9f%e8%ae%a1%e5%85%a5%e9%97%a8-%e7%ac%ac%e4%ba%94%e7%ab%a0" target="_blank" rel="noopener" class="share-btn-weibo">
+          <i class="fab fa-weibo"></i>
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+  
+  
+  
+    
+  
+  
+  
+  <div class="media author-card content-widget-hr">
+    
+      
+      <img class="avatar mr-3 avatar-circle" src="../../authors/admin/avatar_hu04cc06b45fe3d1130f73ba3a4699b934_34764_270x270_fill_q90_lanczos_center.jpg" alt="Avatar">
+    
+
+    <div class="media-body">
+      <h5 class="card-title"><a href="../../">Dr.二哈</a></h5>
+      <h6 class="card-subtitle">在读苦逼科研狗</h6>
+      <p class="card-text">研究方向：脂质营养，业余时间自学R。</p>
+      <ul class="network-icon" aria-hidden="true">
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <li>
+      <a href="../../#contact" >
+        <i class="fas fa-envelope"></i>
+      </a>
+    </li>
+  
+</ul>
+
+    </div>
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <div class="article-widget content-widget-hr">
+    <h3>相关</h3>
+    <ul>
+      
+      <li><a href="../../post/r%E8%AF%AD%E8%A8%80%E7%BB%9F%E8%AE%A1%E5%85%A5%E9%97%A8-%E7%AC%AC%E5%9B%9B%E7%AB%A0/">R语言统计入门-第四章</a></li>
+      
+      <li><a href="../../post/2018-02-27-r%E8%AF%AD%E8%A8%80%E7%BB%9F%E8%AE%A1%E5%85%A5%E9%97%A8-%E7%AC%AC%E4%B8%89%E7%AB%A0/">R语言统计入门-第三章</a></li>
+      
+      <li><a href="../../post/r%E8%AF%AD%E8%A8%80%E7%BB%9F%E8%AE%A1%E5%85%A5%E9%97%A8-%E7%AC%AC%E4%BA%8C%E7%AB%A0/">R语言统计入门-第二章</a></li>
+      
+      <li><a href="../../post/r%E8%AF%AD%E8%A8%80%E7%BB%9F%E8%AE%A1%E5%85%A5%E9%97%A8-%E7%AC%AC%E4%B8%80%E7%AB%A0/">R语言统计入门-第一章</a></li>
+      
+      <li><a href="../../post/%E7%AC%AC%E4%B8%80%E7%AF%87%E5%8D%9A%E5%AE%A2/">第一篇博客</a></li>
+      
+    </ul>
+  </div>
+  
+
+
+
+  </div>
+</article>
+
+      
+
+    
+    
+    
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.imagesloaded/4.1.4/imagesloaded.pkgd.min.js" integrity="sha256-lqvxZrPLtfffUl2G/e7szqSvPBILGbwmsGE1MKlOi0Q=" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.isotope/3.0.6/isotope.pkgd.min.js" integrity="sha256-CBrpuqrMhXwcLLUd5tvQ4euBHCdh7wGlDfNz8vbu/iI=" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js" integrity="sha256-yt2kYMy0w8AbtF89WXb2P1rfjcP/HTHLT7097U8Y5b8=" crossorigin="anonymous"></script>
+
+      
+
+      
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.1/highlight.min.js" integrity="sha256-eOgo0OtLL4cdq7RdwRUiGKLX9XsIJ7nGhWEKbohmVAQ=" crossorigin="anonymous"></script>
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.1/languages/r.min.js"></script>
+        
+      
+
+    
+
+    
+    
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.5.1/leaflet.js" integrity="sha256-EErZamuLefUnbMBQbsEqu1USa+btR2oIlCpBJbyD4/g=" crossorigin="anonymous"></script>
+    
+
+    
+    
+    <script>const code_highlighting = true;</script>
+    
+
+    
+    
+    <script>const isSiteThemeDark = false;</script>
+    
+
+    
+    
+    
+    
+    
+    
+    <script>
+      const search_config = {"indexURI":"/index.json","minLength":1,"threshold":0.3};
+      const i18n = {"no_results":"没有找到结果","placeholder":"搜索...","results":"搜索结果"};
+      const content_type = {
+        'post': "文章",
+        'project': "项目",
+        'publication' : "出版物",
+        'talk' : "演讲"
+        };
+    </script>
+    
+
+    
+    
+
+    
+    
+    <script id="search-hit-fuse-template" type="text/x-template">
+      <div class="search-hit" id="summary-{{key}}">
+      <div class="search-hit-content">
+        <div class="search-hit-name">
+          <a href="{{relpermalink}}">{{title}}</a>
+          <div class="article-metadata search-hit-type">{{type}}</div>
+          <p class="search-hit-description">{{snippet}}</p>
+        </div>
+      </div>
+      </div>
+    </script>
+    
+
+    
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/3.2.1/fuse.min.js" integrity="sha256-VzgmKYmhsGNNN4Ph1kMW+BjoYJM2jV5i4IlFoeZA9XI=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script>
+    
+
+    
+    
+
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+      
+    
+    
+    
+    
+    <script src="../../js/academic.min.c816d323c3a55093dae0829b44ea1ca8.js"></script>
+
+    
+
+
+
+
+
+
+  
+  
+  <div class="container">
+    <footer class="site-footer">
+  
+  <p class="powered-by">
+    
+      <a href="../../privacy/">Privacy Policy</a>
+    
+    
+       &middot; 
+      <a href="../../terms/">Terms</a>
+    
+  </p>
+  
+
+  <p class="powered-by">
+    ©<code>2020</code> &middot; 
+
+    Powered by the
+    <a href="https://sourcethemes.com/academic/" target="_blank" rel="noopener">Academic theme</a> for
+    <a href="https://gohugo.io" target="_blank" rel="noopener">Hugo</a>.
+
+    
+    <span class="float-right" aria-hidden="true">
+      <a href="#" class="back-to-top">
+        <span class="button_icon">
+          <i class="fas fa-chevron-up fa-2x"></i>
+        </span>
+      </a>
+    </span>
+    
+  </p>
+</footer>
+
+  </div>
+  
+
+  
+<div id="modal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">引用</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <pre><code class="tex hljs"></code></pre>
+      </div>
+      <div class="modal-footer">
+        <a class="btn btn-outline-primary my-1 js-copy-cite" href="#" target="_blank">
+          <i class="fas fa-copy"></i> 复制
+        </a>
+        <a class="btn btn-outline-primary my-1 js-download-cite" href="#" target="_blank">
+          <i class="fas fa-download"></i> 下载
+        </a>
+        <div id="modal-error"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
