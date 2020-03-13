@@ -20,7 +20,327 @@
       <description>
 
 
-
+&lt;div id=&#34;第四章-简单的函数&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;第四章 简单的函数&lt;/h1&gt;
+&lt;p&gt;今天开始第四章。如题所见，就是&lt;strong&gt;简单&lt;/strong&gt;的函数。
+R与其说是一门编程语言，在我看来，它不是，编程只是为了让它更方便快捷，它的初衷，就是统计分析作图。而函数这个概念，在各个编程语言中都出现过，而且地位都不低。这是因为，函数就可以让我们的操作简单起来，算平均值就来个mean()，不用把所有数字加起来再除以个数。
+下面看书上的第一节。&lt;/p&gt;
+&lt;div id=&#34;tapply函数&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;4.1 tapply函数&lt;/h2&gt;
+&lt;p&gt;书上的逻辑是这样的：&lt;/p&gt;
+&lt;ol style=&#34;list-style-type: decimal&#34;&gt;
+&lt;li&gt;先介绍了一下所用的数据集Vrg，是一个对两个温带（美国黄石国家公园和国家野牛保护区）的草原数据的监控分析。这个研究的目的是确定某段时间丛生禾草群落的生物多样性是否发生变化，如果变了，是否与环境因素有关。生物多样性用物种丰富度来定义也就是下面数据展示中的变量&lt;strong&gt;R&lt;/strong&gt;，即每个地点的不同种群数量。研究识别出大约90个物种，数据来自于8个时间截面（也就是变量&lt;strong&gt;Transect&lt;/strong&gt;，对，没看错，中文版就是时间截面），每个截面大约是4-10年，总共选取58个观测值：&lt;/li&gt;
+&lt;/ol&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;Veg &amp;lt;- read.table(file = &amp;quot;F:\\database\\RBook\\Vegetation2.txt&amp;quot;,
+                  header = TRUE)
+head(Veg, n=20L)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;##    TransectName Samples Transect Time  R ROCK LITTER ML BARESOIL FallPrec
+## 1       A_22_58       1        1 1958  8 27.0   30.0  0       26    30.22
+## 2       A_22_62       2        1 1962  6 26.0   20.0  0       28    99.56
+## 3       A_22_67       3        1 1967  8 30.0   24.0  0       30    43.43
+## 4       A_22_74       4        1 1974  8 18.0   35.0  0       16    54.86
+## 5       A_22_81       5        1 1981 10 23.0   22.0  4        9    24.38
+## 6       A_22_94       6        1 1994  7 26.0   26.0  0       23    10.16
+## 7       A_22_02       7        1 2002  6 39.0   19.0  4       19    34.29
+## 8       C_22_58       8        2 1958  5 25.0   26.0  0       33    30.22
+## 9       C_22_62       9        2 1962  8 24.0   24.0  2       29    99.56
+## 10      C_22_67      10        2 1967  6 21.0   16.0  1       41    43.43
+## 11      C_22_74      11        2 1974  6 18.0   25.0  0       33    54.86
+## 12      C_22_81      12        2 1981  6 19.0   28.0  0       14    24.38
+## 13      C_22_94      13        2 1994  6 10.5   41.5  0       29    10.16
+## 14      C_22_02      14        2 2002  6 26.0   18.0  2       42    34.29
+## 15      D_12_58      15        3 1958  7 56.0   17.0  0       16    33.78
+## 16      D_12_62      16        3 1962 10 45.0    7.0  0       23   143.51
+## 17      D_12_67      17        3 1967  8 28.0   14.0  0       37    56.38
+## 18      D_12_74      18        3 1974 18 27.0   15.0  0        7    68.32
+## 19      D_12_81      19        3 1981 12 10.0   37.0  0        0    57.40
+## 20      D_12_89      20        3 1989 11 17.0   17.0  0       33    17.52
+##    SprPrec SumPrec WinPrec FallTmax SprTmax SumTmax WinTmax FallTmin SprTmin
+## 1    75.43  125.47   39.62    16.96   15.77   25.17    3.47     0.49    0.36
+## 2    56.13   94.99  107.44    14.56   15.21   24.85    1.16    -0.18    0.18
+## 3    65.02  112.26   76.70    18.44   12.76   25.51    3.09     1.23   -1.86
+## 4    58.67   70.35   90.67    17.16   14.00   26.67    2.46     1.43   -0.53
+## 5    87.63   81.78   45.97    18.49   14.33   26.02    5.72     1.09    0.75
+## 6    57.15   95.25   60.70    17.39   16.91   26.78    3.64     0.28    0.64
+## 7    31.49   62.99   43.68    19.29   13.86   26.27    2.54     1.86   -1.37
+## 8    75.43  125.47   39.62    16.98   15.79   25.19    3.49     0.51    0.38
+## 9    56.13   94.99  107.44    14.58   15.23   24.87    1.18    -0.16    0.19
+## 10   65.02  112.26   76.70    18.46   12.78   25.53    3.11     1.25   -1.85
+## 11   58.67   70.35   90.67    17.18   14.01   26.68    2.47     1.45   -0.52
+## 12   87.63   81.78   45.97    18.51   14.35   26.04    5.74     1.11    0.76
+## 13   57.15   95.25   60.70    17.41   16.92   26.80    3.65     0.30    0.65
+## 14   31.49   62.99   43.68    19.31   13.88   26.29    2.56     1.88   -1.35
+## 15  107.95  181.61  105.15    13.00   11.79   21.12   -0.32    -3.28   -3.43
+## 16   73.40  125.73  173.48    10.65   11.25   20.81   -2.58    -3.91   -3.58
+## 17   83.05  121.15  117.60    14.42    8.91   21.42   -0.72    -2.55   -5.59
+## 18   65.78   88.64  116.84    13.23   10.09   22.59   -1.29    -2.31   -4.30
+## 19   87.12  133.09   67.05    14.57   10.42   21.96    1.90    -2.69   -3.03
+## 20  101.34  120.14  128.01    15.93   11.00   22.06   -2.77    -2.25   -4.11
+##    SumTmin WinTmin PCTSAND PCTSILT PCTOrgC
+## 1     6.97   -8.54      24      30 0.03459
+## 2     6.40  -10.76      24      30 0.03459
+## 3     7.12   -8.50      24      30 0.03459
+## 4     7.20   -8.28      24      30 0.03459
+## 5     6.90   -7.56      24      30 0.03459
+## 6     6.94   -9.21      24      30 0.03459
+## 7     6.96   -9.61      24      30 0.03459
+## 8     6.99   -8.52      20      34 0.06160
+## 9     6.41  -10.74      20      34 0.06160
+## 10    7.14   -8.48      20      34 0.06160
+## 11    7.22   -8.27      20      34 0.06160
+## 12    6.92   -7.54      20      34 0.06160
+## 13    6.96   -9.19      20      34 0.06160
+## 14    6.98   -9.59      20      34 0.06160
+## 15    3.11  -12.23      14      46 0.03630
+## 16    2.55  -14.38      14      46 0.03630
+## 17    3.25  -12.20      14      46 0.03630
+## 18    3.32  -11.92      14      46 0.03630
+## 19    3.06  -11.27      14      46 0.03630
+## 20    3.81  -14.48      14      46 0.03630&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;names(Veg)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;##  [1] &amp;quot;TransectName&amp;quot; &amp;quot;Samples&amp;quot;      &amp;quot;Transect&amp;quot;     &amp;quot;Time&amp;quot;         &amp;quot;R&amp;quot;           
+##  [6] &amp;quot;ROCK&amp;quot;         &amp;quot;LITTER&amp;quot;       &amp;quot;ML&amp;quot;           &amp;quot;BARESOIL&amp;quot;     &amp;quot;FallPrec&amp;quot;    
+## [11] &amp;quot;SprPrec&amp;quot;      &amp;quot;SumPrec&amp;quot;      &amp;quot;WinPrec&amp;quot;      &amp;quot;FallTmax&amp;quot;     &amp;quot;SprTmax&amp;quot;     
+## [16] &amp;quot;SumTmax&amp;quot;      &amp;quot;WinTmax&amp;quot;      &amp;quot;FallTmin&amp;quot;     &amp;quot;SprTmin&amp;quot;      &amp;quot;SumTmin&amp;quot;     
+## [21] &amp;quot;WinTmin&amp;quot;      &amp;quot;PCTSAND&amp;quot;      &amp;quot;PCTSILT&amp;quot;      &amp;quot;PCTOrgC&amp;quot;&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;str(Veg)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## &amp;#39;data.frame&amp;#39;:    58 obs. of  24 variables:
+##  $ TransectName: Factor w/ 58 levels &amp;quot;A_22_02&amp;quot;,&amp;quot;A_22_58&amp;quot;,..: 2 3 4 5 6 7 1 9 10 11 ...
+##  $ Samples     : int  1 2 3 4 5 6 7 8 9 10 ...
+##  $ Transect    : int  1 1 1 1 1 1 1 2 2 2 ...
+##  $ Time        : int  1958 1962 1967 1974 1981 1994 2002 1958 1962 1967 ...
+##  $ R           : int  8 6 8 8 10 7 6 5 8 6 ...
+##  $ ROCK        : num  27 26 30 18 23 26 39 25 24 21 ...
+##  $ LITTER      : num  30 20 24 35 22 26 19 26 24 16 ...
+##  $ ML          : int  0 0 0 0 4 0 4 0 2 1 ...
+##  $ BARESOIL    : num  26 28 30 16 9 23 19 33 29 41 ...
+##  $ FallPrec    : num  30.2 99.6 43.4 54.9 24.4 ...
+##  $ SprPrec     : num  75.4 56.1 65 58.7 87.6 ...
+##  $ SumPrec     : num  125.5 95 112.3 70.3 81.8 ...
+##  $ WinPrec     : num  39.6 107.4 76.7 90.7 46 ...
+##  $ FallTmax    : num  17 14.6 18.4 17.2 18.5 ...
+##  $ SprTmax     : num  15.8 15.2 12.8 14 14.3 ...
+##  $ SumTmax     : num  25.2 24.9 25.5 26.7 26 ...
+##  $ WinTmax     : num  3.47 1.16 3.09 2.46 5.72 ...
+##  $ FallTmin    : num  0.49 -0.18 1.23 1.43 1.09 ...
+##  $ SprTmin     : num  0.36 0.18 -1.86 -0.53 0.75 ...
+##  $ SumTmin     : num  6.97 6.4 7.12 7.2 6.9 ...
+##  $ WinTmin     : num  -8.54 -10.76 -8.5 -8.28 -7.56 ...
+##  $ PCTSAND     : int  24 24 24 24 24 24 24 20 20 20 ...
+##  $ PCTSILT     : int  30 30 30 30 30 30 30 34 34 34 ...
+##  $ PCTOrgC     : num  0.0346 0.0346 0.0346 0.0346 0.0346 ...&lt;/code&gt;&lt;/pre&gt;
+&lt;ol start=&#34;2&#34; style=&#34;list-style-type: decimal&#34;&gt;
+&lt;li&gt;然后算了下8个时间截面的总体物种平均丰富度m以及每个时间截面的平均丰富度m1-m8，并做出了一个向量：&lt;/li&gt;
+&lt;/ol&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;m &amp;lt;- mean(Veg$R)
+m1 &amp;lt;- mean(Veg$R[Veg$Transect==1])
+m2 &amp;lt;- mean(Veg$R[Veg$Transect==2])
+m3 &amp;lt;- mean(Veg$R[Veg$Transect==3])
+m4 &amp;lt;- mean(Veg$R[Veg$Transect==4])
+m5 &amp;lt;- mean(Veg$R[Veg$Transect==5])
+m6 &amp;lt;- mean(Veg$R[Veg$Transect==6])
+m7 &amp;lt;- mean(Veg$R[Veg$Transect==7])
+m8 &amp;lt;- mean(Veg$R[Veg$Transect==8])
+c(m,m1,m2,m3,m4,m5,m6,m7,m8)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## [1]  9.965517  7.571429  6.142857 10.375000  9.250000 12.375000 11.500000
+## [8] 10.500000 11.833333&lt;/code&gt;&lt;/pre&gt;
+&lt;ol start=&#34;3&#34; style=&#34;list-style-type: decimal&#34;&gt;
+&lt;li&gt;大家也看出来了，算每个时间截面的平均丰富度，要是这么做就太麻烦了，能不能简单点呢。答案是有的，就是tapply函数。先演示一下：&lt;/li&gt;
+&lt;/ol&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;tapply(Veg$R, Veg$Transect, mean)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;##         1         2         3         4         5         6         7         8 
+##  7.571429  6.142857 10.375000  9.250000 12.375000 11.500000 10.500000 11.833333&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;#或者
+tapply(X = Veg$R, INDEX = Veg$Transect, FUN = mean)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;##         1         2         3         4         5         6         7         8 
+##  7.571429  6.142857 10.375000  9.250000 12.375000 11.500000 10.500000 11.833333&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;解释一下，看第二个语句就应该明白了。tapply这个函数常用的有3个参数，&lt;strong&gt;x=……&lt;/strong&gt;是告诉它，我要对哪个数据集中的哪个变量操作，&lt;strong&gt;INDEX=……&lt;/strong&gt;是告诉它，我要以什么水平来处理这个&lt;strong&gt;x&lt;/strong&gt;，最后的&lt;strong&gt;FUN=……&lt;/strong&gt;就是告诉它，我要对&lt;strong&gt;x&lt;/strong&gt;做什么运算，可以用内置的函数比如mean，sd什么的，也可以用自己编写的函数。
+&lt;strong&gt;注意大小写。&lt;/strong&gt;
+同理，标准差sd，方差，长度什么的都可以。&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;Me &amp;lt;- tapply(Veg$R, Veg$Transect, mean)
+Sd &amp;lt;- tapply(Veg$R, Veg$Transect, sd)
+Le &amp;lt;- tapply(Veg$R, Veg$Transect, length)
+#然后用cbind组合起来
+cbind(Me,Sd,Le)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;##          Me        Sd Le
+## 1  7.571429 1.3972763  7
+## 2  6.142857 0.8997354  7
+## 3 10.375000 3.5831949  8
+## 4  9.250000 2.3145502  8
+## 5 12.375000 2.1339099  8
+## 6 11.500000 2.2677868  8
+## 7 10.500000 3.1464265  6
+## 8 11.833333 2.7141604  6&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;第一节就没了，书上还分了两个小节…………咋想的。&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;sapply函数和lapply函数&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;4.2 sapply函数和lapply函数&lt;/h2&gt;
+&lt;p&gt;大家可能也发现了，我并没用tapply函数计算整个变量&lt;strong&gt;R&lt;/strong&gt;的平均值。是因为这个整体的平均值比较简单。但是如果要一次性输出Veg数据集中所有数值型变量的平均值呢，该怎么做？
+这个工作要交给sapply函数,比如我就想一次性输出变量&lt;strong&gt;R&lt;/strong&gt;：&lt;strong&gt;ROCK&lt;/strong&gt;，&lt;strong&gt;LITTER&lt;/strong&gt;，&lt;strong&gt;ML&lt;/strong&gt;，&lt;strong&gt;BARESOIL&lt;/strong&gt;的平均值：&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;sapply(Veg[, 5:9], FUN = mean)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;##         R      ROCK    LITTER        ML  BARESOIL 
+##  9.965517 20.991379 22.853448  1.086207 17.594828&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;这个方括号中的&lt;strong&gt;5:9&lt;/strong&gt;指的就是这5个变量。
+那这小节标题中的lapply呢，它是干什么的。
+还是用例子来说明，我还是计算着5个变量的平均值：&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;lapply(Veg[, 5:9], FUN = mean)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## $R
+## [1] 9.965517
+## 
+## $ROCK
+## [1] 20.99138
+## 
+## $LITTER
+## [1] 22.85345
+## 
+## $ML
+## [1] 1.086207
+## 
+## $BARESOIL
+## [1] 17.59483&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;发现差异了吗？sapply输出结果是个向量，而lapply输出的结果却是个列表（list）。
+这里要注意一点，lappy和sapply中包含数据的变量（对，没看错，中文版就是这么写的，其实指的就是那个&lt;strong&gt;x&lt;/strong&gt;）必须是个&lt;strong&gt;数据框&lt;/strong&gt;，要是这么写，就错了：&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;sapply(cbind(Veg$R, Veg$ROCK, Veg$LITTER, Veg$ML, Veg$BARESOIL), FUN = mean)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;##   [1]  8.0  6.0  8.0  8.0 10.0  7.0  6.0  5.0  8.0  6.0  6.0  6.0  6.0  6.0  7.0
+##  [16] 10.0  8.0 18.0 12.0 11.0  7.0 10.0  8.0  9.0  6.0 12.0 13.0 10.0  8.0  8.0
+##  [31] 13.0 16.0  9.0 14.0 11.0 13.0 11.0 12.0  9.0 10.0 14.0 14.0 10.0 14.0  9.0
+##  [46] 12.0 11.0 12.0 14.0  9.0  5.0 12.0  9.0 10.0 16.0 12.0 10.0 14.0 27.0 26.0
+##  [61] 30.0 18.0 23.0 26.0 39.0 25.0 24.0 21.0 18.0 19.0 10.5 26.0 56.0 45.0 28.0
+##  [76] 27.0 10.0 17.0 26.5 36.0 53.0 59.0 45.0 41.0 35.0 44.0 53.5 59.0 15.0 20.0
+##  [91]  4.0  8.0  5.0  4.0  2.0  8.0  5.0  7.0  5.0  6.0  3.0  2.0  3.0  0.0 20.0
+## [106]  7.0 11.0  6.0  0.0 15.0 25.0 23.0 14.0 11.0  8.0 13.0 30.0 20.0 24.0 35.0
+## [121] 22.0 26.0 19.0 26.0 24.0 16.0 25.0 28.0 41.5 18.0 17.0  7.0 14.0 15.0 37.0
+## [136] 17.0 14.0 19.0 10.0  5.0  9.0 12.0 24.0 10.0 18.0  9.0 23.0 21.0 51.0 34.0
+## [151] 28.0 30.0 32.0 29.0 32.0 20.0 29.0 19.0 23.0 32.0 22.5 28.0 26.0 29.0 23.0
+## [166] 40.0 14.5 21.0 24.0 15.0 15.0 18.0 29.0 26.0  0.0  0.0  0.0  0.0  4.0  0.0
+## [181]  4.0  0.0  2.0  1.0  0.0  0.0  0.0  2.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0
+## [196]  1.0  0.0  3.0  1.0  0.0  0.0  0.0  0.0  5.0  0.0  0.0  0.0  2.0  0.0  5.0
+## [211]  0.0  7.0  0.0  0.0  3.0  0.0  0.0  6.0  0.0  2.0  1.0  1.0  0.0  0.0  0.0
+## [226]  7.0  2.0  4.0  0.0  0.0  0.0  0.0 26.0 28.0 30.0 16.0  9.0 23.0 19.0 33.0
+## [241] 29.0 41.0 33.0 14.0 29.0 42.0 16.0 23.0 37.0  7.0  0.0 33.0 17.5  4.0 20.0
+## [256] 13.0 30.0  7.0  3.0 12.0  7.5  5.0 20.0 19.0 13.0  2.0  1.0 11.0 11.0  5.0
+## [271] 30.0 37.0 12.0 13.0  9.0  4.0 16.5 17.0 27.0 26.0  0.0  0.0 35.0  7.0 20.0
+## [286] 20.0 14.0  4.0 27.0 13.0&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;它会输出一个很长的向量，根本不是你想要的。原因就在于cbind输出的不是数据框。
+可以改成这样：&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;sapply(data.frame(cbind(Veg$R, Veg$ROCK, Veg$LITTER, Veg$ML, Veg$BARESOIL)), FUN = mean)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;##        X1        X2        X3        X4        X5 
+##  9.965517 20.991379 22.853448  1.086207 17.594828&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;但是对比之前的结果，又有不同的地方，这个语句输出的结果中，丢失了变量标签，只有X1什么的。有两种解决方法，一是在运行sapply之前就生成一个合适的数据框，二是在用cbind结合数据后再用colnames函数来加上标签。&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;summary函数&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;4.3 summary函数&lt;/h2&gt;
+&lt;p&gt;这个函数，看名字就知道了，会输出变量信息。相当于统计概要：&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;Z &amp;lt;- cbind(Veg$R, Veg$ROCK, Veg$LITTER)
+colnames(Z) &amp;lt;- c(&amp;quot;R&amp;quot;, &amp;quot;ROCK&amp;quot;, &amp;quot;LITTER&amp;quot;)
+summary(Z)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;##        R               ROCK           LITTER     
+##  Min.   : 5.000   Min.   : 0.00   Min.   : 5.00  
+##  1st Qu.: 8.000   1st Qu.: 7.25   1st Qu.:17.00  
+##  Median :10.000   Median :18.50   Median :23.00  
+##  Mean   : 9.966   Mean   :20.99   Mean   :22.85  
+##  3rd Qu.:12.000   3rd Qu.:27.00   3rd Qu.:28.75  
+##  Max.   :18.000   Max.   :59.00   Max.   :51.00&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;你看结果，最小值，第一四分位数，中位数，平均值，第三四分位数，最大值都出来了。
+下面的语句也可以输出这样的结果：&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;summary(Veg[, c(&amp;quot;R&amp;quot;, &amp;quot;ROCK&amp;quot;, &amp;quot;LITTER&amp;quot;)])&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;##        R               ROCK           LITTER     
+##  Min.   : 5.000   Min.   : 0.00   Min.   : 5.00  
+##  1st Qu.: 8.000   1st Qu.: 7.25   1st Qu.:17.00  
+##  Median :10.000   Median :18.50   Median :23.00  
+##  Mean   : 9.966   Mean   :20.99   Mean   :22.85  
+##  3rd Qu.:12.000   3rd Qu.:27.00   3rd Qu.:28.75  
+##  Max.   :18.000   Max.   :59.00   Max.   :51.00&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;summary(Veg[, c(5, 6, 7)])&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;##        R               ROCK           LITTER     
+##  Min.   : 5.000   Min.   : 0.00   Min.   : 5.00  
+##  1st Qu.: 8.000   1st Qu.: 7.25   1st Qu.:17.00  
+##  Median :10.000   Median :18.50   Median :23.00  
+##  Mean   : 9.966   Mean   :20.99   Mean   :22.85  
+##  3rd Qu.:12.000   3rd Qu.:27.00   3rd Qu.:28.75  
+##  Max.   :18.000   Max.   :59.00   Max.   :51.00&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;道理是一样的。&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;table函数&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;4.4 table函数&lt;/h2&gt;
+&lt;p&gt;这里以第二章的习题1和7为例，引入鹿的数据，这些数据来源于不同的农场、月份、年份和性别。这项研究的一个目的就是找出寄生虫&lt;em&gt;E.cervi&lt;/em&gt;的数量和动物长度的关系（对，你没看出，中文版就是动物长度），而这种关系可能与农场、月份、年份和性别都有关系（对，就是关系与什么什么有关系，中文版就是这么写的），为了验证这一点，统计模型中就要有相互作用。但是，如果某些年份没有进行雌性的抽样，或者某些年份一些农场没有提供抽样，就会出现问题，因为这就形成了缺失值。
+tabble函数的作用就是用来了解每个农场提供抽样动物的数量，每个性别和年份观察值的数量。&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;Deer &amp;lt;- read.table(file = &amp;quot;F:\\database\\RBook\\Deer.txt&amp;quot;, header = TRUE, fill=TRUE)
+head(Deer, n = 20L)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;##    Farm Month Year Sex clas1_4 LCT   KFI  Ecervi Tb
+## 1    AL    10    0   1       4 191 20.45  0.0000  0
+## 2    AL    10    0   1       4 180 16.40  0.0000  0
+## 3    AL    10    0   1       3 192 15.90  2.3800  0
+## 4    AL    10    0   1       4 196 17.30  0.0000  0
+## 5    AL    10    0   1       4 204    NA  0.0000 NA
+## 6    AL    10    0   1       4 190 16.30  0.0000  0
+## 7    AL    10    0   1       4 196 22.20  1.2100 NA
+## 8    AL    10    0   1       4 200 14.70  0.0000  1
+## 9    AL    10    0   1       4 197 13.50  0.8000  0
+## 10   AL    10    0   1       4 208 15.15  0.0000  0
+## 11   AL    10    0   1       4 216 15.20  0.0000  0
+## 12   AL    10    0   1       4 199 14.50  0.9000  1
+## 13   AL    10    0   1       4 178 11.55 53.6000  1
+## 14   AL    10    0   1       4 206 14.00 14.3700  0
+## 15   AL    11    2   2       3 164 24.52  0.0000  0
+## 16   AU    12   99   1       3 173    NA 27.7554  0
+## 17   AU    12   99   1       3 172 26.00  5.4846  0
+## 18   AU    12   99   1       4 184 16.10  5.4846  0
+## 19   AU    12   99   1       3 170    NA  0.0000 NA
+## 20   AU    12   99   1       3 155    NA  0.0000 NA&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;names(Deer)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## [1] &amp;quot;Farm&amp;quot;    &amp;quot;Month&amp;quot;   &amp;quot;Year&amp;quot;    &amp;quot;Sex&amp;quot;     &amp;quot;clas1_4&amp;quot; &amp;quot;LCT&amp;quot;     &amp;quot;KFI&amp;quot;    
+## [8] &amp;quot;Ecervi&amp;quot;  &amp;quot;Tb&amp;quot;&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;str(Deer)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## &amp;#39;data.frame&amp;#39;:    1182 obs. of  9 variables:
+##  $ Farm   : Factor w/ 28 levels &amp;quot;R\xd1\t02&amp;quot;,&amp;quot;R\xd1\t12&amp;quot;,..: 3 3 3 3 3 3 3 3 3 3 ...
+##  $ Month  : int  10 10 10 10 10 10 10 10 10 10 ...
+##  $ Year   : int  0 0 0 0 0 0 0 0 0 0 ...
+##  $ Sex    : int  1 1 1 1 1 1 1 1 1 1 ...
+##  $ clas1_4: num  4 4 3 4 4 4 4 4 4 4 ...
+##  $ LCT    : num  191 180 192 196 204 190 196 200 197 208 ...
+##  $ KFI    : num  20.4 16.4 15.9 17.3 NA ...
+##  $ Ecervi : num  0 0 2.38 0 0 0 1.21 0 0.8 0 ...
+##  $ Tb     : int  0 0 0 0 NA 0 NA 1 0 0 ...&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;原文中这个命令并没有&lt;strong&gt;fill=TRUE&lt;/strong&gt;这个参数，我为什么要加上呢，因为没有的话会报错：“Error in scan(file = file, what = what, sep = sep, quote = quote, dec = dec, : line 657 did not have 9 elements”，其实文件中第657行是有9个元素的，所以我加上这个参数让它忽略掉。
+变量中，农场分别采用AL、AU等表示，就是字符串，而其他变量都是数值或者整数型向量。那每个农场的观测值数量就可以这么来获得：&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;table(Deer$Farm)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## 
+## R\xd1\t02 R\xd1\t12        AL        AU        BA        BE        CB       CRC 
+##        10        15        15        37        98        19        93        16 
+##        HB       LCV        LN       MAN        MB        MO        NC        NV 
+##        35         2        34        76        41       278        32        35 
+##        PA        PN        QM        RF        RO       SAL       SAU        SE 
+##        11        45        75        34        44         1         3        26 
+##        TI        TN      VISO        VY 
+##        21        31        15        40&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;可以看到，有的农场（MO）抽取了278个样本，而有的农场（SAL）仅抽取了1个样本。
+然后再看看性别和年份：&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;table(Deer$Sex, Deer$Year)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;##    
+##       0   1   2   3   4   5  99
+##   1 100  88 157  72  78  34  21
+##   2  76  41 198 116  60  35   0
+##   3   0   9   1   0   0   0   0
+##   4   0   5   2   0   0   0   0&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;这个结果中横向的0，1，2，3，4，5，99代表2000，2001，2002，2003，2004，2005和1999年，纵向的1和2代表性别。
+可以发现在1999年，只有一种性别的鹿被检测了。如果不知道这个，在后续处理中包含性别/年份交互作用项的数据就会报错。&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;我们学习了哪些函数&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;4.5 我们学习了哪些函数&lt;/h2&gt;
+&lt;p&gt;自己去整理去。&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;习题&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;4.6 习题&lt;/h2&gt;
+&lt;ol style=&#34;list-style-type: decimal&#34;&gt;
+&lt;li&gt;使用tapply，sapply和lappy函数来计算每个月的平均值：
+文件&lt;em&gt;temperature.xls&lt;/em&gt;包含了荷兰海岸线上31个不同地点的温度观测值。抽样开始于1990年，结束于2005年12月，为期16年，根据季节的不同，抽样频率为每月0-4次。
+以月为单位计算所有观测点的温度平均值，最终结果应该是一个16×12的变量。再计算每个月的观测值得标准差和数量。&lt;/li&gt;
+&lt;li&gt;使用table函数来处理温度数据：
+使用习题1中的数据，确定每个观测点的观测值数量。每年记录了多少个观测值？每个观测点每年记录了多少观测值？&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;
+&lt;/div&gt;
 </description>
     </item>
     
