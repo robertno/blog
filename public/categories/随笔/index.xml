@@ -7,7 +7,7 @@
     <description>随笔</description>
     <generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>zh</language><copyright>©`2020`</copyright><lastBuildDate>Wed, 18 Jul 2018 00:00:00 +0000</lastBuildDate>
     <image>
-      <url>img/map[gravatar:%!s(bool=false) shape:circle]</url>
+      <url>img/map[gravatar:%!s(bool=false) shape:square]</url>
       <title>随笔</title>
       <link>/categories/%E9%9A%8F%E7%AC%94/</link>
     </image>

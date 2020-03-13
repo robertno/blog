@@ -76,13 +76,16 @@ N1
 上文说到有的函数没有data参数，还有一个办法是用**$**符号。比如：
 
 ```{r}
-Squid$GSI
+#这个命令输出结果太多
+#Squid$GSI
+#于是我用了head显示前几行
+head(Squid$GSI)
 ```
 
 还有一个方法，就是按列选择，观察数据框可以得知，GSI这个变量在Squid数据集的第6列，那么：
 
 ```{r}
-Squid[,6]
+head(Squid[,6])
 ```
 
 当然，我不推荐这种方法，还得查第几列，麻烦。
@@ -94,7 +97,7 @@ Squid[,6]
 ```{r}
 attach(Squid)
 #直接访问变量GSI
-GSI
+head(GSI)
 #然后可以画图了
 boxplot(GSI)
 #或者运算
@@ -120,7 +123,7 @@ unique(Squid$Sex)
 ```{r}
 Se1 <- Squid$Sex == 1
 SquidM <- Squid[Se1,]
-SquidM
+head(SquidM)
 ```
 
 下面讲下这段代码的逻辑：
@@ -132,10 +135,10 @@ SquidM
 
 ```{r}
 SquidM <- Squid[Squid$Sex == 1,]
-SquidM
+head(SquidM)
 #雌性的数据
 SquidF <- Squid[Squid$Sex == 2,]
-SquidF
+head(SquidF)
 ```
 
 下面讲一下布尔运算符的用法：或“|”,与“&”，非“!”。
@@ -173,13 +176,13 @@ SquidM.1 <- Squid[Squid$Sex == 1 &
 
 ```{r}
 #按月份排序
-Squid[order(Squid$Month),]
+head(Squid[order(Squid$Month),], n=30L)
 ```
 
 因为处理的是Squid中行，所以放在了逗号的前面。也可以对一个变量进行排序：
 
 ```{r}
-Squid$GSI[order(Squid$Month)]
+head(Squid$GSI[order(Squid$Month)], n=30L)
 ```
 
 ## 3.3 使用相同的标识符组合两个数据集
@@ -197,7 +200,7 @@ Sq2 <- read.table(file = "F:\\database\\RBook\\Squid2.txt", header = TRUE)
 
 ```{r}
 SquidMerged <- merge(Sq1, Sq2, by = "Sample")
-SquidMerged
+head(SquidMerged, n=30L)
 ```
 
 这个**by = "Sample"**就是说，Sq1和Sq2以Sample作为相同的标识符来合并。
@@ -206,7 +209,7 @@ SquidMerged
 ```{r}
 SquidMerged2 <- merge(Sq1, Sq2, by = "Sample",
                       all = TRUE)
-SquidMerged2
+head(SquidMerged2, n=30L)
 ```
 
 对比这两个组合数据集，就可以发现样本4的差别。
@@ -255,7 +258,7 @@ Squid$fSex <- factor(Squid$Sex)
 那我们看一下这两个新变量长什么样子，比如说fSex：
 
 ```{r}
-Squid$fSex
+head(Squid$fSex, n=100L)
 ```
 
 注意最后一行：**Levels: 1 2**，这告诉我们，fSex有两个水平，下面将这两个水平重新编码为**“雄性”**和**“雌性”**：
@@ -263,7 +266,7 @@ Squid$fSex
 ```{r}
 Squid$fSex <- factor(Squid$Sex, levels = c(1,2),
                      labels = c("M", "F"))
-Squid$fSex
+head(Squid$fSex, n=100L)
 ```
 
 这里levels = c(1,2)和labels = c("M", "F")就一一对应起来，1对应M也就是雄性，2对应F也就是雌性。
@@ -278,7 +281,7 @@ M1
 下面，我们看一下FLocation：
 
 ```{r}
-Squid$fLocation
+head(Squid$fLocation, n=100L)
 boxplot(GSI ~ fLocation, data = Squid)
 ```
 
@@ -287,7 +290,7 @@ boxplot(GSI ~ fLocation, data = Squid)
 
 ```{r}
 Squid$fLocation <- factor(Squid$Location, levels = c(2,3,1,4))
-Squid$fLocation
+head(Squid$fLocation, n=100L)
 ```
 
 此时，最后一行显示的是：**Levels: 2 3 1 4**，我用这个重编码过的fLocation画个图，大家看下差别：

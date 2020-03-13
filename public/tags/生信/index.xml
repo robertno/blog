@@ -7,7 +7,7 @@
     <description>生信</description>
     <generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>zh</language><copyright>©`2020`</copyright><lastBuildDate>Tue, 20 Feb 2018 00:00:00 +0000</lastBuildDate>
     <image>
-      <url>img/map[gravatar:%!s(bool=false) shape:circle]</url>
+      <url>img/map[gravatar:%!s(bool=false) shape:square]</url>
       <title>生信</title>
       <link>/tags/%E7%94%9F%E4%BF%A1/</link>
     </image>
